@@ -48,28 +48,40 @@ const steps = [
 
 const faqs = [
   {
-    question: "What is Anchor Place?",
-    answer: "Anchor Place is a coordination tool that helps connect people who need placement (housing, residential care, transitional living) with available facilities and programs. We serve hospitals, social workers, LMEs, jails, reentry programs, and housing providers."
+    question: "What is Anchor Place™?",
+    answer: "Anchor Place™ is a placement coordination and availability platform that helps providers connect with hospitals, social workers, and placement teams seeking housing or care options for individuals with complex needs."
   },
   {
-    question: "What types of placements can I find here?",
-    answer: "We list placements for: Intellectual/Developmental Disabilities (IDD), Mental Health, Behavioral Health, Reentry Programs, Post-Hospital Discharge, and General Housing/Shelter programs."
+    question: "Who can use Anchor Place™?",
+    answer: "Anchor Place™ is designed for AFL providers, group homes, supportive and transitional housing, sober living programs, and other residential care providers."
   },
   {
-    question: "Is this service free?",
-    answer: "Yes, Anchor Place is free to use. We are a coordination tool designed to help connect people with the care and housing they need."
+    question: "Does Anchor Place™ store client information?",
+    answer: "No. Anchor Place™ does not store protected health information (PHI), client names, medical records, or diagnoses. It is a coordination tool only."
   },
   {
-    question: "Do you collect medical information?",
-    answer: "No. Anchor Place does not collect or store any protected health information (PHI). We only collect contact information for coordination purposes. No names, diagnoses, or medical records are stored in our system."
+    question: "How does placement coordination work?",
+    answer: "Providers list available beds or rooms, accepted populations, funding types, and location. Placement teams submit requests based on general criteria. All placement decisions are handled offline between the provider and referring agency."
   },
   {
-    question: "How do I list my facility?",
-    answer: "If you operate a housing or care facility and want to be listed in Anchor Place, click on 'Explore Starting a Placement' from the home page to submit your information."
+    question: "Does Anchor Place™ make placement decisions or guarantee referrals?",
+    answer: "No. Anchor Place™ does not approve, deny, or guarantee placements. All acceptance decisions remain solely with the provider."
   },
   {
-    question: "How current is the availability information?",
-    answer: "Facilities are responsible for updating their availability. We recommend contacting facilities directly to confirm current openings before making placement decisions."
+    question: "Can Anchor Place™ be used across different cities or states?",
+    answer: "Yes. Anchor Place™ supports both in-state and out-of-state placement coordination. Providers may indicate location flexibility and whether interstate placements are accepted."
+  },
+  {
+    question: "How much does Anchor Place™ cost for providers?",
+    answer: "Provider access is $29.99 per month per provider location. There are no long-term contracts during the pilot phase."
+  },
+  {
+    question: "Is Anchor Place™ HIPAA compliant?",
+    answer: "Anchor Place™ is designed to avoid HIPAA requirements by not collecting or storing protected health information. Providers and placement teams should continue to follow their internal compliance procedures when sharing client-specific details offline."
+  },
+  {
+    question: "Do providers need to respond to every inquiry?",
+    answer: "No. Providers may choose which inquiries to respond to based on availability and fit."
   }
 ];
 

@@ -289,6 +289,13 @@ export default function PlaceClient() {
                       value={formData.location_preference}
                       onChange={(e) => updateFormData('location_preference', e.target.value)}
                     />
+                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg mt-2">
+                      <p className="text-xs font-medium text-slate-600 mb-1">Relocation Note:</p>
+                      <p className="text-xs text-slate-500">
+                        Anchor Place™ supports both in-state and out-of-state placement coordination. 
+                        Location flexibility and interstate considerations are handled directly between providers and placement teams.
+                      </p>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="urgency">Urgency Level *</Label>
