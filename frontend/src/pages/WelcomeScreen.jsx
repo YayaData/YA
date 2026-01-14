@@ -69,7 +69,7 @@ export default function WelcomeScreen() {
               What do you need to do today?
             </h1>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Anchor Place helps coordinate placement for people with complex needs. 
+              Anchor Place helps coordinate placement availability and referrals for people with complex care and housing needs. 
               Select an option below to get started.
             </p>
           </div>
@@ -120,6 +120,16 @@ export default function WelcomeScreen() {
                 This tool does not collect or store protected health information
               </span>
             </div>
+          </div>
+
+          {/* Compliance Disclaimer */}
+          <div className="mt-12 max-w-2xl mx-auto text-center animate-in" style={{ animationDelay: '0.6s' }}>
+            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Disclaimer</h3>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Anchor Place™ is a placement coordination and availability tool only. 
+              It does not store protected health information (PHI), make placement decisions, or guarantee placement outcomes. 
+              All placements are subject to provider acceptance, agency approval, and applicable state and federal regulations.
+            </p>
           </div>
         </div>
       </main>
