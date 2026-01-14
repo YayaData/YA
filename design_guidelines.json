@@ -1,0 +1,160 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "Anchor Place",
+      "tone": "Calm, Professional, Trustworthy, Accessible",
+      "archetype": "Soft Utility",
+      "theme_mode": "light"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Manrope, sans-serif",
+        "body": "Inter, sans-serif",
+        "accent": "Merriweather, serif"
+      },
+      "scale": {
+        "h1": "text-4xl md:text-5xl font-bold tracking-tight",
+        "h2": "text-3xl font-semibold tracking-tight",
+        "h3": "text-2xl font-semibold",
+        "body_lg": "text-lg leading-relaxed",
+        "body_base": "text-base leading-relaxed",
+        "caption": "text-sm text-slate-500"
+      }
+    },
+    "colors": {
+      "palette": {
+        "primary": {
+          "DEFAULT": "#0284c7",
+          "foreground": "#ffffff",
+          "hover": "#0369a1"
+        },
+        "secondary": {
+          "DEFAULT": "#f0f9ff",
+          "foreground": "#0f172a"
+        },
+        "background": "#ffffff",
+        "surface": "#f8fafc",
+        "text": {
+          "primary": "#0f172a",
+          "secondary": "#64748b",
+          "muted": "#94a3b8"
+        },
+        "status": {
+          "success": "#10b981",
+          "warning": "#f59e0b",
+          "error": "#ef4444",
+          "info": "#3b82f6"
+        }
+      },
+      "usage_rules": "Use primary blue for main actions. Use surface colors for card backgrounds. Text must always be Slate-900 for headings and Slate-600 for body to ensure high contrast."
+    },
+    "layout": {
+      "spacing": {
+        "container_padding": "p-6 md:p-12",
+        "section_gap": "gap-8 md:gap-16",
+        "card_padding": "p-6"
+      },
+      "grid_system": {
+        "dashboard": "grid grid-cols-1 md:grid-cols-12 gap-6",
+        "cards": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      },
+      "radius": "rounded-xl"
+    },
+    "components": {
+      "buttons": {
+        "primary": "bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-full shadow-sm transition-all hover:shadow-md",
+        "secondary": "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 h-11 px-8 rounded-full transition-all",
+        "ghost": "hover:bg-slate-100 text-slate-600 hover:text-slate-900"
+      },
+      "cards": {
+        "base": "bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 rounded-xl overflow-hidden",
+        "interactive": "cursor-pointer hover:border-primary/20 hover:ring-2 hover:ring-primary/5"
+      },
+      "inputs": {
+        "base": "h-11 bg-white border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg"
+      }
+    },
+    "visual_enhancers": {
+      "shadows": "shadow-[0_2px_8px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)]",
+      "gradients": "bg-gradient-to-b from-slate-50 to-white",
+      "glass": "bg-white/80 backdrop-blur-md border-b border-slate-200/50"
+    },
+    "motion": {
+      "transition": "transition-all duration-300 ease-out",
+      "hover_lift": "hover:-translate-y-1",
+      "fade_in": "animate-in fade-in duration-500 slide-in-from-bottom-4"
+    }
+  },
+  "assets": {
+    "images": [
+      {
+        "category": "hero_background",
+        "url": "https://images.unsplash.com/photo-1673219498641-e54db77132a8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjQyMTd8MHwxfHNlYXJjaHwxfHxjYWxtJTIwYmx1ZSUyMGFic3RyYWN0JTIwbWluaW1hbCUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzY4NDA1MjA4fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Calm blue water horizon for subtle background overlays",
+        "usage": "Hero section background with low opacity overlay"
+      },
+      {
+        "category": "action_place_client",
+        "url": "https://images.unsplash.com/photo-1659353888906-adb3e0041693?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjQyMTd8MHwxfHNlYXJjaHwxfHxmcmllbmRseSUyMGRpdmVyc2UlMjBoZWFsdGhjYXJlJTIwcHJvZmVzc2lvbmFsJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzY4NDA1MjEyfDA&ixlib=rb-4.1.0&q=85",
+        "description": "Friendly healthcare professional",
+        "usage": "Card image for 'Place a Client' action"
+      },
+      {
+        "category": "action_list_placements",
+        "url": "https://images.unsplash.com/photo-1758548157747-285c7012db5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjQyMTd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBicmlnaHQlMjBjbGVhbiUyMGFwYXJ0bWVudCUyMGludGVyaW9yfGVufDB8fHx8MTc2ODQwNTIxNnww&ixlib=rb-4.1.0&q=85",
+        "description": "Bright clean apartment interior",
+        "usage": "Card image for 'Available Placements' action"
+      },
+      {
+        "category": "action_help",
+        "url": "https://images.unsplash.com/photo-1763982811982-e4901b18bbe3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwyfHxjb21wYXNzaW9uYXRlJTIwc3VwcG9ydCUyMGhlbHBpbmclMjBoYW5kc3xlbnwwfHx8fDE3Njg0MDUyMTd8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Supportive hands layered",
+        "usage": "Card image for 'How Placement Works' action"
+      }
+    ],
+    "icons": {
+      "library": "lucide-react",
+      "style": "Stroke width 1.5px, rounded joins"
+    }
+  },
+  "implementation_guide": {
+    "pages": [
+      {
+        "name": "Welcome Screen",
+        "path": "/",
+        "layout": "Centered 'Concierge' layout. Large greeting text. Grid of 4 large action cards.",
+        "key_elements": [
+          "Hero Text: 'What do you need to do today?'",
+          "Action Grid: 4 Cards (Place Client, List Placements, Learn, Explore Idea)",
+          "No complex navigation bar on this screen - focus on choice."
+        ]
+      },
+      {
+        "name": "Place Client Form",
+        "path": "/place-client",
+        "layout": "Multi-step wizard (Stepper). Centered form container.",
+        "key_elements": [
+          "Step Indicator (1. Basics, 2. Needs, 3. Contact)",
+          "Clear labels, no medical jargon",
+          "Disclaimer: 'Do not enter PHI/Real Names'"
+        ]
+      },
+      {
+        "name": "Available Placements",
+        "path": "/placements",
+        "layout": "Filter sidebar (left) + Grid of placement cards (right).",
+        "key_elements": [
+          "Filters: Location, Type (IDD, Mental Health), Availability",
+          "Cards: Facility Name, Type, Status Badge (Available/Full), 'Contact' button"
+        ]
+      }
+    ],
+    "universal_rules": [
+      "Do not use gradients for text.",
+      "Ensure all forms have validation states.",
+      "Use 'sonner' for all toast notifications.",
+      "All interactive elements must have data-testid attributes.",
+      "Mobile responsiveness is critical - stack grids on mobile."
+    ]
+  }
+}
