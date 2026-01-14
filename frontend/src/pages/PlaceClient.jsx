@@ -21,7 +21,7 @@ const urgencyLevels = [
 ];
 
 const steps = [
-  { id: 1, title: "Your Information", description: "Tell us about yourself" },
+  { id: 1, title: "Your Contact Information", description: "For coordination purposes only" },
   { id: 2, title: "Placement Needs", description: "What type of placement is needed" },
   { id: 3, title: "Additional Details", description: "Any other information" }
 ];
@@ -205,6 +205,11 @@ export default function PlaceClient() {
               {/* Step 1: Contact Information */}
               {currentStep === 1 && (
                 <>
+                  <div className="p-3 bg-sky-50 border border-sky-100 rounded-lg mb-2">
+                    <p className="text-sm text-sky-700">
+                      This information is used only to coordinate placement communication. Do not enter client-identifying information.
+                    </p>
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="referral_source">Referral Source *</Label>
                     <Select 
