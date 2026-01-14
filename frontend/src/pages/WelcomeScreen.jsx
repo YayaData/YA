@@ -131,6 +131,18 @@ export default function WelcomeScreen() {
               All placements are subject to provider acceptance, agency approval, and applicable state and federal regulations.
             </p>
           </div>
+
+          {/* Pricing Notice */}
+          <div className="mt-8 max-w-2xl mx-auto text-center animate-in" style={{ animationDelay: '0.7s' }}>
+            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Pricing Notice</h3>
+            <div className="text-sm text-slate-500 leading-relaxed space-y-2">
+              <p>Anchor Place™ is offered as a subscription service for housing and care providers.</p>
+              <p><span className="font-medium text-slate-600">Provider Access:</span> $29.99 per month per provider location.</p>
+              <p>This includes listing placement availability and receiving placement inquiries.</p>
+              <p>Placement seekers (hospitals, social workers, LMEs, reentry programs) may use the platform at no cost during the pilot phase.</p>
+              <p>Billing and payment setup are handled during provider onboarding.</p>
+            </div>
+          </div>
         </div>
       </main>
 
