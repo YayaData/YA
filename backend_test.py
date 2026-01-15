@@ -433,6 +433,9 @@ def main():
     test_results.append(tester.test_get_other_state_data())
     test_results.append(tester.test_invalid_state())
     
+    # Test all 5 fully populated states
+    test_results.append(tester.test_fully_populated_states())
+    
     # Templates API tests
     test_results.append(tester.test_get_templates())
     test_results.append(tester.test_get_specific_template())
@@ -440,6 +443,12 @@ def main():
     
     # National overview test
     test_results.append(tester.test_national_overview())
+    
+    # New features tests
+    test_results.append(tester.test_products_api())
+    test_results.append(tester.test_email_capture())
+    test_results.append(tester.test_consultation_request())
+    test_results.append(tester.test_checkout_session_creation())
     
     # Print final results
     print("\n" + "=" * 60)
