@@ -6,7 +6,9 @@ import {
   Filter,
   Search,
   ArrowRight,
-  Lock
+  Lock,
+  CreditCard,
+  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,25 +24,36 @@ import {
 } from "@/components/ui/select";
 import axios from "axios";
 import ResourceCard from "@/components/ResourceCard";
+import EmailCaptureModal from "@/components/EmailCaptureModal";
+import ConsultationModal from "@/components/ConsultationModal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const TemplatesPage = () => {
   const [templates, setTemplates] = useState([]);
+  const [products, setProducts] = useState({});
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [consultationOpen, setConsultationOpen] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(null);
 
   useEffect(() => {
-    fetchTemplates();
+    fetchData();
   }, []);
 
-  const fetchTemplates = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${API}/templates`);
-      setTemplates(response.data.templates);
+      const [templatesRes, productsRes] = await Promise.all([
+        axios.get(`${API}/templates`),
+        axios.get(`${API}/products`)
+      ]);
+      setTemplates(templatesRes.data.templates);
+      setProducts(productsRes.data.products);
     } catch (error) {
-      console.error("Error fetching templates:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
@@ -54,6 +67,36 @@ const TemplatesPage = () => {
     const matchesCategory = categoryFilter === "all" || template.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
+
+  const handleDownloadClick = (template) => {
+    setSelectedTemplate(template);
+    setEmailModalOpen(true);
+  };
+
+  const handleEmailSuccess = () => {
+    if (selectedTemplate) {
+      // Trigger actual download
+      window.open(`${API}/templates/download/${selectedTemplate.id}`, "_blank");
+    }
+  };
+
+  const handleCheckout = async (productId) => {
+    setCheckoutLoading(productId);
+    try {
+      const response = await axios.post(`${API}/checkout/create-session`, {
+        product_id: productId,
+        origin_url: window.location.origin
+      });
+      
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -83,7 +126,7 @@ const TemplatesPage = () => {
             </h1>
             <p className="text-lg text-slate-600">
               Download ready-to-use templates for policies, contracts, job postings, 
-              and more. Preview each template before downloading.
+              and more. Free PDF downloads available with email signup.
             </p>
           </div>
         </div>
@@ -137,7 +180,7 @@ const TemplatesPage = () => {
                     description={template.description}
                     category={template.category}
                     previewText={template.preview_text}
-                    downloadUrl={`${API}${template.download_url}`}
+                    onDownload={() => handleDownloadClick(template)}
                   />
                 </div>
               ))}
@@ -166,101 +209,93 @@ const TemplatesPage = () => {
         </div>
       </section>
 
-      {/* Premium Templates CTA */}
+      {/* Premium Products Section */}
       <section className="py-12 md:py-16 bg-white border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="border-2 border-gold bg-gradient-to-br from-gold-light/50 to-white overflow-hidden">
-            <CardContent className="p-0">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="p-8 md:p-12">
-                  <Badge className="bg-gold text-white mb-4">
-                    <Lock className="w-3 h-3 mr-1" />
-                    Premium Access
-                  </Badge>
-                  <h2 className="text-2xl sm:text-3xl font-serif font-bold text-navy mb-4">
-                    Get Editable Templates
-                  </h2>
-                  <p className="text-slate-600 mb-6">
-                    Upgrade to access fully editable Word and Excel versions of all templates. 
-                    Customize them for your specific state and business needs.
+          <div className="text-center mb-12">
+            <Badge className="bg-gold text-white mb-4">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Premium Upgrades
+            </Badge>
+            <h2 className="text-3xl font-serif font-bold text-navy mb-4">
+              Take Your Launch to the Next Level
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Get editable templates, comprehensive guides, and expert support to fast-track your agency launch.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Object.entries(products).map(([id, product]) => (
+              <Card key={id} className="border-2 border-slate-200 card-hover" data-testid={`product-card-${id}`}>
+                <CardContent className="p-6">
+                  <h3 className="font-serif font-bold text-navy text-lg mb-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-slate-600 text-sm mb-4">
+                    {product.description}
                   </p>
-                  <ul className="space-y-3 mb-8">
-                    {[
-                      "Editable Word & Excel formats",
-                      "State-specific customization notes",
-                      "Compliance checklist included",
-                      "Free updates when regulations change"
-                    ].map((feature, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-slate-700">
-                        <div className="w-5 h-5 bg-gold rounded-full flex items-center justify-center">
-                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex flex-wrap gap-4">
-                    <Button className="bg-gold hover:bg-gold/90 text-white" data-testid="get-premium-templates-btn">
-                      Get Premium Templates
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Button>
-                    <Button variant="outline" className="border-navy text-navy hover:bg-navy hover:text-white" data-testid="view-sample-btn">
-                      View Sample
-                    </Button>
+                  <div className="flex items-baseline gap-1 mb-4">
+                    <span className="text-3xl font-bold text-gold">${product.price}</span>
+                    <span className="text-slate-500 text-sm">USD</span>
                   </div>
-                </div>
-                <div className="hidden md:flex items-center justify-center bg-slate-100 p-8">
-                  <div className="relative">
-                    <div className="absolute -top-4 -left-4 w-48 h-64 bg-white rounded-lg shadow-lg transform -rotate-6 border border-slate-200">
-                      <div className="p-4">
-                        <div className="h-3 w-20 bg-slate-200 rounded mb-3"></div>
-                        <div className="h-2 w-full bg-slate-100 rounded mb-2"></div>
-                        <div className="h-2 w-full bg-slate-100 rounded mb-2"></div>
-                        <div className="h-2 w-3/4 bg-slate-100 rounded"></div>
-                      </div>
-                    </div>
-                    <div className="relative w-48 h-64 bg-white rounded-lg shadow-xl border-2 border-gold">
-                      <div className="p-4">
-                        <div className="flex items-center gap-2 mb-4">
-                          <FileText className="w-6 h-6 text-gold" />
-                          <div className="h-3 w-24 bg-gold rounded"></div>
-                        </div>
-                        <div className="h-2 w-full bg-slate-200 rounded mb-2"></div>
-                        <div className="h-2 w-full bg-slate-200 rounded mb-2"></div>
-                        <div className="h-2 w-full bg-slate-200 rounded mb-2"></div>
-                        <div className="h-2 w-2/3 bg-slate-200 rounded mb-4"></div>
-                        <div className="h-8 w-full bg-gold-light rounded"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                  <Button 
+                    className="w-full bg-gold hover:bg-gold/90 text-white"
+                    onClick={() => handleCheckout(id)}
+                    disabled={checkoutLoading === id}
+                    data-testid={`checkout-btn-${id}`}
+                  >
+                    {checkoutLoading === id ? (
+                      "Processing..."
+                    ) : (
+                      <>
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Buy Now
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Help Section */}
+      {/* Consultation CTA */}
       <section className="py-12 md:py-16 bg-navy">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-4">
-            Need Custom Templates?
+            Need Personalized Guidance?
           </h2>
           <p className="text-slate-300 mb-8">
-            Our team can create customized templates specific to your state's requirements 
-            and your agency's unique needs.
+            Book a strategy consultation with our experts. Get answers to your specific questions 
+            and a customized roadmap for your state.
           </p>
           <Button 
-            variant="outline" 
-            className="border-white text-white hover:bg-white hover:text-navy"
-            data-testid="request-custom-btn"
+            onClick={() => setConsultationOpen(true)}
+            className="bg-gold hover:bg-gold/90 text-white"
+            size="lg"
+            data-testid="book-consultation-btn"
           >
-            Request Custom Templates
+            Book a Consultation
+            <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
       </section>
+
+      {/* Modals */}
+      <EmailCaptureModal
+        isOpen={emailModalOpen}
+        onClose={() => setEmailModalOpen(false)}
+        templateId={selectedTemplate?.id}
+        templateTitle={selectedTemplate?.title}
+        onSuccess={handleEmailSuccess}
+      />
+
+      <ConsultationModal
+        isOpen={consultationOpen}
+        onClose={() => setConsultationOpen(false)}
+      />
     </div>
   );
 };

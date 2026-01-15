@@ -1,18 +1,9 @@
-import { FileText, Download, ExternalLink } from "lucide-react";
+import { FileText, Download } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
 
-const ResourceCard = ({ title, description, category, previewText, downloadUrl }) => {
-  const handleDownload = () => {
-    toast.success(`Downloading: ${title}`, {
-      description: "Your template will download shortly.",
-    });
-    // In production, this would trigger actual download
-    window.open(downloadUrl, "_blank");
-  };
-
+const ResourceCard = ({ title, description, category, previewText, onDownload }) => {
   const getCategoryColor = (cat) => {
     const colors = {
       Operations: "bg-blue-light text-blue-700",
@@ -47,12 +38,12 @@ const ResourceCard = ({ title, description, category, previewText, downloadUrl }
               </div>
               <Button
                 size="sm"
-                onClick={handleDownload}
+                onClick={onDownload}
                 className="bg-gold hover:bg-gold/90 text-white"
                 data-testid={`download-btn-${title.toLowerCase().replace(/\s+/g, '-')}`}
               >
                 <Download className="w-4 h-4 mr-2" />
-                Download
+                Download PDF
               </Button>
             </div>
             
