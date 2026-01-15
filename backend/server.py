@@ -22,10 +22,16 @@ db = client[os.environ['DB_NAME']]
 # Create the main app
 app = FastAPI(title="Anchor Place - Client Placement API")
 
-# Root-level health check for Kubernetes probes
+# Root-level health check for Kubernetes probes (required for deployment)
 @app.get("/health")
 async def root_health_check():
+    """Health check endpoint for Kubernetes liveness/readiness probes"""
     return {"status": "healthy"}
+
+@app.get("/")
+async def root():
+    """Root endpoint"""
+    return {"message": "Anchor Place API", "health": "/health", "api": "/api"}
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
