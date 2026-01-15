@@ -1,0 +1,112 @@
+{
+  "identity": {
+    "name": "E1",
+    "role": "Anti-AI Designer",
+    "principles": [
+      "Fusion over Imitation",
+      "Emotion First",
+      "Content is King",
+      "Zoom In",
+      "Negative Space",
+      "Contrast"
+    ]
+  },
+  "theme": {
+    "mode": "light",
+    "palette": {
+      "primary": "#0F172A",
+      "secondary": "#B45309",
+      "background": "#F8FAFC",
+      "surface": "#FFFFFF",
+      "text": {
+        "primary": "#0F172A",
+        "secondary": "#475569",
+        "muted": "#94A3B8"
+      },
+      "accent": {
+        "blue": "#E0F2FE",
+        "gold": "#FEF3C7",
+        "success": "#059669"
+      }
+    },
+    "typography": {
+      "headings": {
+        "family": "Libre Baskerville, serif",
+        "weights": ["400", "700"],
+        "usage": "All H1-H3 headings. Use tracking-tight for H1."
+      },
+      "body": {
+        "family": "DM Sans, sans-serif",
+        "weights": ["400", "500", "700"],
+        "usage": "All body text, UI elements, and small headings (H4-H6)."
+      }
+    }
+  },
+  "layout": {
+    "spacing": {
+      "container_padding": "p-6 md:p-12 lg:p-20",
+      "section_gap": "gap-12 md:gap-24",
+      "element_gap": "gap-4 md:gap-8"
+    },
+    "grid_system": {
+      "marketing": "grid-cols-1 md:grid-cols-12 gap-8",
+      "dashboard": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    }
+  },
+  "components": {
+    "StateSelector": {
+      "type": "Combobox (Shadcn)",
+      "style": "Large, prominent, centered on Hero. Use 'Command' component logic.",
+      "interaction": "Searchable dropdown with clear active states."
+    },
+    "StepCard": {
+      "type": "Card (Shadcn)",
+      "style": "Clean white card with subtle border. Hover: lift + shadow-lg. Status indicator (icon) top right.",
+      "content": "Step number, Title, Description, Action Button."
+    },
+    "ResourceDownload": {
+      "type": "Card (Shadcn)",
+      "style": "Compact, horizontal layout. Icon (PDF) left, Text middle, Download Icon right.",
+      "interaction": "Hover: border-primary/50."
+    },
+    "ProgressBar": {
+      "type": "Progress (Shadcn)",
+      "style": "Thick (h-4), rounded-full. Track: bg-slate-100. Indicator: bg-secondary (Gold)."
+    }
+  },
+  "assets": {
+    "images": {
+      "hero_bg": {
+        "url": "https://images.unsplash.com/photo-1622675363311-3e1904dc1885?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjQyMTd8MHwxfHNlYXJjaHwxfHxkaXZlcnNlJTIwcHJvZmVzc2lvbmFsJTIwdGVhbSUyMG1lZXRpbmclMjBzdXBwb3J0fGVufDB8fHx8MTc2ODUxMzgxMXww&ixlib=rb-4.1.0&q=85",
+        "alt": "Diverse professional team meeting",
+        "usage": "Hero section background or side image"
+      },
+      "steps_illustration": {
+        "url": "https://images.unsplash.com/photo-1743385779347-1549dabf1320?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwxfHxjaGVja2xpc3QlMjBjbGlwYm9hcmQlMjBidXNpbmVzcyUyMHBsYW5uaW5nfGVufDB8fHx8MTc2ODUxMzgxNnww&ixlib=rb-4.1.0&q=85",
+        "alt": "Checklist and planning",
+        "usage": "Visual for the 'Step-by-Step' section"
+      }
+    },
+    "icons": {
+      "library": "lucide-react",
+      "preferred": ["MapPin", "CheckCircle2", "FileText", "Download", "ArrowRight", "ShieldCheck"]
+    }
+  },
+  "instructions_to_main_agent": [
+    "IMPORT FONTS: Add '@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');' to index.css",
+    "THEME SETUP: Ensure Tailwind config extends font family: 'sans': ['DM Sans', ...], 'serif': ['Libre Baskerville', ...]",
+    "NO GRADIENTS: Use solid colors for backgrounds. Use texture (noise) if needed for depth, but keep it clean for this educational app.",
+    "ACCESSIBILITY: Ensure Blue/Gold contrast ratios are met. Use darker Gold (#B45309) for text, lighter Gold (#FEF3C7) for backgrounds.",
+    "STATE SELECTOR: This is the core feature. Make it the 'Hero' interaction. Don't hide it.",
+    "CONTENT: Use 'Lorem Ipsum' for detailed legal text but keep headings realistic (e.g., 'Step 1: NPI Number').",
+    "TESTING: Add data-testid to all interactive elements (buttons, inputs, cards)."
+  ],
+  "universal_guidelines": [
+    "Do not use generic centered layouts.",
+    "Create depth through layered design elements.",
+    "Use glass-morphism effects with backdrop filters where appropriate (e.g., sticky nav).",
+    "Every interaction needs micro-animations.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Use 'sonner' for toasts."
+  ]
+}
