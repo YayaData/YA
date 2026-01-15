@@ -173,14 +173,45 @@ class PeerSupportAPITester:
         )
 
     def test_template_download(self):
-        """Test template download endpoint"""
-        return self.run_test(
-            "Template Download", 
-            "GET", 
-            "templates/download/policies-procedures", 
-            200, 
-            ["message", "template_id"]
-        )
+        """Test template download endpoint (should return PDF)"""
+        url = f"{self.base_url}/api/templates/download/policies-procedures"
+        self.tests_run += 1
+        print(f"\n🔍 Testing Template PDF Download...")
+        print(f"   URL: {url}")
+        
+        try:
+            response = requests.get(url, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                # Check if it's a PDF
+                content_type = response.headers.get('content-type', '')
+                if 'application/pdf' in content_type:
+                    self.tests_passed += 1
+                    print(f"✅ Passed - PDF download working, size: {len(response.content)} bytes")
+                    return True, {}
+                else:
+                    print(f"❌ Failed - Expected PDF, got content-type: {content_type}")
+                    self.failed_tests.append({
+                        'name': 'Template PDF Download',
+                        'error': f'Wrong content type: {content_type}',
+                        'url': url
+                    })
+                    return False, {}
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                self.failed_tests.append({
+                    'name': 'Template PDF Download',
+                    'expected': 200,
+                    'actual': response.status_code,
+                    'url': url
+                })
+                return False, {}
+                
+        except Exception as e:
+            print(f"❌ Failed - Error: {str(e)}")
+            self.failed_tests.append({'name': 'Template PDF Download', 'error': str(e), 'url': url})
+            return False, {}
 
     def test_national_overview(self):
         """Test national overview endpoint"""
