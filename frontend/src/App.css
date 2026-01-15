@@ -1,34 +1,153 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* App-specific styles */
+
+/* Hero section background overlay */
+.hero-overlay {
+    background: linear-gradient(
+        135deg,
+        rgba(248, 250, 252, 0.95) 0%,
+        rgba(248, 250, 252, 0.85) 100%
+    );
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
+/* State card grid */
+.state-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    .state-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
     }
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+/* Progress indicator */
+.progress-step {
+    position: relative;
 }
 
-.App-link {
-    color: #61dafb;
+.progress-step::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 100%;
+    height: 2px;
+    background: hsl(214, 32%, 91%);
+    transform: translateY(-50%);
 }
 
-@keyframes App-logo-spin {
+.progress-step:last-child::after {
+    display: none;
+}
+
+.progress-step.completed::after {
+    background: hsl(32, 95%, 44%);
+}
+
+/* Checklist item */
+.checklist-item {
+    transition: all 0.2s ease;
+}
+
+.checklist-item:hover {
+    background-color: hsl(210, 40%, 98%);
+}
+
+/* Section divider */
+.section-divider {
+    width: 60px;
+    height: 4px;
+    background: hsl(32, 95%, 44%);
+    border-radius: 2px;
+}
+
+/* Badge styles */
+.badge-gold {
+    background-color: hsl(48, 96%, 89%);
+    color: hsl(32, 95%, 35%);
+}
+
+.badge-blue {
+    background-color: hsl(199, 89%, 94%);
+    color: hsl(200, 80%, 30%);
+}
+
+/* Template card */
+.template-card {
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.template-card:hover {
+    border-left-color: hsl(32, 95%, 44%);
+}
+
+/* CTA section */
+.cta-pattern {
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(180, 83, 9, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(15, 23, 42, 0.03) 0%, transparent 50%);
+}
+
+/* Navigation active state */
+.nav-link {
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: hsl(32, 95%, 44%);
+    transition: width 0.2s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Info box */
+.info-box {
+    border-left: 4px solid hsl(199, 89%, 70%);
+    background: hsl(199, 89%, 97%);
+}
+
+/* Warning box */
+.warning-box {
+    border-left: 4px solid hsl(32, 95%, 44%);
+    background: hsl(48, 96%, 95%);
+}
+
+/* Mobile menu animation */
+@keyframes slideIn {
     from {
-        transform: rotate(0deg);
+        transform: translateX(-100%);
+        opacity: 0;
     }
     to {
-        transform: rotate(360deg);
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.mobile-menu-enter {
+    animation: slideIn 0.3s ease forwards;
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-break {
+        page-break-before: always;
     }
 }
