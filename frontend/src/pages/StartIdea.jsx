@@ -181,6 +181,26 @@ export default function StartIdea() {
             </p>
           </div>
 
+          {/* Provider Invitation Notice */}
+          <Card className="mb-8 border border-sky-200 bg-sky-50">
+            <CardContent className="p-6">
+              <h3 className="text-base font-semibold text-slate-900 mb-3 font-['Manrope']">
+                Interested in becoming a provider?
+              </h3>
+              <div className="text-sm text-slate-600 space-y-2">
+                <p>
+                  If you own or rent a home and have available space, you may be able to start a care or housing-based business by offering placement availability in your residence or rental property.
+                </p>
+                <p>
+                  Many providers begin this way and work with the appropriate agencies to meet state and program requirements. Requirements vary by location and funding source.
+                </p>
+                <p className="text-slate-500 italic">
+                  Anchor Place™ does not license, approve, or guarantee placements. The platform provides visibility and placement coordination once a provider is ready to accept referrals.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Form Card */}
           <Card className="border border-slate-200 shadow-sm">
             <CardHeader className="pb-4">

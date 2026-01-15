@@ -82,6 +82,10 @@ const faqs = [
   {
     question: "Do providers need to respond to every inquiry?",
     answer: "No. Providers may choose which inquiries to respond to based on availability and fit."
+  },
+  {
+    question: "Can I list space in my home or a rental property to start a new business?",
+    answer: "Yes. Many providers begin by offering available space in a primary residence or a rental property. Requirements vary by state, program, and funding source, and approvals are handled through the appropriate agencies. Anchor Place™ provides placement visibility and coordination once a provider is ready to accept referrals."
   }
 ];
 
