@@ -1,10 +1,18 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, CheckCircle2, FileText, Shield, Users, MapPin } from "lucide-react";
+import { ArrowRight, CheckCircle2, FileText, Shield, Users, MapPin, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import StateSelector from "@/components/StateSelector";
+import ConsultationModal from "@/components/ConsultationModal";
+import axios from "axios";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const HomePage = () => {
+  const [consultationOpen, setConsultationOpen] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
   const features = [
     {
       icon: MapPin,
@@ -27,6 +35,24 @@ const HomePage = () => {
       description: "Understand Medicaid, MCO, and state certification requirements.",
     },
   ];
+
+  const handleCheckout = async (productId) => {
+    setCheckoutLoading(true);
+    try {
+      const response = await axios.post(`${API}/checkout/create-session`, {
+        product_id: productId,
+        origin_url: window.location.origin
+      });
+      
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
 
   return (
     <div data-testid="home-page">
@@ -158,15 +184,22 @@ const HomePage = () => {
             <Button 
               size="lg"
               className="bg-gold hover:bg-gold/90 text-white px-8"
+              onClick={() => handleCheckout("pdf-guide")}
+              disabled={checkoutLoading}
               data-testid="cta-get-full-guide-btn"
             >
-              Get the Full Guide
-              <ArrowRight className="ml-2 w-5 h-5" />
+              {checkoutLoading ? "Processing..." : (
+                <>
+                  <CreditCard className="w-5 h-5 mr-2" />
+                  Get Full Guide - $47
+                </>
+              )}
             </Button>
             <Button 
               size="lg"
               variant="outline"
               className="border-white text-white hover:bg-white hover:text-navy px-8"
+              onClick={() => setConsultationOpen(true)}
               data-testid="cta-book-consultation-btn"
             >
               Book a Consultation
@@ -174,6 +207,11 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      <ConsultationModal
+        isOpen={consultationOpen}
+        onClose={() => setConsultationOpen(false)}
+      />
     </div>
   );
 };
