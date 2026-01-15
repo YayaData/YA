@@ -14,7 +14,7 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
 - Step-by-step checklist for each state
 - Certification, Business Setup, Medicaid, MCO, Supervision, and Billing info
 - National Overview section
-- Downloadable templates
+- Downloadable PDF templates
 - Mobile-responsive design
 - No login required for MVP
 - Blue & gold color scheme on white background
@@ -29,50 +29,79 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
 - `/api/states` - Returns all 50 states with population status
 - `/api/states/{state_code}` - Returns detailed state data
 - `/api/templates` - Returns 6 downloadable templates
+- `/api/templates/download/{id}` - PDF generation with reportlab
 - `/api/national-overview` - Returns national guidance content
-- North Carolina (NC) fully populated with real data
+- `/api/products` - Returns 4 purchasable products
+- `/api/checkout/create-session` - Stripe checkout integration
+- `/api/checkout/status/{session_id}` - Payment status polling
+- `/api/email-capture` - Email lead capture
+- `/api/consultation-request` - Consultation form submissions
+- `/api/webhook/stripe` - Stripe webhook handler
+
+**Fully Populated States (5):**
+- North Carolina (NC)
+- Texas (TX)
+- California (CA)
+- Florida (FL)
+- New York (NY)
 
 **Frontend (React)**
 - **HomePage**: Hero section, feature cards, state selector grid with search
-- **StatePage**: Tabbed interface with 7 sections (Checklist, Certification, Business Setup, Medicaid, MCOs, Supervision, Billing)
-- **NationalOverviewPage**: What is Peer Support, Medicaid billing basics, universal requirements, best practices, multi-state expansion
-- **TemplatesPage**: 6 templates with preview, category filtering, and download buttons
-- **Components**: Navbar (glass effect, mobile menu), Footer (disclaimer), StateSelector, StepCard, ProgressBar, ResourceCard, InfoSection
+- **StatePage**: Tabbed interface with 7 sections
+- **NationalOverviewPage**: Comprehensive national guidance
+- **TemplatesPage**: 6 templates with email capture, premium products section
+- **PaymentSuccessPage**: Payment confirmation with polling
+- **PaymentCancelPage**: Cancellation handling
 
-**Design**
-- Libre Baskerville (serif) for headings, DM Sans for body
-- Navy (#0F172A) primary, Gold (#B45309) accent
-- Card hover effects, fade-in animations
-- Mobile-responsive navigation
+**Components:**
+- Navbar (glass effect, mobile menu, upgrade dropdown with prices)
+- Footer (disclaimer)
+- StateSelector (search, badges)
+- StepCard, ProgressBar
+- ResourceCard (with download trigger)
+- EmailCaptureModal (lead capture before download)
+- ConsultationModal (booking form)
+- InfoSection
+
+**Monetization:**
+- 4 Products via Stripe:
+  - Complete PDF Guide: $47
+  - Editable Templates Bundle: $97
+  - Strategy Consultation: $197
+  - Full Launch Course: $297
+- Email capture on template downloads
+- Consultation booking form
 
 ---
 
 ## Prioritized Backlog
 
-### P0 (Critical)
+### P0 (Critical) - COMPLETED
 - [x] All 50 states selectable
-- [x] NC fully populated
+- [x] NC, TX, CA, FL, NY fully populated
 - [x] Step-by-step checklist with progress tracking
-- [x] Basic templates available
+- [x] PDF templates downloadable
+- [x] Stripe payment integration
+- [x] Email capture system
+- [x] Consultation booking
 
 ### P1 (Important)
-- [ ] Populate remaining 49 states with real data
-- [ ] Generate actual PDF templates for download
-- [ ] Add state comparison feature
-- [ ] Implement save/export checklist progress to localStorage
+- [ ] Populate remaining 44 states with real data
+- [ ] Create actual editable Word/Excel templates for premium
+- [ ] Email notification when leads captured
+- [ ] Admin dashboard for viewing leads/payments
 
 ### P2 (Nice to Have)
 - [ ] User accounts for saved progress
 - [ ] Provider directory
 - [ ] AI assistant per state
 - [ ] State-specific document uploads
-- [ ] Email capture for lead generation
+- [ ] Newsletter integration (Mailchimp/ConvertKit)
 
 ---
 
 ## Next Action Items
-1. **Populate additional states** - Start with high-demand states (TX, CA, FL, NY)
-2. **Create actual PDF templates** - Convert preview text to downloadable PDFs
-3. **Add upsell integration** - Connect upgrade buttons to payment flow
+1. **Populate more states** - Priority: OH, PA, IL, GA, NJ, VA, WA, AZ
+2. **Email notifications** - Send alert when consultation/email captured
+3. **Admin dashboard** - View leads, payments, and analytics
 4. **SEO optimization** - Add meta tags, sitemap, structured data
-5. **Analytics integration** - Track state selection, template downloads
