@@ -230,6 +230,190 @@ class PeerSupportAPITester:
                 print(f"   ✅ Found {len(response['best_practices'])} best practices")
         return success, response
 
+    def test_products_api(self):
+        """Test products API for Stripe integration"""
+        success, response = self.run_test("Get Products", "GET", "products", 200, ["products"])
+        if success and 'products' in response:
+            products = response['products']
+            if len(products) == 4:
+                print(f"   ✅ Found exactly 4 products as expected")
+                # Check product structure
+                expected_products = ["pdf-guide", "templates-bundle", "full-course", "consultation"]
+                for product_id in expected_products:
+                    if product_id in products:
+                        product = products[product_id]
+                        if all(key in product for key in ['name', 'price', 'description']):
+                            print(f"   ✓ Product {product_id}: {product['name']} - ${product['price']}")
+                        else:
+                            print(f"   ⚠️  Product {product_id} missing required fields")
+                    else:
+                        print(f"   ⚠️  Missing expected product: {product_id}")
+            else:
+                print(f"   ⚠️  Expected 4 products, got {len(products)}")
+        return success, response
+
+    def test_email_capture(self):
+        """Test email capture endpoint"""
+        url = f"{self.base_url}/api/email-capture"
+        headers = {'Content-Type': 'application/json'}
+        test_data = {
+            "email": "test@example.com",
+            "name": "Test User",
+            "source": "template_download",
+            "template_id": "policies-procedures"
+        }
+
+        self.tests_run += 1
+        print(f"\n🔍 Testing Email Capture...")
+        print(f"   URL: {url}")
+        
+        try:
+            response = requests.post(url, json=test_data, headers=headers, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                self.tests_passed += 1
+                print(f"✅ Passed - Email capture working")
+                try:
+                    response_data = response.json()
+                    if response_data.get('success'):
+                        print(f"   ✓ Success response received")
+                    return True, response_data
+                except:
+                    return True, {}
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                self.failed_tests.append({
+                    'name': 'Email Capture',
+                    'expected': 200,
+                    'actual': response.status_code,
+                    'url': url,
+                    'response': response.text[:200] if response.text else 'No response'
+                })
+                return False, {}
+                
+        except Exception as e:
+            print(f"❌ Failed - Error: {str(e)}")
+            self.failed_tests.append({'name': 'Email Capture', 'error': str(e), 'url': url})
+            return False, {}
+
+    def test_consultation_request(self):
+        """Test consultation request endpoint"""
+        url = f"{self.base_url}/api/consultation-request"
+        headers = {'Content-Type': 'application/json'}
+        test_data = {
+            "name": "Test User",
+            "email": "test@example.com",
+            "state": "North Carolina",
+            "phone": "555-123-4567",
+            "message": "I need help starting my peer support agency"
+        }
+
+        self.tests_run += 1
+        print(f"\n🔍 Testing Consultation Request...")
+        print(f"   URL: {url}")
+        
+        try:
+            response = requests.post(url, json=test_data, headers=headers, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                self.tests_passed += 1
+                print(f"✅ Passed - Consultation request working")
+                try:
+                    response_data = response.json()
+                    if response_data.get('success'):
+                        print(f"   ✓ Success response received")
+                    return True, response_data
+                except:
+                    return True, {}
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                self.failed_tests.append({
+                    'name': 'Consultation Request',
+                    'expected': 200,
+                    'actual': response.status_code,
+                    'url': url,
+                    'response': response.text[:200] if response.text else 'No response'
+                })
+                return False, {}
+                
+        except Exception as e:
+            print(f"❌ Failed - Error: {str(e)}")
+            self.failed_tests.append({'name': 'Consultation Request', 'error': str(e), 'url': url})
+            return False, {}
+
+    def test_checkout_session_creation(self):
+        """Test Stripe checkout session creation"""
+        url = f"{self.base_url}/api/checkout/create-session"
+        headers = {'Content-Type': 'application/json'}
+        test_data = {
+            "product_id": "pdf-guide",
+            "origin_url": "https://peerlaunch.preview.emergentagent.com"
+        }
+
+        self.tests_run += 1
+        print(f"\n🔍 Testing Checkout Session Creation...")
+        print(f"   URL: {url}")
+        
+        try:
+            response = requests.post(url, json=test_data, headers=headers, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                self.tests_passed += 1
+                print(f"✅ Passed - Checkout session creation working")
+                try:
+                    response_data = response.json()
+                    if 'url' in response_data and 'session_id' in response_data:
+                        print(f"   ✓ Stripe URL generated: {response_data['url'][:50]}...")
+                        print(f"   ✓ Session ID: {response_data['session_id']}")
+                        return True, response_data
+                    else:
+                        print(f"   ⚠️  Missing url or session_id in response")
+                        return True, response_data
+                except:
+                    return True, {}
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                self.failed_tests.append({
+                    'name': 'Checkout Session Creation',
+                    'expected': 200,
+                    'actual': response.status_code,
+                    'url': url,
+                    'response': response.text[:200] if response.text else 'No response'
+                })
+                return False, {}
+                
+        except Exception as e:
+            print(f"❌ Failed - Error: {str(e)}")
+            self.failed_tests.append({'name': 'Checkout Session Creation', 'error': str(e), 'url': url})
+            return False, {}
+
+    def test_fully_populated_states(self):
+        """Test that all 5 states (NC, TX, CA, FL, NY) are fully populated"""
+        fully_populated_states = ["NC", "TX", "CA", "FL", "NY"]
+        all_passed = True
+        
+        for state_code in fully_populated_states:
+            success, response = self.run_test(
+                f"Get {state_code} State Data", 
+                "GET", 
+                f"states/{state_code}", 
+                200, 
+                ["state_code", "state_name", "is_fully_populated"]
+            )
+            if success:
+                if response.get('is_fully_populated'):
+                    print(f"   ✅ {state_code} is fully populated")
+                else:
+                    print(f"   ❌ {state_code} should be fully populated but isn't")
+                    all_passed = False
+            else:
+                all_passed = False
+        
+        return all_passed, {}
+
 def main():
     print("🚀 Starting Peer Support Agency API Tests")
     print("=" * 60)
