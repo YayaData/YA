@@ -23,6 +23,7 @@ const Navbar = () => {
   const navLinks = [
     { path: "/", label: "Home", icon: MapPin },
     { path: "/national-overview", label: "National Overview", icon: Globe },
+    { path: "/federal-links", label: "Federal Links", icon: Globe },
     { path: "/templates", label: "Templates", icon: FileText },
   ];
 
