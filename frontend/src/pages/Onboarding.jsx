@@ -471,7 +471,16 @@ export default function Onboarding() {
       {/* Navigation Footer */}
       {currentStep > 0 && currentStep < 7 && (
         <footer className="w-full py-6 px-6 border-t border-slate-100">
-          <div className="max-w-2xl mx-auto flex justify-end">
+          <div className="max-w-2xl mx-auto flex justify-between items-center">
+            <Button 
+              variant="outline"
+              onClick={prevStep}
+              data-testid="footer-back-btn"
+              className="h-11 px-6 gap-2 border-slate-300"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </Button>
             <Button 
               onClick={currentStep === 6 ? () => setCurrentStep(7) : nextStep}
               disabled={!canProceed()}
