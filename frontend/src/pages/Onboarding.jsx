@@ -464,13 +464,14 @@ export default function Onboarding() {
   const renderStep = () => {
     switch (currentStep) {
       case 0: return <WelcomeScreen />;
-      case 1: return <RoleScreen />;
-      case 2: return <StateScreen />;
-      case 3: return <GoalScreen />;
-      case 4: return <ReadinessScreen />;
-      case 5: return <PopulationScreen />;
-      case 6: return <ActionReadinessScreen />;
-      case 7:
+      case 1: return <ConfirmationScreen />;
+      case 2: return <RoleScreen />;
+      case 3: return <StateScreen />;
+      case 4: return <GoalScreen />;
+      case 5: return <ReadinessScreen />;
+      case 6: return <PopulationScreen />;
+      case 7: return <ActionReadinessScreen />;
+      case 8:
         if (formData.actionReadiness === "yes_now") return <OutcomeYesNow />;
         if (formData.actionReadiness === "maybe_support") return <OutcomeMaybeSupport />;
         if (formData.actionReadiness === "no_setup") return <OutcomeNoSetup />;
@@ -479,13 +480,15 @@ export default function Onboarding() {
     }
   };
 
-  const totalSteps = 7;
-  const isOutcomeScreen = currentStep === 7;
+  const totalSteps = 7; // Quiz steps (not counting welcome, confirmation, and outcome)
+  const isOutcomeScreen = currentStep === 8;
+  const isConfirmationScreen = currentStep === 1;
+  const quizStepNumber = currentStep > 1 ? currentStep - 1 : 0; // For display purposes
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
       {/* Header with Navigation */}
-      {currentStep > 0 && !isOutcomeScreen && (
+      {currentStep > 1 && !isOutcomeScreen && (
         <header className="w-full py-4 px-6 border-b border-slate-100">
           <div className="max-w-2xl mx-auto flex items-center justify-between">
             <Button 
@@ -499,7 +502,7 @@ export default function Onboarding() {
               Back
             </Button>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-500">Step {currentStep} of {totalSteps}</span>
+              <span className="text-sm text-slate-500">Step {quizStepNumber} of {totalSteps - 1}</span>
             </div>
             <Button 
               variant="ghost" 
@@ -515,11 +518,11 @@ export default function Onboarding() {
       )}
 
       {/* Progress Bar */}
-      {currentStep > 0 && !isOutcomeScreen && (
+      {currentStep > 1 && !isOutcomeScreen && (
         <div className="w-full bg-slate-100 h-1">
           <div 
             className="bg-sky-600 h-1 transition-all duration-300"
-            style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+            style={{ width: `${(quizStepNumber / (totalSteps - 1)) * 100}%` }}
           />
         </div>
       )}
