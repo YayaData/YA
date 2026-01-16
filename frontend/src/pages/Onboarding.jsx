@@ -1,0 +1,485 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ArrowLeft, ArrowRight, Anchor, CheckCircle2, HelpCircle, Settings } from "lucide-react";
+
+const US_STATES = [
+  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+  "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois",
+  "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts",
+  "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
+  "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota",
+  "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+  "Wisconsin", "Wyoming"
+];
+
+const ROLE_OPTIONS = [
+  { value: "agency", label: "Agency" },
+  { value: "homeowner", label: "Homeowner / Housing Provider" },
+  { value: "individual_provider", label: "Individual Provider (peer/DSP/caregiver)" },
+  { value: "case_manager", label: "Case Manager / Referrer" },
+  { value: "partner", label: "Partner (housing or services)" }
+];
+
+const GOAL_OPTIONS = [
+  { value: "accept_client", label: "Accept a client" },
+  { value: "place_client", label: "Place a client" },
+  { value: "explore", label: "Explore placement options" },
+  { value: "partner", label: "Partner with an agency" }
+];
+
+const READINESS_OPTIONS = [
+  { value: "available_room", label: "Available room or unit" },
+  { value: "staff_available", label: "Staff or support available" },
+  { value: "working_with_agency", label: "Working with an agency" },
+  { value: "certification", label: "Certification (peer/DSP/etc.)" },
+  { value: "none", label: "None yet — need guidance" }
+];
+
+const POPULATION_OPTIONS = [
+  { value: "adults", label: "Adults (18+)" },
+  { value: "mental_health", label: "Mental Health" },
+  { value: "substance_use", label: "Substance Use" },
+  { value: "disabilities", label: "Disabilities" },
+  { value: "seniors", label: "Seniors" },
+  { value: "justice_involved", label: "Justice-involved" }
+];
+
+const ACTION_READINESS_OPTIONS = [
+  { value: "yes_now", label: "Yes — now" },
+  { value: "maybe_support", label: "Maybe — need support" },
+  { value: "no_setup", label: "No — need setup" }
+];
+
+export default function Onboarding() {
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState({
+    role: "",
+    state: "",
+    goal: "",
+    readiness: [],
+    population: [],
+    actionReadiness: ""
+  });
+
+  const updateFormData = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const toggleMultiSelect = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].includes(value)
+        ? prev[field].filter(v => v !== value)
+        : [...prev[field], value]
+    }));
+  };
+
+  const canProceed = () => {
+    switch (currentStep) {
+      case 0: return true; // Welcome screen
+      case 1: return formData.role !== "";
+      case 2: return formData.state !== "";
+      case 3: return formData.goal !== "";
+      case 4: return formData.readiness.length > 0;
+      case 5: return true; // Population is optional
+      case 6: return formData.actionReadiness !== "";
+      default: return false;
+    }
+  };
+
+  const nextStep = () => {
+    if (canProceed() && currentStep < 7) {
+      setCurrentStep(prev => prev + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(prev => prev - 1);
+    }
+  };
+
+  const handleComplete = () => {
+    // Store onboarding completion
+    localStorage.setItem('anchorplace_onboarding_complete', 'true');
+    localStorage.setItem('anchorplace_user_data', JSON.stringify(formData));
+    
+    // Route based on action readiness
+    if (formData.actionReadiness === "yes_now") {
+      navigate("/");
+    }
+  };
+
+  const goToHome = () => {
+    localStorage.setItem('anchorplace_onboarding_complete', 'true');
+    localStorage.setItem('anchorplace_user_data', JSON.stringify(formData));
+    navigate("/");
+  };
+
+  // Step 0: Welcome
+  const WelcomeScreen = () => (
+    <div className="text-center space-y-6">
+      <div className="inline-flex p-4 rounded-2xl bg-sky-100 text-sky-600 mb-2">
+        <Anchor className="h-12 w-12" />
+      </div>
+      <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight font-['Manrope']">
+        Find or Offer Placement — Fast & Compliant
+      </h1>
+      <p className="text-lg text-slate-600 max-w-xl mx-auto leading-relaxed">
+        Answer a few quick questions to see if you can place or accept a client today. 
+        If setup is required, we'll guide you.
+      </p>
+      <Button 
+        onClick={nextStep}
+        data-testid="start-onboarding-btn"
+        className="bg-sky-600 hover:bg-sky-700 h-12 px-8 text-base"
+      >
+        Start (2 minutes)
+        <ArrowRight className="ml-2 h-5 w-5" />
+      </Button>
+    </div>
+  );
+
+  // Step 1: Role Selection
+  const RoleScreen = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
+          What best describes you right now?
+        </h2>
+        <p className="text-slate-600">Select one option</p>
+      </div>
+      <RadioGroup 
+        value={formData.role} 
+        onValueChange={(value) => updateFormData('role', value)}
+        className="space-y-3"
+      >
+        {ROLE_OPTIONS.map((option) => (
+          <div key={option.value} className="flex items-center space-x-3 p-4 border border-slate-200 rounded-xl hover:border-sky-300 hover:bg-sky-50 transition-all cursor-pointer">
+            <RadioGroupItem value={option.value} id={option.value} data-testid={`role-${option.value}`} />
+            <Label htmlFor={option.value} className="flex-1 cursor-pointer text-base">{option.label}</Label>
+          </div>
+        ))}
+      </RadioGroup>
+    </div>
+  );
+
+  // Step 2: State Selection
+  const StateScreen = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
+          What state are you operating in?
+        </h2>
+        <p className="text-slate-600">Select your state</p>
+      </div>
+      <Select value={formData.state} onValueChange={(value) => updateFormData('state', value)}>
+        <SelectTrigger className="h-12" data-testid="state-select">
+          <SelectValue placeholder="Select a state" />
+        </SelectTrigger>
+        <SelectContent>
+          {US_STATES.map((state) => (
+            <SelectItem key={state} value={state}>{state}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+
+  // Step 3: Goal Selection
+  const GoalScreen = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
+          What are you trying to do today?
+        </h2>
+        <p className="text-slate-600">Select one option</p>
+      </div>
+      <RadioGroup 
+        value={formData.goal} 
+        onValueChange={(value) => updateFormData('goal', value)}
+        className="space-y-3"
+      >
+        {GOAL_OPTIONS.map((option) => (
+          <div key={option.value} className="flex items-center space-x-3 p-4 border border-slate-200 rounded-xl hover:border-sky-300 hover:bg-sky-50 transition-all cursor-pointer">
+            <RadioGroupItem value={option.value} id={`goal-${option.value}`} data-testid={`goal-${option.value}`} />
+            <Label htmlFor={`goal-${option.value}`} className="flex-1 cursor-pointer text-base">{option.label}</Label>
+          </div>
+        ))}
+      </RadioGroup>
+    </div>
+  );
+
+  // Step 4: Readiness
+  const ReadinessScreen = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
+          Which do you have right now?
+        </h2>
+        <p className="text-slate-600">Select all that apply</p>
+      </div>
+      <div className="space-y-3">
+        {READINESS_OPTIONS.map((option) => (
+          <div 
+            key={option.value} 
+            className={`flex items-center space-x-3 p-4 border rounded-xl transition-all cursor-pointer ${
+              formData.readiness.includes(option.value) 
+                ? 'border-sky-500 bg-sky-50' 
+                : 'border-slate-200 hover:border-sky-300 hover:bg-sky-50'
+            }`}
+            onClick={() => toggleMultiSelect('readiness', option.value)}
+          >
+            <Checkbox 
+              checked={formData.readiness.includes(option.value)}
+              onCheckedChange={() => toggleMultiSelect('readiness', option.value)}
+              data-testid={`readiness-${option.value}`}
+            />
+            <Label className="flex-1 cursor-pointer text-base">{option.label}</Label>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Step 5: Population (Optional)
+  const PopulationScreen = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
+          Who can you accept or place?
+        </h2>
+        <p className="text-slate-600">Select all that apply (optional)</p>
+      </div>
+      <div className="space-y-3">
+        {POPULATION_OPTIONS.map((option) => (
+          <div 
+            key={option.value} 
+            className={`flex items-center space-x-3 p-4 border rounded-xl transition-all cursor-pointer ${
+              formData.population.includes(option.value) 
+                ? 'border-sky-500 bg-sky-50' 
+                : 'border-slate-200 hover:border-sky-300 hover:bg-sky-50'
+            }`}
+            onClick={() => toggleMultiSelect('population', option.value)}
+          >
+            <Checkbox 
+              checked={formData.population.includes(option.value)}
+              onCheckedChange={() => toggleMultiSelect('population', option.value)}
+              data-testid={`population-${option.value}`}
+            />
+            <Label className="flex-1 cursor-pointer text-base">{option.label}</Label>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Step 6: Action Readiness
+  const ActionReadinessScreen = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
+          Are you ready to act today?
+        </h2>
+        <p className="text-slate-600">Select one option</p>
+      </div>
+      <RadioGroup 
+        value={formData.actionReadiness} 
+        onValueChange={(value) => updateFormData('actionReadiness', value)}
+        className="space-y-3"
+      >
+        {ACTION_READINESS_OPTIONS.map((option) => (
+          <div key={option.value} className="flex items-center space-x-3 p-4 border border-slate-200 rounded-xl hover:border-sky-300 hover:bg-sky-50 transition-all cursor-pointer">
+            <RadioGroupItem value={option.value} id={`action-${option.value}`} data-testid={`action-${option.value}`} />
+            <Label htmlFor={`action-${option.value}`} className="flex-1 cursor-pointer text-base">{option.label}</Label>
+          </div>
+        ))}
+      </RadioGroup>
+    </div>
+  );
+
+  // Outcome Screens
+  const OutcomeYesNow = () => (
+    <div className="text-center space-y-6">
+      <div className="inline-flex p-4 rounded-2xl bg-emerald-100 text-emerald-600">
+        <CheckCircle2 className="h-12 w-12" />
+      </div>
+      <h2 className="text-2xl font-bold text-slate-900 font-['Manrope']">
+        You're Ready to Go!
+      </h2>
+      <p className="text-lg text-slate-600 max-w-md mx-auto">
+        You can now list your available space or submit a placement request.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <Button 
+          onClick={goToHome}
+          data-testid="go-to-placements-btn"
+          className="bg-sky-600 hover:bg-sky-700 h-12 px-6"
+        >
+          Go to Placement Actions
+        </Button>
+      </div>
+      <p className="text-xs text-slate-500 max-w-md mx-auto pt-4 border-t border-slate-100">
+        Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
+      </p>
+    </div>
+  );
+
+  const OutcomeMaybeSupport = () => (
+    <div className="text-center space-y-6">
+      <div className="inline-flex p-4 rounded-2xl bg-amber-100 text-amber-600">
+        <HelpCircle className="h-12 w-12" />
+      </div>
+      <h2 className="text-2xl font-bold text-slate-900 font-['Manrope']">
+        You Can Proceed with Support
+      </h2>
+      <p className="text-lg text-slate-600 max-w-md mx-auto">
+        You can proceed with support or an agency partner.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <Button 
+          onClick={goToHome}
+          data-testid="find-agency-btn"
+          className="bg-sky-600 hover:bg-sky-700 h-12 px-6"
+        >
+          Find an Agency Partner
+        </Button>
+        <Button 
+          variant="outline"
+          onClick={() => navigate("/how-it-works")}
+          data-testid="learn-needed-btn"
+          className="h-12 px-6"
+        >
+          Learn What's Needed
+        </Button>
+      </div>
+      <p className="text-xs text-slate-500 max-w-md mx-auto pt-4 border-t border-slate-100">
+        Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
+      </p>
+    </div>
+  );
+
+  const OutcomeNoSetup = () => (
+    <div className="text-center space-y-6">
+      <div className="inline-flex p-4 rounded-2xl bg-slate-100 text-slate-600">
+        <Settings className="h-12 w-12" />
+      </div>
+      <h2 className="text-2xl font-bold text-slate-900 font-['Manrope']">
+        Setup Required
+      </h2>
+      <p className="text-lg text-slate-600 max-w-md mx-auto">
+        You need setup before placement or billing.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <Button 
+          onClick={goToHome}
+          data-testid="setup-guide-btn"
+          className="bg-sky-600 hover:bg-sky-700 h-12 px-6"
+        >
+          Go to Setup Guide (AnchorAxis)
+        </Button>
+      </div>
+      <p className="text-xs text-slate-500 max-w-md mx-auto pt-4 border-t border-slate-100">
+        Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
+      </p>
+    </div>
+  );
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case 0: return <WelcomeScreen />;
+      case 1: return <RoleScreen />;
+      case 2: return <StateScreen />;
+      case 3: return <GoalScreen />;
+      case 4: return <ReadinessScreen />;
+      case 5: return <PopulationScreen />;
+      case 6: return <ActionReadinessScreen />;
+      case 7:
+        if (formData.actionReadiness === "yes_now") return <OutcomeYesNow />;
+        if (formData.actionReadiness === "maybe_support") return <OutcomeMaybeSupport />;
+        if (formData.actionReadiness === "no_setup") return <OutcomeNoSetup />;
+        return <OutcomeYesNow />;
+      default: return <WelcomeScreen />;
+    }
+  };
+
+  const totalSteps = 7;
+  const isOutcomeScreen = currentStep === 7;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
+      {/* Header */}
+      {currentStep > 0 && !isOutcomeScreen && (
+        <header className="w-full py-4 px-6 border-b border-slate-100">
+          <div className="max-w-2xl mx-auto flex items-center justify-between">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={prevStep}
+              data-testid="back-btn"
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </Button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-500">Step {currentStep} of {totalSteps}</span>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={goToHome}
+              className="text-slate-500"
+            >
+              Skip
+            </Button>
+          </div>
+        </header>
+      )}
+
+      {/* Progress Bar */}
+      {currentStep > 0 && !isOutcomeScreen && (
+        <div className="w-full bg-slate-100 h-1">
+          <div 
+            className="bg-sky-600 h-1 transition-all duration-300"
+            style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+          />
+        </div>
+      )}
+
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center px-6 py-12">
+        <Card className="w-full max-w-xl border-0 shadow-none bg-transparent">
+          <CardContent className="p-0">
+            {renderStep()}
+          </CardContent>
+        </Card>
+      </main>
+
+      {/* Navigation Footer */}
+      {currentStep > 0 && currentStep < 7 && (
+        <footer className="w-full py-6 px-6 border-t border-slate-100">
+          <div className="max-w-2xl mx-auto flex justify-end">
+            <Button 
+              onClick={currentStep === 6 ? () => setCurrentStep(7) : nextStep}
+              disabled={!canProceed()}
+              data-testid="continue-btn"
+              className="bg-sky-600 hover:bg-sky-700 h-11 px-8 gap-2"
+            >
+              {currentStep === 6 ? "See Results" : "Continue"}
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </footer>
+      )}
+    </div>
+  );
+}
