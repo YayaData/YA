@@ -417,6 +417,145 @@ class PeerSupportAPITester:
         
         return all_passed, {}
 
+    def test_admin_login_correct_password(self):
+        """Test admin login with correct password"""
+        url = f"{self.base_url}/api/admin/login"
+        headers = {'Content-Type': 'application/json'}
+        test_data = {"password": "Chris229@@@"}
+
+        self.tests_run += 1
+        print(f"\n🔍 Testing Admin Login (Correct Password)...")
+        print(f"   URL: {url}")
+        
+        try:
+            response = requests.post(url, json=test_data, headers=headers, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                self.tests_passed += 1
+                print(f"✅ Passed - Admin login with correct password working")
+                try:
+                    response_data = response.json()
+                    if response_data.get('success'):
+                        print(f"   ✓ Success response received")
+                    return True, response_data
+                except:
+                    return True, {}
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                self.failed_tests.append({
+                    'name': 'Admin Login (Correct Password)',
+                    'expected': 200,
+                    'actual': response.status_code,
+                    'url': url,
+                    'response': response.text[:200] if response.text else 'No response'
+                })
+                return False, {}
+                
+        except Exception as e:
+            print(f"❌ Failed - Error: {str(e)}")
+            self.failed_tests.append({'name': 'Admin Login (Correct Password)', 'error': str(e), 'url': url})
+            return False, {}
+
+    def test_admin_login_wrong_password(self):
+        """Test admin login with wrong password"""
+        url = f"{self.base_url}/api/admin/login"
+        headers = {'Content-Type': 'application/json'}
+        test_data = {"password": "wrongpassword"}
+
+        self.tests_run += 1
+        print(f"\n🔍 Testing Admin Login (Wrong Password)...")
+        print(f"   URL: {url}")
+        
+        try:
+            response = requests.post(url, json=test_data, headers=headers, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 401:
+                self.tests_passed += 1
+                print(f"✅ Passed - Admin login correctly rejects wrong password")
+                return True, {}
+            else:
+                print(f"❌ Failed - Expected 401, got {response.status_code}")
+                self.failed_tests.append({
+                    'name': 'Admin Login (Wrong Password)',
+                    'expected': 401,
+                    'actual': response.status_code,
+                    'url': url,
+                    'response': response.text[:200] if response.text else 'No response'
+                })
+                return False, {}
+                
+        except Exception as e:
+            print(f"❌ Failed - Error: {str(e)}")
+            self.failed_tests.append({'name': 'Admin Login (Wrong Password)', 'error': str(e), 'url': url})
+            return False, {}
+
+    def test_admin_stats(self):
+        """Test admin stats endpoint"""
+        url = f"{self.base_url}/api/admin/stats?password=Chris229@@@"
+        
+        self.tests_run += 1
+        print(f"\n🔍 Testing Admin Stats...")
+        print(f"   URL: {url}")
+        
+        try:
+            response = requests.get(url, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                self.tests_passed += 1
+                print(f"✅ Passed - Admin stats endpoint working")
+                try:
+                    response_data = response.json()
+                    expected_keys = ['leads', 'consultations', 'payments', 'paid_payments', 'total_revenue']
+                    for key in expected_keys:
+                        if key in response_data:
+                            print(f"   ✓ Found stat: {key} = {response_data[key]}")
+                        else:
+                            print(f"   ⚠️  Missing stat: {key}")
+                    return True, response_data
+                except:
+                    return True, {}
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                self.failed_tests.append({
+                    'name': 'Admin Stats',
+                    'expected': 200,
+                    'actual': response.status_code,
+                    'url': url,
+                    'response': response.text[:200] if response.text else 'No response'
+                })
+                return False, {}
+                
+        except Exception as e:
+            print(f"❌ Failed - Error: {str(e)}")
+            self.failed_tests.append({'name': 'Admin Stats', 'error': str(e), 'url': url})
+            return False, {}
+
+    def test_get_all_states_count(self):
+        """Test that API returns exactly 50 states with 13 fully populated"""
+        success, response = self.run_test("Get All States Count", "GET", "states", 200, ["states"])
+        if success and 'states' in response:
+            states = response['states']
+            if len(states) == 50:
+                print(f"   ✅ Correct total number of states: {len(states)}")
+            else:
+                print(f"   ⚠️  Expected 50 states, got {len(states)}")
+            
+            # Count fully populated states
+            fully_populated_count = sum(1 for s in states if s.get('is_fully_populated'))
+            if fully_populated_count == 13:
+                print(f"   ✅ Correct number of fully populated states: {fully_populated_count}")
+            else:
+                print(f"   ⚠️  Expected 13 fully populated states, got {fully_populated_count}")
+                
+            # List fully populated states
+            fully_populated = [s['code'] for s in states if s.get('is_fully_populated')]
+            print(f"   📋 Fully populated states: {', '.join(fully_populated)}")
+            
+        return success, response
+
 def main():
     print("🚀 Starting Peer Support Agency API Tests")
     print("=" * 60)
