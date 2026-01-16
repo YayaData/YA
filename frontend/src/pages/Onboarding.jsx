@@ -85,18 +85,19 @@ export default function Onboarding() {
   const canProceed = () => {
     switch (currentStep) {
       case 0: return true; // Welcome screen
-      case 1: return formData.role !== "";
-      case 2: return formData.state !== "";
-      case 3: return formData.goal !== "";
-      case 4: return formData.readiness.length > 0;
-      case 5: return true; // Population is optional
-      case 6: return formData.actionReadiness !== "";
+      case 1: return true; // Confirmation screen
+      case 2: return formData.role !== "";
+      case 3: return formData.state !== "";
+      case 4: return formData.goal !== "";
+      case 5: return formData.readiness.length > 0;
+      case 6: return true; // Population is optional
+      case 7: return formData.actionReadiness !== "";
       default: return false;
     }
   };
 
   const nextStep = () => {
-    if (canProceed() && currentStep < 7) {
+    if (canProceed() && currentStep < 8) {
       setCurrentStep(prev => prev + 1);
     }
   };
