@@ -419,16 +419,16 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
-      {/* Header */}
+      {/* Header with Navigation */}
       {currentStep > 0 && !isOutcomeScreen && (
         <header className="w-full py-4 px-6 border-b border-slate-100">
           <div className="max-w-2xl mx-auto flex items-center justify-between">
             <Button 
-              variant="ghost" 
+              variant="outline" 
               size="sm"
               onClick={prevStep}
               data-testid="back-btn"
-              className="gap-2"
+              className="gap-2 border-slate-300"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -439,10 +439,11 @@ export default function Onboarding() {
             <Button 
               variant="ghost" 
               size="sm"
-              onClick={goToHome}
-              className="text-slate-500"
+              onClick={() => navigate("/")}
+              data-testid="save-exit-btn"
+              className="text-slate-500 hover:text-slate-700"
             >
-              Skip
+              Save & Exit
             </Button>
           </div>
         </header>
