@@ -182,7 +182,7 @@ export default function StartIdea() {
           </div>
 
           {/* Provider Invitation Notice */}
-          <Card className="mb-8 border border-sky-200 bg-sky-50">
+          <Card className="mb-6 border border-sky-200 bg-sky-50">
             <CardContent className="p-6">
               <h3 className="text-base font-semibold text-slate-900 mb-3 font-['Manrope']">
                 Interested in becoming a provider?
@@ -198,6 +198,15 @@ export default function StartIdea() {
                   Anchor Place™ does not license, approve, or guarantee placements. The platform provides visibility and placement coordination once a provider is ready to accept referrals.
                 </p>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Provider Readiness Notice */}
+          <Card className="mb-8 border border-amber-200 bg-amber-50">
+            <CardContent className="p-4">
+              <p className="text-sm text-amber-800">
+                <span className="font-semibold">Before receiving placements</span>, providers must complete a short readiness check (training and documentation verification). You'll be guided through this step before any placements are assigned.
+              </p>
             </CardContent>
           </Card>
 
