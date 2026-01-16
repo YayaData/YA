@@ -124,6 +124,18 @@ export default function Onboarding() {
     navigate("/");
   };
 
+  const restartQuiz = () => {
+    setFormData({
+      role: "",
+      state: "",
+      goal: "",
+      readiness: [],
+      population: [],
+      actionReadiness: ""
+    });
+    setCurrentStep(0);
+  };
+
   // Step 0: Welcome
   const WelcomeScreen = () => (
     <div className="text-center space-y-6">
@@ -148,7 +160,63 @@ export default function Onboarding() {
     </div>
   );
 
-  // Step 1: Role Selection
+  // Step 1: Confirmation Screen (Before We Start)
+  const ConfirmationScreen = () => (
+    <div className="text-center space-y-6">
+      <div className="inline-flex p-4 rounded-2xl bg-slate-100 text-slate-600 mb-2">
+        <Clock className="h-10 w-10" />
+      </div>
+      <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight font-['Manrope']">
+        Before We Start
+      </h1>
+      <p className="text-lg text-slate-600 max-w-lg mx-auto leading-relaxed">
+        This short quiz helps route you correctly. You can restart the quiz at any time without affecting your access to the app.
+      </p>
+      
+      {/* Checklist */}
+      <div className="max-w-sm mx-auto text-left space-y-3 py-4">
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
+            <Check className="h-4 w-4 text-emerald-600" />
+          </div>
+          <span className="text-slate-700">Takes about 2 minutes</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
+            <Check className="h-4 w-4 text-emerald-600" />
+          </div>
+          <span className="text-slate-700">Answers are not final</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
+            <Check className="h-4 w-4 text-emerald-600" />
+          </div>
+          <span className="text-slate-700">You can restart anytime</span>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+        <Button 
+          onClick={nextStep}
+          data-testid="start-quiz-btn"
+          className="bg-sky-600 hover:bg-sky-700 h-12 px-8 text-base"
+        >
+          Start Quiz
+          <ArrowRight className="ml-2 h-5 w-5" />
+        </Button>
+        <Button 
+          variant="outline"
+          onClick={() => navigate("/")}
+          data-testid="go-back-home-btn"
+          className="h-12 px-8"
+        >
+          Go Back to Home
+        </Button>
+      </div>
+    </div>
+  );
+
+  // Step 2: Role Selection
   const RoleScreen = () => (
     <div className="space-y-6">
       <div>
@@ -172,7 +240,7 @@ export default function Onboarding() {
     </div>
   );
 
-  // Step 2: State Selection
+  // Step 3: State Selection
   const StateScreen = () => (
     <div className="space-y-6">
       <div>
