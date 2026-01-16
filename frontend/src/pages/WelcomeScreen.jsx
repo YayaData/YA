@@ -83,6 +83,15 @@ export default function WelcomeScreen() {
               <p>Choose the option below based on your role.</p>
               <p>You'll be guided step by step — no prior setup required.</p>
             </div>
+            <Button 
+              onClick={() => navigate("/onboarding")}
+              variant="outline"
+              data-testid="take-qualification-btn"
+              className="mt-4 gap-2"
+            >
+              <ClipboardCheck className="h-4 w-4" />
+              New here? Take the 2-min qualification check
+            </Button>
           </div>
 
           {/* Action Cards Grid */}
