@@ -231,25 +231,28 @@ class PeerSupportAPITester:
         return success, response
 
     def test_products_api(self):
-        """Test products API for Stripe integration"""
+        """Test products API for Stripe integration - should have 5 products including state-bundle"""
         success, response = self.run_test("Get Products", "GET", "products", 200, ["products"])
         if success and 'products' in response:
             products = response['products']
-            if len(products) == 4:
-                print(f"   ✅ Found exactly 4 products as expected")
-                # Check product structure
-                expected_products = ["pdf-guide", "templates-bundle", "full-course", "consultation"]
+            if len(products) == 5:
+                print(f"   ✅ Found exactly 5 products as expected")
+                # Check product structure including new state-bundle
+                expected_products = ["pdf-guide", "templates-bundle", "state-bundle", "consultation", "full-course"]
                 for product_id in expected_products:
                     if product_id in products:
                         product = products[product_id]
                         if all(key in product for key in ['name', 'price', 'description']):
                             print(f"   ✓ Product {product_id}: {product['name']} - ${product['price']}")
+                            # Verify state-bundle price
+                            if product_id == "state-bundle" and product['price'] == 147.00:
+                                print(f"   ✅ State Bundle has correct price: $147")
                         else:
                             print(f"   ⚠️  Product {product_id} missing required fields")
                     else:
                         print(f"   ⚠️  Missing expected product: {product_id}")
             else:
-                print(f"   ⚠️  Expected 4 products, got {len(products)}")
+                print(f"   ⚠️  Expected 5 products, got {len(products)}")
         return success, response
 
     def test_email_capture(self):
