@@ -570,12 +570,12 @@ def main():
     test_results.append(tester.test_root_endpoint())
     
     # States API tests
-    test_results.append(tester.test_get_all_states())
+    test_results.append(tester.test_get_all_states_count())
     test_results.append(tester.test_get_nc_state_data())
     test_results.append(tester.test_get_other_state_data())
     test_results.append(tester.test_invalid_state())
     
-    # Test all 5 fully populated states
+    # Test all 13 fully populated states
     test_results.append(tester.test_fully_populated_states())
     
     # Templates API tests
@@ -586,11 +586,16 @@ def main():
     # National overview test
     test_results.append(tester.test_national_overview())
     
-    # New features tests
+    # Products and payment tests
     test_results.append(tester.test_products_api())
     test_results.append(tester.test_email_capture())
     test_results.append(tester.test_consultation_request())
     test_results.append(tester.test_checkout_session_creation())
+    
+    # Admin functionality tests
+    test_results.append(tester.test_admin_login_correct_password())
+    test_results.append(tester.test_admin_login_wrong_password())
+    test_results.append(tester.test_admin_stats())
     
     # Print final results
     print("\n" + "=" * 60)
