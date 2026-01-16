@@ -155,7 +155,7 @@ export default function Onboarding() {
         <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
           What best describes you right now?
         </h2>
-        <p className="text-slate-600">Select one option</p>
+        <p className="text-slate-500 text-sm">You can go back or change your answers at any time.</p>
       </div>
       <RadioGroup 
         value={formData.role} 
@@ -179,7 +179,10 @@ export default function Onboarding() {
         <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
           What state are you operating in?
         </h2>
-        <p className="text-slate-600">Select your state</p>
+        <p className="text-slate-500 text-sm">You can go back or change your answers at any time.</p>
+      </div>
+        </h2>
+        <p className="text-slate-500 text-sm">You can go back or change your answers at any time.</p>
       </div>
       <Select value={formData.state} onValueChange={(value) => updateFormData('state', value)}>
         <SelectTrigger className="h-12" data-testid="state-select">
@@ -201,7 +204,7 @@ export default function Onboarding() {
         <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
           What are you trying to do today?
         </h2>
-        <p className="text-slate-600">Select one option</p>
+        <p className="text-slate-500 text-sm">You can go back or change your answers at any time.</p>
       </div>
       <RadioGroup 
         value={formData.goal} 
@@ -225,7 +228,7 @@ export default function Onboarding() {
         <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
           Which do you have right now?
         </h2>
-        <p className="text-slate-600">Select all that apply</p>
+        <p className="text-slate-500 text-sm">You can go back or change your answers at any time.</p>
       </div>
       <div className="space-y-3">
         {READINESS_OPTIONS.map((option) => (
@@ -257,7 +260,7 @@ export default function Onboarding() {
         <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
           Who can you accept or place?
         </h2>
-        <p className="text-slate-600">Select all that apply (optional)</p>
+        <p className="text-slate-500 text-sm">You can go back or change your answers at any time. (Optional)</p>
       </div>
       <div className="space-y-3">
         {POPULATION_OPTIONS.map((option) => (
@@ -289,7 +292,7 @@ export default function Onboarding() {
         <h2 className="text-2xl font-bold text-slate-900 mb-2 font-['Manrope']">
           Are you ready to act today?
         </h2>
-        <p className="text-slate-600">Select one option</p>
+        <p className="text-slate-500 text-sm">You can go back or change your answers at any time.</p>
       </div>
       <RadioGroup 
         value={formData.actionReadiness} 
