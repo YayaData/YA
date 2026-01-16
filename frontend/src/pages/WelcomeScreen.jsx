@@ -64,13 +64,25 @@ export default function WelcomeScreen() {
       <main className="px-6 md:px-12 py-12 md:py-20">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
-          <div className="text-center mb-16 animate-in" style={{ animationDelay: '0.1s' }}>
+          <div className="text-center mb-12 animate-in" style={{ animationDelay: '0.1s' }}>
             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-4 font-['Manrope']">
               Coordinate housing placements and referrals in one place
             </h1>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
               Select the option below that matches your role. You'll be guided step by step.
             </p>
+          </div>
+
+          {/* Start Here Guidance */}
+          <div className="max-w-2xl mx-auto mb-12 text-center animate-in" style={{ animationDelay: '0.2s' }}>
+            <div className="inline-block px-4 py-1.5 bg-sky-100 text-sky-700 rounded-full text-sm font-semibold mb-4">
+              Start Here
+            </div>
+            <div className="text-slate-600 space-y-1">
+              <p>This tool helps coordinate housing placements and referrals.</p>
+              <p>Choose the option below based on your role.</p>
+              <p>You'll be guided step by step — no prior setup required.</p>
+            </div>
           </div>
 
           {/* Action Cards Grid */}
