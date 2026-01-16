@@ -538,7 +538,7 @@ export default function Onboarding() {
       </main>
 
       {/* Navigation Footer */}
-      {currentStep > 0 && currentStep < 7 && (
+      {currentStep > 1 && currentStep < 8 && (
         <footer className="w-full py-6 px-6 border-t border-slate-100">
           <div className="max-w-2xl mx-auto flex justify-between items-center">
             <Button 
