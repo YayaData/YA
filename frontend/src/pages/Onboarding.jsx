@@ -551,14 +551,25 @@ export default function Onboarding() {
               Back
             </Button>
             <Button 
-              onClick={currentStep === 6 ? () => setCurrentStep(7) : nextStep}
+              onClick={currentStep === 7 ? () => setCurrentStep(8) : nextStep}
               disabled={!canProceed()}
               data-testid="continue-btn"
               className="bg-sky-600 hover:bg-sky-700 h-11 px-8 gap-2"
             >
-              {currentStep === 6 ? "See Results" : "Continue"}
+              {currentStep === 7 ? "See Results" : "Continue"}
               <ArrowRight className="h-4 w-4" />
             </Button>
+          </div>
+          {/* Restart Quiz Link */}
+          <div className="max-w-2xl mx-auto text-center mt-4">
+            <button
+              onClick={restartQuiz}
+              data-testid="restart-quiz-link"
+              className="text-sm text-slate-500 hover:text-sky-600 underline underline-offset-2 inline-flex items-center gap-1"
+            >
+              <RotateCcw className="h-3 w-3" />
+              Restart quiz
+            </button>
           </div>
         </footer>
       )}
