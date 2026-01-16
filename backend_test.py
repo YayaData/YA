@@ -394,8 +394,8 @@ class PeerSupportAPITester:
             return False, {}
 
     def test_fully_populated_states(self):
-        """Test that all 5 states (NC, TX, CA, FL, NY) are fully populated"""
-        fully_populated_states = ["NC", "TX", "CA", "FL", "NY"]
+        """Test that all 13 states are fully populated"""
+        fully_populated_states = ["NC", "TX", "CA", "FL", "NY", "OH", "PA", "IL", "GA", "NJ", "VA", "WA", "AZ"]
         all_passed = True
         
         for state_code in fully_populated_states:
