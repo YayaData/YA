@@ -5,7 +5,7 @@ import { Users, Building2, HelpCircle, Lightbulb, Anchor } from "lucide-react";
 const actionCards = [
   {
     id: "place-client",
-    title: "Place a Client",
+    title: "Place a Client (Case Managers & Agencies)",
     description: "Submit a placement request for someone who needs housing or care services.",
     icon: Users,
     path: "/place-client",
@@ -15,7 +15,7 @@ const actionCards = [
   },
   {
     id: "list-placements",
-    title: "List Available Placements",
+    title: "Offer a Placement (Providers & Homeowners)",
     description: "Browse current openings at facilities and housing programs in your area.",
     icon: Building2,
     path: "/placements",
@@ -66,11 +66,10 @@ export default function WelcomeScreen() {
           {/* Hero Section */}
           <div className="text-center mb-16 animate-in" style={{ animationDelay: '0.1s' }}>
             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-4 font-['Manrope']">
-              What do you need to do today?
+              Coordinate housing placements and referrals in one place
             </h1>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Anchor Place helps coordinate placement availability and referrals for people with complex care and housing needs. 
-              Select an option below to get started.
+              Select the option below that matches your role. You'll be guided step by step.
             </p>
           </div>
 
