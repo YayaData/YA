@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, Building2, HelpCircle, Lightbulb, Anchor } from "lucide-react";
+import { Users, Building2, HelpCircle, Lightbulb, Anchor, ClipboardCheck } from "lucide-react";
 
 const actionCards = [
   {
