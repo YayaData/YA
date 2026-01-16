@@ -181,9 +181,6 @@ export default function Onboarding() {
         </h2>
         <p className="text-slate-500 text-sm">You can go back or change your answers at any time.</p>
       </div>
-        </h2>
-        <p className="text-slate-500 text-sm">You can go back or change your answers at any time.</p>
-      </div>
       <Select value={formData.state} onValueChange={(value) => updateFormData('state', value)}>
         <SelectTrigger className="h-12" data-testid="state-select">
           <SelectValue placeholder="Select a state" />
