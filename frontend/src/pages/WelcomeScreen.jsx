@@ -19,7 +19,7 @@ const actionCards = [
     description: "Browse current openings at facilities and housing programs in your area.",
     icon: Building2,
     path: "/placements",
-    image: "https://images.unsplash.com/photo-1752920886911-ca01fba18fcb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxjYXJlZ2l2ZXIlMjBwcm92aWRlciUyMHdlbGNvbWluZyUyMGhvbWUlMjBzdXBwb3J0aXZlJTIwaG91c2luZyUyMGNvbWZvcnRhYmxlJTIwbGl2aW5nJTIwc3BhY2V8ZW58MHx8fHwxNzY4NTY4OTAyfDA&ixlib=rb-4.1.0&q=85&w=400",
+    image: "https://images.unsplash.com/photo-1605742055648-d52e55d2f9bf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxjb3p5JTIwYmVkcm9vbSUyMGNsZWFuJTIwbGluZW5zJTIwd2VsY29taW5nJTIwcHJpdmF0ZSUyMHJvb20lMjByZXNpZGVudGlhbHxlbnwwfHx8fDE3Njg1NjkxOTR8MA&ixlib=rb-4.1.0&q=85&w=400",
     color: "bg-emerald-50 hover:bg-emerald-100",
     iconColor: "text-emerald-600"
   },
