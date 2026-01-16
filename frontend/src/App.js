@@ -7,6 +7,7 @@ import HomePage from "@/pages/HomePage";
 import StatePage from "@/pages/StatePage";
 import NationalOverviewPage from "@/pages/NationalOverviewPage";
 import TemplatesPage from "@/pages/TemplatesPage";
+import FederalLinksPage from "@/pages/FederalLinksPage";
 import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
 import PaymentCancelPage from "@/pages/PaymentCancelPage";
 import AdminPage from "@/pages/AdminPage";
@@ -31,6 +32,7 @@ function App() {
                   <Route path="/state/:stateCode" element={<StatePage />} />
                   <Route path="/national-overview" element={<NationalOverviewPage />} />
                   <Route path="/templates" element={<TemplatesPage />} />
+                  <Route path="/federal-links" element={<FederalLinksPage />} />
                 </Routes>
               </main>
               <Footer />
