@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ArrowRight, Anchor, CheckCircle2, HelpCircle, Settings } from "lucide-react";
+import { ArrowLeft, ArrowRight, Anchor, CheckCircle2, HelpCircle, Settings, Clock, RotateCcw, Check } from "lucide-react";
 
 const US_STATES = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
