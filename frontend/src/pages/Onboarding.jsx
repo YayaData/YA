@@ -385,18 +385,28 @@ export default function Onboarding() {
         You're Ready to Go!
       </h2>
       <p className="text-lg text-slate-600 max-w-md mx-auto">
-        You can now list your available space or submit a placement request.
+        You can proceed now. Anchor Placement helps coordinate housing and referrals.
       </p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button 
-          onClick={goToHome}
-          data-testid="go-to-placements-btn"
-          className="bg-sky-600 hover:bg-sky-700 h-12 px-6"
+          onClick={() => navigate("/placements")}
+          data-testid="list-space-btn"
+          className="bg-sky-600 hover:bg-sky-700 h-12 px-8 text-base font-medium"
         >
-          Go to Placement Actions
+          List a Space
+        </Button>
+        <Button 
+          onClick={() => navigate("/place-client")}
+          data-testid="request-placement-btn"
+          className="bg-emerald-600 hover:bg-emerald-700 h-12 px-8 text-base font-medium"
+        >
+          Request Placement
         </Button>
       </div>
-      <p className="text-xs text-slate-500 max-w-md mx-auto pt-4 border-t border-slate-100">
+      <p className="text-sm text-slate-500 max-w-md mx-auto">
+        No Medicaid billing or licensing approvals are issued in this app.
+      </p>
+      <p className="text-xs text-slate-400 max-w-md mx-auto pt-4 border-t border-slate-100">
         Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
       </p>
     </div>
@@ -411,13 +421,13 @@ export default function Onboarding() {
         You Can Proceed with Support
       </h2>
       <p className="text-lg text-slate-600 max-w-md mx-auto">
-        You can proceed with support or an agency partner.
+        You can proceed with support or an agency partner. This is common.
       </p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button 
           onClick={goToHome}
           data-testid="find-agency-btn"
-          className="bg-sky-600 hover:bg-sky-700 h-12 px-6"
+          className="bg-sky-600 hover:bg-sky-700 h-12 px-8 text-base font-medium"
         >
           Find an Agency Partner
         </Button>
@@ -425,12 +435,15 @@ export default function Onboarding() {
           variant="outline"
           onClick={() => navigate("/how-it-works")}
           data-testid="learn-needed-btn"
-          className="h-12 px-6"
+          className="h-12 px-8 text-base font-medium border-slate-300"
         >
           Learn What's Needed
         </Button>
       </div>
-      <p className="text-xs text-slate-500 max-w-md mx-auto pt-4 border-t border-slate-100">
+      <p className="text-sm text-slate-500 max-w-md mx-auto">
+        We'll help you understand next steps without pressure.
+      </p>
+      <p className="text-xs text-slate-400 max-w-md mx-auto pt-4 border-t border-slate-100">
         Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
       </p>
     </div>
@@ -442,21 +455,24 @@ export default function Onboarding() {
         <Settings className="h-12 w-12" />
       </div>
       <h2 className="text-2xl font-bold text-slate-900 font-['Manrope']">
-        Setup Required
+        Setup Needed
       </h2>
       <p className="text-lg text-slate-600 max-w-md mx-auto">
-        You need setup before placement or billing.
+        You'll need setup before placement or billing. We'll guide you step-by-step.
       </p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button 
           onClick={goToHome}
           data-testid="setup-guide-btn"
-          className="bg-sky-600 hover:bg-sky-700 h-12 px-6"
+          className="bg-sky-600 hover:bg-sky-700 h-12 px-8 text-base font-medium"
         >
           Go to Setup Guide (AnchorAxis)
         </Button>
       </div>
-      <p className="text-xs text-slate-500 max-w-md mx-auto pt-4 border-t border-slate-100">
+      <p className="text-sm text-slate-500 max-w-md mx-auto">
+        Your answers are saved. You can return anytime.
+      </p>
+      <p className="text-xs text-slate-400 max-w-md mx-auto pt-4 border-t border-slate-100">
         Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
       </p>
     </div>
