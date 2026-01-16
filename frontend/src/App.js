@@ -6,6 +6,7 @@ import PlaceClient from "@/pages/PlaceClient";
 import Placements from "@/pages/Placements";
 import HowItWorks from "@/pages/HowItWorks";
 import StartIdea from "@/pages/StartIdea";
+import Onboarding from "@/pages/Onboarding";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<WelcomeScreen />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/place-client" element={<PlaceClient />} />
           <Route path="/placements" element={<Placements />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
