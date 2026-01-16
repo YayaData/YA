@@ -9,15 +9,17 @@ import NationalOverviewPage from "@/pages/NationalOverviewPage";
 import TemplatesPage from "@/pages/TemplatesPage";
 import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
 import PaymentCancelPage from "@/pages/PaymentCancelPage";
+import AdminPage from "@/pages/AdminPage";
 
 function App() {
   return (
     <div className="App min-h-screen flex flex-col">
       <BrowserRouter>
         <Routes>
-          {/* Payment pages without navbar/footer */}
+          {/* Pages without navbar/footer */}
           <Route path="/payment-success" element={<PaymentSuccessPage />} />
           <Route path="/payment-cancel" element={<PaymentCancelPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           
           {/* Main pages with navbar/footer */}
           <Route path="/*" element={

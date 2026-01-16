@@ -130,6 +130,17 @@ const Navbar = () => {
                       <span className="text-gold font-medium">$97</span>
                     </div>
                   </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleCheckout("state-bundle")}
+                    disabled={checkoutLoading === "state-bundle"}
+                    data-testid="upgrade-state-bundle"
+                    className="cursor-pointer"
+                  >
+                    <div className="flex justify-between w-full">
+                      <span>5-State Bundle</span>
+                      <span className="text-gold font-medium">$147</span>
+                    </div>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
                     onClick={() => handleCheckout("consultation")}
