@@ -9,7 +9,7 @@ const actionCards = [
     description: "Submit a placement request for someone who needs housing or care services.",
     icon: Users,
     path: "/place-client",
-    image: "https://images.unsplash.com/photo-1659353888906-adb3e0041693?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjQyMTd8MHwxfHNlYXJjaHwxfHxmcmllbmRseSUyMGRpdmVyc2UlMjBoZWFsdGhjYXJlJTIwcHJvZmVzc2lvbmFsJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzY4NDA1MjEyfDA&ixlib=rb-4.1.0&q=85&w=400",
+    image: "https://images.unsplash.com/photo-1565688527174-775059ac429c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwxfHxkaXZlcnNlJTIwcHJvZmVzc2lvbmFscyUyMHJldmlld2luZyUyMGRvY3VtZW50cyUyMG9mZmljZSUyMG1lZXRpbmclMjBjYXJlJTIwY29vcmRpbmF0aW9ufGVufDB8fHx8MTc2ODU2ODg4NXww&ixlib=rb-4.1.0&q=85&w=400",
     color: "bg-sky-50 hover:bg-sky-100",
     iconColor: "text-sky-600"
   },
@@ -19,7 +19,7 @@ const actionCards = [
     description: "Browse current openings at facilities and housing programs in your area.",
     icon: Building2,
     path: "/placements",
-    image: "https://images.unsplash.com/photo-1758548157747-285c7012db5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3MjQyMTd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBicmlnaHQlMjBjbGVhbiUyMGFwYXJ0bWVudCUyMGludGVyaW9yfGVufDB8fHx8MTc2ODQwNTIxNnww&ixlib=rb-4.1.0&q=85&w=400",
+    image: "https://images.unsplash.com/photo-1752920886911-ca01fba18fcb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxjYXJlZ2l2ZXIlMjBwcm92aWRlciUyMHdlbGNvbWluZyUyMGhvbWUlMjBzdXBwb3J0aXZlJTIwaG91c2luZyUyMGNvbWZvcnRhYmxlJTIwbGl2aW5nJTIwc3BhY2V8ZW58MHx8fHwxNzY4NTY4OTAyfDA&ixlib=rb-4.1.0&q=85&w=400",
     color: "bg-emerald-50 hover:bg-emerald-100",
     iconColor: "text-emerald-600"
   },
