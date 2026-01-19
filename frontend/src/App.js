@@ -7,6 +7,7 @@ import Placements from "@/pages/Placements";
 import HowItWorks from "@/pages/HowItWorks";
 import StartIdea from "@/pages/StartIdea";
 import Onboarding from "@/pages/Onboarding";
+import AdminDashboard from "@/pages/AdminDashboard";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/placements" element={<Placements />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/start-idea" element={<StartIdea />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-right" richColors />
