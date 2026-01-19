@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, Building2, HelpCircle, Lightbulb, Anchor, ClipboardCheck } from "lucide-react";
+import { Users, Building2, HelpCircle, Lightbulb, ClipboardCheck } from "lucide-react";
+
+const LOGO_URL = "https://customer-assets.emergentagent.com/job_anchor-place/artifacts/a2v0mwtd_image.png";
 
 const actionCards = [
   {
