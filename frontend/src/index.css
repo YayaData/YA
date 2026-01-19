@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -12,7 +12,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 code {
@@ -21,40 +21,34 @@ code {
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
+        --background: 210 50% 98%;
+        --foreground: 220 14% 17%;
         --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
+        --card-foreground: 220 14% 17%;
         --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
-        --primary: 199 89% 48%;
+        --popover-foreground: 220 14% 17%;
+        --primary: 224 82% 48%;
         --primary-foreground: 0 0% 100%;
-        --secondary: 204 100% 97%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 170 70% 42%;
+        --secondary-foreground: 0 0% 100%;
         --muted: 210 40% 96.1%;
         --muted-foreground: 215.4 16.3% 46.9%;
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
+        --accent: 45 100% 48%;
+        --accent-foreground: 220 14% 17%;
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 0 0% 98%;
         --border: 214.3 31.8% 91.4%;
         --input: 214.3 31.8% 91.4%;
-        --ring: 199 89% 48%;
-        --radius: 0.75rem;
+        --ring: 224 82% 48%;
+        --radius: 1rem;
 
-        /* Custom Anchor Place colors */
-        --anchor-blue: 199 89% 48%;
-        --anchor-blue-hover: 201 96% 32%;
-        --slate-50: 210 40% 98%;
-        --slate-100: 210 40% 96.1%;
-        --slate-200: 214.3 31.8% 91.4%;
-        --slate-500: 215.4 16.3% 46.9%;
-        --slate-600: 215.3 19.3% 34.5%;
-        --slate-700: 215.3 25% 26.7%;
-        --slate-900: 222.2 84% 4.9%;
-        --success: 160 84% 39%;
-        --warning: 38 92% 50%;
-        --info: 217 91% 60%;
+        /* Anchor Placement Brand Colors */
+        --anchor-blue: #1F4FD8;
+        --anchor-teal: #1CB5A3;
+        --anchor-gold: #F4B400;
+        --anchor-dark: #1F2937;
+        --anchor-bg-start: #F7FBFF;
+        --anchor-bg-end: #EAF4FF;
     }
 }
 
@@ -80,11 +74,19 @@ code {
     }
     
     .animate-fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
+        animation: fadeIn 0.6s ease-out forwards;
     }
     
     .animate-slide-up {
-        animation: slideUp 0.5s ease-out forwards;
+        animation: slideUp 0.6s ease-out forwards;
+    }
+
+    .gradient-bg {
+        background: linear-gradient(180deg, #F7FBFF 0%, #EAF4FF 100%);
+    }
+
+    .gradient-hero {
+        background: linear-gradient(135deg, #1F4FD8 0%, #1CB5A3 100%);
     }
 }
 
@@ -100,7 +102,7 @@ code {
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
