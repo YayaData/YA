@@ -57,7 +57,7 @@ export default function WelcomeScreen() {
           <div className="p-2 bg-sky-600 rounded-xl">
             <Anchor className="h-6 w-6 text-white" />
           </div>
-          <span className="text-xl font-semibold text-slate-900 font-['Manrope']">Anchor Place</span>
+          <span className="text-xl font-semibold text-slate-900 font-['Manrope']">Anchor Placement</span>
         </div>
       </header>
 
@@ -147,7 +147,7 @@ export default function WelcomeScreen() {
           <div className="mt-12 max-w-2xl mx-auto text-center animate-in" style={{ animationDelay: '0.6s' }}>
             <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Disclaimer</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              Anchor Place™ is a placement coordination and availability tool only. 
+              Anchor Placement™ is a placement coordination and availability tool only. 
               It does not store protected health information (PHI), make placement decisions, or guarantee placement outcomes. 
               All placements are subject to provider acceptance, agency approval, and applicable state and federal regulations.
             </p>
@@ -157,7 +157,7 @@ export default function WelcomeScreen() {
           <div className="mt-8 max-w-2xl mx-auto text-center animate-in" style={{ animationDelay: '0.7s' }}>
             <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Pricing Notice</h3>
             <div className="text-sm text-slate-500 leading-relaxed space-y-2">
-              <p>Anchor Place™ is offered as a subscription service for housing and care providers.</p>
+              <p>Anchor Placement™ is offered as a subscription service for housing and care providers.</p>
               <p><span className="font-medium text-slate-600">Provider Access:</span> $29.99 per month per provider location.</p>
               <p>This includes listing placement availability and receiving placement inquiries.</p>
               <p>Placement seekers (hospitals, social workers, LMEs, reentry programs) may use the platform at no cost during the pilot phase.</p>
@@ -171,7 +171,7 @@ export default function WelcomeScreen() {
       <footer className="py-8 px-6 md:px-12 border-t border-slate-100">
         <div className="max-w-6xl mx-auto text-center">
           <p className="text-sm text-slate-500">
-            Anchor Place – Client Placement Coordination Tool
+            Anchor Placement – Client Placement Coordination Tool
           </p>
         </div>
       </footer>

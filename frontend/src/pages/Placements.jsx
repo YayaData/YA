@@ -216,7 +216,7 @@ export default function Placements() {
                   Many providers begin this way and work with the appropriate agencies to meet state and program requirements. Requirements vary by location and funding source.
                 </p>
                 <p className="text-slate-500 italic">
-                  Anchor Place™ does not license, approve, or guarantee placements. The platform provides visibility and placement coordination once a provider is ready to accept referrals.
+                  Anchor Placement™ does not license, approve, or guarantee placements. The platform provides visibility and placement coordination once a provider is ready to accept referrals.
                 </p>
               </div>
             </CardContent>

@@ -48,36 +48,36 @@ const steps = [
 
 const faqs = [
   {
-    question: "What is Anchor Place™?",
-    answer: "Anchor Place™ is a placement coordination and availability platform that helps providers connect with hospitals, social workers, and placement teams seeking housing or care options for individuals with complex needs."
+    question: "What is Anchor Placement™?",
+    answer: "Anchor Placement™ is a placement coordination and availability platform that helps providers connect with hospitals, social workers, and placement teams seeking housing or care options for individuals with complex needs."
   },
   {
-    question: "Who can use Anchor Place™?",
-    answer: "Anchor Place™ is designed for AFL providers, group homes, supportive and transitional housing, sober living programs, and other residential care providers."
+    question: "Who can use Anchor Placement™?",
+    answer: "Anchor Placement™ is designed for AFL providers, group homes, supportive and transitional housing, sober living programs, and other residential care providers."
   },
   {
-    question: "Does Anchor Place™ store client information?",
-    answer: "No. Anchor Place™ does not store protected health information (PHI), client names, medical records, or diagnoses. It is a coordination tool only."
+    question: "Does Anchor Placement™ store client information?",
+    answer: "No. Anchor Placement™ does not store protected health information (PHI), client names, medical records, or diagnoses. It is a coordination tool only."
   },
   {
     question: "How does placement coordination work?",
     answer: "Providers list available beds or rooms, accepted populations, funding types, and location. Placement teams submit requests based on general criteria. All placement decisions are handled offline between the provider and referring agency."
   },
   {
-    question: "Does Anchor Place™ make placement decisions or guarantee referrals?",
-    answer: "No. Anchor Place™ does not approve, deny, or guarantee placements. All acceptance decisions remain solely with the provider."
+    question: "Does Anchor Placement™ make placement decisions or guarantee referrals?",
+    answer: "No. Anchor Placement™ does not approve, deny, or guarantee placements. All acceptance decisions remain solely with the provider."
   },
   {
-    question: "Can Anchor Place™ be used across different cities or states?",
-    answer: "Yes. Anchor Place™ supports both in-state and out-of-state placement coordination. Providers may indicate location flexibility and whether interstate placements are accepted."
+    question: "Can Anchor Placement™ be used across different cities or states?",
+    answer: "Yes. Anchor Placement™ supports both in-state and out-of-state placement coordination. Providers may indicate location flexibility and whether interstate placements are accepted."
   },
   {
-    question: "How much does Anchor Place™ cost for providers?",
+    question: "How much does Anchor Placement™ cost for providers?",
     answer: "Provider access is $29.99 per month per provider location. There are no long-term contracts during the pilot phase."
   },
   {
-    question: "Is Anchor Place™ HIPAA compliant?",
-    answer: "Anchor Place™ is designed to avoid HIPAA requirements by not collecting or storing protected health information. Providers and placement teams should continue to follow their internal compliance procedures when sharing client-specific details offline."
+    question: "Is Anchor Placement™ HIPAA compliant?",
+    answer: "Anchor Placement™ is designed to avoid HIPAA requirements by not collecting or storing protected health information. Providers and placement teams should continue to follow their internal compliance procedures when sharing client-specific details offline."
   },
   {
     question: "Do providers need to respond to every inquiry?",
@@ -85,7 +85,7 @@ const faqs = [
   },
   {
     question: "Can I list space in my home or a rental property to start a new business?",
-    answer: "Yes. Many providers begin by offering available space in a primary residence or a rental property. Requirements vary by state, program, and funding source, and approvals are handled through the appropriate agencies. Anchor Place™ provides placement visibility and coordination once a provider is ready to accept referrals."
+    answer: "Yes. Many providers begin by offering available space in a primary residence or a rental property. Requirements vary by state, program, and funding source, and approvals are handled through the appropriate agencies. Anchor Placement™ provides placement visibility and coordination once a provider is ready to accept referrals."
   }
 ];
 
@@ -139,7 +139,7 @@ export default function HowItWorks() {
               A Simple Guide to Client Placement
             </h1>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Anchor Place makes it easy to coordinate housing and care placements. 
+              Anchor Placement makes it easy to coordinate housing and care placements. 
               Follow these steps to get started.
             </p>
           </div>
@@ -280,7 +280,7 @@ export default function HowItWorks() {
       <footer className="py-8 px-6 md:px-12 border-t border-slate-100">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm text-slate-500">
-            Anchor Place – Client Placement Coordination Tool
+            Anchor Placement – Client Placement Coordination Tool
           </p>
         </div>
       </footer>

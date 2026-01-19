@@ -385,7 +385,7 @@ export default function Onboarding() {
         You're Ready to Go!
       </h2>
       <p className="text-lg text-slate-600 max-w-md mx-auto">
-        You can proceed now. Anchor Placement helps coordinate housing and referrals.
+        You can proceed now. Anchor Placementment helps coordinate housing and referrals.
       </p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button 
@@ -407,7 +407,7 @@ export default function Onboarding() {
         No Medicaid billing or licensing approvals are issued in this app.
       </p>
       <p className="text-xs text-slate-400 max-w-md mx-auto pt-4 border-t border-slate-100">
-        Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
+        Anchor Placementment coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
       </p>
     </div>
   );
@@ -444,7 +444,7 @@ export default function Onboarding() {
         We'll help you understand next steps without pressure.
       </p>
       <p className="text-xs text-slate-400 max-w-md mx-auto pt-4 border-t border-slate-100">
-        Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
+        Anchor Placementment coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
       </p>
     </div>
   );
@@ -473,7 +473,7 @@ export default function Onboarding() {
         Your answers are saved. You can return anytime.
       </p>
       <p className="text-xs text-slate-400 max-w-md mx-auto pt-4 border-t border-slate-100">
-        Anchor Placement coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
+        Anchor Placementment coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
       </p>
     </div>
   );
