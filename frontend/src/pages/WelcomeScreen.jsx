@@ -186,10 +186,14 @@ export default function WelcomeScreen() {
       </main>
 
       {/* Footer */}
-      <footer className="py-8 px-6 md:px-12 border-t border-slate-100">
-        <div className="max-w-6xl mx-auto text-center">
+      <footer className="py-8 px-6 md:px-12 border-t border-slate-100 bg-slate-50">
+        <div className="max-w-6xl mx-auto flex flex-col items-center gap-4">
+          <div className="flex items-center gap-2">
+            <img src={LOGO_URL} alt="Anchor Placement" className="h-8 w-8 object-contain" />
+            <span className="text-sm font-semibold text-slate-700">Anchor Placement</span>
+          </div>
           <p className="text-sm text-slate-500">
-            Anchor Placement – Client Placement Coordination Tool
+            Client Placement Coordination Tool
           </p>
         </div>
       </footer>
