@@ -53,24 +53,40 @@ export default function WelcomeScreen() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      {/* Header */}
-      <header className="w-full py-6 px-6 md:px-12">
-        <div className="max-w-6xl mx-auto flex items-center gap-3">
-          <div className="p-2 bg-sky-600 rounded-xl">
-            <Anchor className="h-6 w-6 text-white" />
+      {/* Banner Header */}
+      <header className="w-full bg-sky-600 py-4 px-6 md:px-12">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img 
+              src={LOGO_URL} 
+              alt="Anchor Placement Logo" 
+              className="h-12 w-12 object-contain"
+            />
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white font-['Manrope'] tracking-tight">
+                Anchor Placement
+              </h1>
+              <p className="text-sky-100 text-sm">Client Placement Coordination</p>
+            </div>
           </div>
-          <span className="text-xl font-semibold text-slate-900 font-['Manrope']">Anchor Placement</span>
+          <Button 
+            variant="outline" 
+            onClick={() => navigate("/admin")}
+            className="bg-white/10 border-white/30 text-white hover:bg-white/20 hidden md:flex"
+          >
+            Admin
+          </Button>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="px-6 md:px-12 py-12 md:py-20">
+      <main className="px-6 md:px-12 py-12 md:py-16">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
           <div className="text-center mb-12 animate-in" style={{ animationDelay: '0.1s' }}>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-4 font-['Manrope']">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-4 font-['Manrope']">
               Coordinate housing placements and referrals in one place
-            </h1>
+            </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
               Select the option below that matches your role. You'll be guided step by step.
             </p>
