@@ -108,7 +108,7 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
-    role: "",
+    organizationType: "",
     state: "",
     goal: "",
     readiness: [],
