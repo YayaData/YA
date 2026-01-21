@@ -19,12 +19,56 @@ const US_STATES = [
   "Wisconsin", "Wyoming"
 ];
 
-const ROLE_OPTIONS = [
-  { value: "agency", label: "Agency" },
-  { value: "homeowner", label: "Homeowner / Housing Provider" },
-  { value: "individual_provider", label: "Individual Provider (peer/DSP/caregiver)" },
-  { value: "case_manager", label: "Case Manager / Referrer" },
-  { value: "partner", label: "Partner (housing or services)" }
+// Organization Types - Grouped by Category
+const ORGANIZATION_TYPES = {
+  providers: {
+    label: "Housing & Care Providers",
+    options: [
+      { value: "AFL_PROVIDER", label: "AFL Provider (Alternative Family Living)" },
+      { value: "INDEPENDENT_HOME_PROVIDER", label: "Independent Home Provider" },
+      { value: "GROUP_HOME", label: "Group Home" },
+      { value: "TRANSITIONAL_HOUSING", label: "Transitional Housing" },
+      { value: "RESPITE_PROVIDER", label: "Respite Provider" }
+    ]
+  },
+  shelters: {
+    label: "Shelters & Reentry Programs",
+    options: [
+      { value: "HOMELESS_SHELTER", label: "Homeless Shelter" },
+      { value: "DOMESTIC_VIOLENCE_SHELTER", label: "Domestic Violence Shelter" },
+      { value: "VETERANS_SHELTER", label: "Veterans Shelter" },
+      { value: "REENTRY_PROGRAM", label: "Reentry Program" },
+      { value: "PRISON_REENTRY", label: "Prison Reentry" },
+      { value: "HALFWAY_HOUSE", label: "Halfway House" },
+      { value: "PROBATION_PAROLE", label: "Probation / Parole Services" }
+    ]
+  },
+  agencies: {
+    label: "Agencies & Organizations",
+    options: [
+      { value: "BEHAVIORAL_HEALTH_AGENCY", label: "Behavioral Health Agency" },
+      { value: "CASE_MANAGEMENT_AGENCY", label: "Case Management Agency" },
+      { value: "HOSPITAL_DISCHARGE_PLANNER", label: "Hospital Discharge Planner" },
+      { value: "NONPROFIT_ORGANIZATION", label: "Nonprofit Organization" },
+      { value: "FAITH_BASED_ORG", label: "Faith-Based Organization" }
+    ]
+  },
+  individuals: {
+    label: "Individuals & Families",
+    options: [
+      { value: "VETERAN_SELF", label: "Veteran (Self)" },
+      { value: "FAMILY_MEMBER", label: "Family Member" },
+      { value: "SELF_REFERRAL", label: "Self-Referral" }
+    ]
+  }
+};
+
+// Flatten for easy lookup
+const ALL_ORG_TYPES = [
+  ...ORGANIZATION_TYPES.providers.options,
+  ...ORGANIZATION_TYPES.shelters.options,
+  ...ORGANIZATION_TYPES.agencies.options,
+  ...ORGANIZATION_TYPES.individuals.options
 ];
 
 const GOAL_OPTIONS = [
@@ -46,9 +90,12 @@ const POPULATION_OPTIONS = [
   { value: "adults", label: "Adults (18+)" },
   { value: "mental_health", label: "Mental Health" },
   { value: "substance_use", label: "Substance Use" },
-  { value: "disabilities", label: "Disabilities" },
-  { value: "seniors", label: "Seniors" },
-  { value: "justice_involved", label: "Justice-involved" }
+  { value: "disabilities", label: "Disabilities (IDD)" },
+  { value: "seniors", label: "Seniors / Aging" },
+  { value: "justice_involved", label: "Justice-Involved" },
+  { value: "veterans", label: "Veterans" },
+  { value: "homeless", label: "Homeless / Housing Insecure" },
+  { value: "domestic_violence", label: "Domestic Violence Survivors" }
 ];
 
 const ACTION_READINESS_OPTIONS = [
