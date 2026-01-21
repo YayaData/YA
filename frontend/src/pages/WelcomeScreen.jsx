@@ -190,16 +190,16 @@ export default function WelcomeScreen() {
                     <Home className="h-6 w-6" style={{ color: colors.blue }} />
                   </div>
                   <h3 className="text-2xl font-bold font-['Poppins']" style={{ color: colors.dark }}>
-                    Have Available Space?
+                    Have space in your home or rental property?
                   </h3>
                 </div>
                 <p className="text-gray-600 text-lg mb-6">
-                  List open beds, rooms, or units and connect with agencies and professionals actively looking to place clients.
+                  List your spare room, unit, or bed and connect with agencies and professionals actively looking to place clients. We work with both everyday homeowners and housing providers.
                 </p>
                 <div className="space-y-2 mb-6">
                   <p className="text-sm text-gray-500 font-medium">Perfect for:</p>
                   <div className="flex flex-wrap gap-2">
-                    {["AFL", "Respite Providers", "Group Homes", "Supportive Housing"].map((item) => (
+                    {["Homeowners & renters", "AFL and Respite providers", "Group homes", "Supportive housing"].map((item) => (
                       <span key={item} className="px-3 py-1 rounded-full text-sm font-medium" style={{ background: `${colors.blue}12`, color: colors.blue }}>
                         {item}
                       </span>
