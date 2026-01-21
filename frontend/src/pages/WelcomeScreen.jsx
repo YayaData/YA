@@ -82,19 +82,14 @@ export default function WelcomeScreen() {
           <div className="max-w-7xl mx-auto">
             <div className="max-w-3xl">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-['Poppins'] leading-tight mb-6 text-white">
-                Connecting Available Homes with People Who Need to Place Clients
+                A Centralized Placement Network for Care-Based Housing
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 mb-6 font-['Inter']">
-                Anchor Placement makes it easy for providers with available space and professionals who need placements to find each other — <span className="font-semibold text-yellow-300">quickly, clearly, and nationwide</span>.
+              <p className="text-xl md:text-2xl text-white/90 mb-8 font-['Inter']">
+                Post available space or match clients to approved care-based housing — all in one secure platform.
               </p>
-              <div className="flex flex-col md:flex-row gap-3 text-white/80 mb-10">
-                <span className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-yellow-300" /> No endless phone calls</span>
-                <span className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-yellow-300" /> No guessing who has openings</span>
-                <span className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-yellow-300" /> No waiting weeks</span>
-              </div>
               
               {/* Primary CTAs */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <Button 
                   onClick={() => navigate("/onboarding?path=provider")}
                   data-testid="have-space-btn"
@@ -102,7 +97,7 @@ export default function WelcomeScreen() {
                   style={{ background: colors.gold }}
                 >
                   <Home className="mr-2 h-5 w-5" />
-                  I Have Space Available
+                  I Have Space to Share
                 </Button>
                 <Button 
                   onClick={() => navigate("/onboarding?path=agency")}
@@ -113,6 +108,23 @@ export default function WelcomeScreen() {
                   <Search className="mr-2 h-5 w-5" />
                   I Need to Place a Client
                 </Button>
+              </div>
+
+              {/* Secondary CTA */}
+              <Button 
+                onClick={() => navigate("/onboarding")}
+                variant="outline"
+                className="h-12 px-6 text-base font-medium rounded-xl border-white/40 text-white hover:bg-white/10 mb-8"
+              >
+                See If I Qualify
+              </Button>
+
+              {/* Trust Reassurance */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 max-w-lg">
+                <p className="text-white/90 text-sm">
+                  <strong className="text-yellow-300">You don't need experience. You're not alone.</strong><br />
+                  We guide you through requirements, safety checks, and next steps.
+                </p>
               </div>
             </div>
           </div>
