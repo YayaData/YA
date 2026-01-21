@@ -133,7 +133,7 @@ export default function Onboarding() {
     switch (currentStep) {
       case 0: return true; // Welcome screen
       case 1: return true; // Confirmation screen
-      case 2: return formData.role !== "";
+      case 2: return formData.organizationType !== "";
       case 3: return formData.state !== "";
       case 4: return formData.goal !== "";
       case 5: return formData.readiness.length > 0;
@@ -173,6 +173,16 @@ export default function Onboarding() {
   };
 
   const restartQuiz = () => {
+    setFormData({
+      organizationType: "",
+      state: "",
+      goal: "",
+      readiness: [],
+      population: [],
+      actionReadiness: ""
+    });
+    setCurrentStep(0);
+  };
     setFormData({
       role: "",
       state: "",
