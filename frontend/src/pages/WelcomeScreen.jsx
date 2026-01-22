@@ -22,7 +22,7 @@ const colors = {
 const images = {
   hero: "https://images.unsplash.com/photo-1638866109757-9cf3af612f57?w=1600&auto=format&fit=crop",
   provider: "https://customer-assets.emergentagent.com/job_anchor-placement/artifacts/axk63exe_image.png",
-  agency: "https://images.unsplash.com/photo-1565688527174-775059ac429c?w=800&auto=format&fit=crop",
+  agency: "https://customer-assets.emergentagent.com/job_anchor-placement/artifacts/p8my88wo_image.png",
   community: "https://images.pexels.com/photos/8204963/pexels-photo-8204963.jpeg?w=1200&auto=format&fit=crop",
   hands: "https://images.unsplash.com/photo-1675179182818-e3518274be24?w=1200&auto=format&fit=crop"
 };
