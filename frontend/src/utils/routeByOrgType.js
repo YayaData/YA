@@ -17,6 +17,20 @@ export function routeByOrgType(orgType, navigate) {
   navigate("/");
 }
 
+export function getDashboardRoute(orgType) {
+  const caps = ORG_CAPABILITIES[orgType] || [];
+
+  if (caps.includes("PROVIDE_PLACEMENT")) {
+    return "/provider-dashboard";
+  }
+
+  if (caps.includes("REQUEST_PLACEMENT")) {
+    return "/requestor-dashboard";
+  }
+
+  return "/dashboard";
+}
+
 export function canProvidePlacement(orgType) {
   const capabilities = ORG_CAPABILITIES[orgType] || [];
   return capabilities.includes("PROVIDE_PLACEMENT");
