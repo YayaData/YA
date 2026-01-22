@@ -29,6 +29,15 @@ const images = {
 
 export default function WelcomeScreen() {
   const navigate = useNavigate();
+  
+  // Check if user has completed onboarding
+  const userData = JSON.parse(localStorage.getItem('anchorplacement_user_data') || '{}');
+  const isOnboarded = localStorage.getItem('anchorplacement_onboarding_complete') === 'true';
+  const orgType = userData.orgType;
+  
+  // Get placement tabs based on org type for returning users
+  const placementTabs = orgType ? getPlacementTabs(orgType) : { showNeedPlacement: true, showPlacementAvailable: true };
+  const dashboardRoute = orgType ? getDashboardRoute(orgType) : '/onboarding';
 
   return (
     <div className="min-h-screen">
