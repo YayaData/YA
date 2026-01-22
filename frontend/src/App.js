@@ -8,6 +8,8 @@ import HowItWorks from "@/pages/HowItWorks";
 import StartIdea from "@/pages/StartIdea";
 import Onboarding from "@/pages/Onboarding";
 import AdminDashboard from "@/pages/AdminDashboard";
+import ProviderDashboard from "@/pages/ProviderDashboard";
+import RequestorDashboard from "@/pages/RequestorDashboard";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/start-idea" element={<StartIdea />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+          <Route path="/requestor-dashboard" element={<RequestorDashboard />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-right" richColors />
