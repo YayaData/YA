@@ -10,6 +10,7 @@ import Onboarding from "@/pages/Onboarding";
 import AdminDashboard from "@/pages/AdminDashboard";
 import ProviderDashboard from "@/pages/ProviderDashboard";
 import RequestorDashboard from "@/pages/RequestorDashboard";
+import Dashboard from "@/pages/Dashboard";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<WelcomeScreen />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/place-client" element={<PlaceClient />} />
           <Route path="/placements" element={<Placements />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
