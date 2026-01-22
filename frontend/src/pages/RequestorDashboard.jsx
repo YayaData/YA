@@ -4,7 +4,8 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Plus, Clock, CheckCircle2, AlertCircle, Users } from "lucide-react";
+import { ArrowLeft, Plus, Clock, CheckCircle2, AlertCircle, Users, Download, MapPin } from "lucide-react";
+import { FEATURE_FLAGS } from "@/constants/featureFlags";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_anchor-place/artifacts/a2v0mwtd_image.png";
@@ -21,6 +22,11 @@ export default function RequestorDashboard() {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const userData = JSON.parse(localStorage.getItem('anchorplacement_user_data') || '{}');
+
+  // Feature flags
+  const isCountyMode = FEATURE_FLAGS.COUNTY_MODE;
+  const canExport = FEATURE_FLAGS.EXPORT_REPORTS;
+  const assignedCounty = userData.state || userData.county || null;
 
   useEffect(() => {
     fetchRequests();
