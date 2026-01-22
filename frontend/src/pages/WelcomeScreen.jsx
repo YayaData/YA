@@ -110,36 +110,55 @@ export default function WelcomeScreen() {
                 Post available space or match clients to approved care-based housing — all in one secure platform.
               </p>
               
-              {/* Primary CTAs */}
+              {/* Primary CTAs - Show personalized for returning users */}
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <Button 
-                  onClick={() => navigate("/onboarding?path=provider")}
-                  data-testid="have-space-btn"
-                  className="h-14 px-8 text-lg font-semibold font-['Poppins'] rounded-xl shadow-lg hover:shadow-xl transition-all text-gray-900"
-                  style={{ background: colors.gold }}
-                >
-                  <Home className="mr-2 h-5 w-5" />
-                  I Have Space to Share
-                </Button>
-                <Button 
-                  onClick={() => navigate("/onboarding?path=agency")}
-                  data-testid="need-place-btn"
-                  className="h-14 px-8 text-lg font-semibold font-['Poppins'] rounded-xl shadow-lg hover:shadow-xl transition-all bg-white hover:bg-gray-100"
-                  style={{ color: colors.blue }}
-                >
-                  <Search className="mr-2 h-5 w-5" />
-                  I Need to Place a Client
-                </Button>
+                {/* Show based on user capabilities or default for new users */}
+                {(!isOnboarded || placementTabs.showPlacementAvailable) && (
+                  <Button 
+                    onClick={() => isOnboarded ? navigate("/placements") : navigate("/onboarding?path=provider")}
+                    data-testid="have-space-btn"
+                    className="h-14 px-8 text-lg font-semibold font-['Poppins'] rounded-xl shadow-lg hover:shadow-xl transition-all text-gray-900"
+                    style={{ background: colors.gold }}
+                  >
+                    <Home className="mr-2 h-5 w-5" />
+                    {isOnboarded ? "Manage My Listings" : "I Have Space to Share"}
+                  </Button>
+                )}
+                {(!isOnboarded || placementTabs.showNeedPlacement) && (
+                  <Button 
+                    onClick={() => isOnboarded ? navigate("/place-client") : navigate("/onboarding?path=agency")}
+                    data-testid="need-place-btn"
+                    className="h-14 px-8 text-lg font-semibold font-['Poppins'] rounded-xl shadow-lg hover:shadow-xl transition-all bg-white hover:bg-gray-100"
+                    style={{ color: colors.blue }}
+                  >
+                    <Search className="mr-2 h-5 w-5" />
+                    {isOnboarded ? "Place a Client" : "I Need to Place a Client"}
+                  </Button>
+                )}
               </div>
 
-              {/* Secondary CTA */}
-              <Button 
-                onClick={() => navigate("/onboarding")}
-                variant="outline"
-                className="h-12 px-6 text-base font-medium rounded-xl border-white/40 text-white hover:bg-white/10 mb-8"
-              >
-                See If I Qualify
-              </Button>
+              {/* Secondary CTA - Only show for non-onboarded users */}
+              {!isOnboarded && (
+                <Button 
+                  onClick={() => navigate("/onboarding")}
+                  variant="outline"
+                  className="h-12 px-6 text-base font-medium rounded-xl border-white/40 text-white hover:bg-white/10 mb-8"
+                >
+                  See If I Qualify
+                </Button>
+              )}
+
+              {/* Dashboard CTA for returning users */}
+              {isOnboarded && (
+                <Button 
+                  onClick={() => navigate(dashboardRoute)}
+                  variant="outline"
+                  className="h-12 px-6 text-base font-medium rounded-xl border-white/40 text-white hover:bg-white/10 mb-8 gap-2"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  Go to My Dashboard
+                </Button>
+              )}
 
               {/* Trust Reassurance */}
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 max-w-lg">
