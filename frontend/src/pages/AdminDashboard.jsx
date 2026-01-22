@@ -84,6 +84,43 @@ export default function AdminDashboard() {
   const urgentCount = placementRequests.filter(r => r.urgency === "Urgent").length;
   const pendingInquiries = providerInquiries.length;
 
+  // Check if in read-only audit mode
+  const isReadOnly = FEATURE_FLAGS.READ_ONLY_AUDIT;
+  const canExport = FEATURE_FLAGS.EXPORT_REPORTS;
+
+  const handleExportCSV = () => {
+    if (!canExport) {
+      toast.error("Export feature is disabled");
+      return;
+    }
+    // Generate CSV content
+    const headers = ["Contact Name", "Email", "Location", "Type", "Urgency", "Status"];
+    const rows = placementRequests.map(r => [
+      r.contact_name,
+      r.contact_email,
+      r.location_preference,
+      r.placement_type_needed,
+      r.urgency,
+      r.status || "Pending"
+    ]);
+    const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `placement-requests-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    toast.success("CSV exported successfully!");
+  };
+
+  const handleExportPDF = () => {
+    if (!canExport) {
+      toast.error("Export feature is disabled");
+      return;
+    }
+    toast.info("PDF export coming soon!");
+  };
+
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #F7FBFF 0%, #EAF4FF 100%)' }}>
       {/* Header */}
