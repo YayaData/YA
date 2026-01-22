@@ -51,6 +51,18 @@ export default function WelcomeScreen() {
             </span>
           </div>
           <div className="flex items-center gap-3">
+            {isOnboarded && (
+              <Button 
+                variant="default"
+                onClick={() => navigate(dashboardRoute)}
+                className="hidden md:flex gap-2"
+                style={{ background: colors.teal }}
+                data-testid="dashboard-btn"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                My Dashboard
+              </Button>
+            )}
             <Button 
               variant="ghost" 
               onClick={() => navigate("/how-it-works")}
