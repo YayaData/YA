@@ -158,6 +158,43 @@ export default function AdminDashboard() {
       </header>
 
       <main className="px-6 py-8 max-w-7xl mx-auto">
+        {/* Read-Only Audit Mode Banner */}
+        {isReadOnly && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-3" data-testid="read-only-banner">
+            <Lock className="h-5 w-5 text-amber-600" />
+            <div>
+              <p className="font-semibold text-amber-800">Read-only audit mode enabled</p>
+              <p className="text-sm text-amber-600">All edit, approve, and suspend actions are disabled for compliance review.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Export Actions */}
+        {canExport && (
+          <div className="mb-6 flex gap-3 justify-end" data-testid="export-actions">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleExportCSV}
+              className="gap-2"
+              data-testid="export-csv-btn"
+            >
+              <Download className="h-4 w-4" />
+              Export CSV
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleExportPDF}
+              className="gap-2"
+              data-testid="export-pdf-btn"
+            >
+              <FileText className="h-4 w-4" />
+              Export PDF
+            </Button>
+          </div>
+        )}
+
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="rounded-xl border-0 shadow-md">
