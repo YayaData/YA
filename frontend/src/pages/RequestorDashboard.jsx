@@ -58,6 +58,33 @@ export default function RequestorDashboard() {
     }
   };
 
+  const handleExportCSV = () => {
+    if (!canExport) return;
+    const headers = ["Type", "Location", "Status", "Date"];
+    const rows = requests.map(r => [
+      r.placement_type_needed,
+      r.location_preference,
+      r.status || "Pending",
+      r.created_at ? new Date(r.created_at).toLocaleDateString() : "N/A"
+    ]);
+    const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `my-requests-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+  };
+
+  // Navigate to place-client with county restriction if COUNTY_MODE is enabled
+  const handleNewRequest = () => {
+    if (isCountyMode && assignedCounty) {
+      navigate(`/place-client?county=${encodeURIComponent(assignedCounty)}`);
+    } else {
+      navigate("/place-client");
+    }
+  };
+
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #F7FBFF 0%, #EAF4FF 100%)' }}>
       {/* Header */}
