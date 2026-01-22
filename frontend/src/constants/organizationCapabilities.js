@@ -60,6 +60,7 @@ export const ORG_TYPE_LABELS = {
   GROUP_HOME: "Group Home",
   TRANSITIONAL_HOUSING: "Transitional Housing",
   RESPITE_PROVIDER: "Respite Provider",
+  VETERANS_TRANSITIONAL: "Veterans Transitional Housing",
 
   HOMELESS_SHELTER: "Homeless Shelter",
   DOMESTIC_VIOLENCE_SHELTER: "Domestic Violence Shelter",
