@@ -318,26 +318,45 @@ export default function ProviderDashboard() {
         {/* Incoming Requests */}
         <Card className="rounded-2xl shadow-lg border-0" data-testid="requests-list">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-xl font-bold font-['Poppins']" style={{ color: colors.dark }}>
-              Incoming Placement Requests
-              {preferences.length > 0 && (
-                <span className="text-sm font-normal text-gray-500 ml-2">
-                  ({visibleRequests.length} of {requests.length} shown)
-                </span>
+            <div>
+              <CardTitle className="text-xl font-bold font-['Poppins']" style={{ color: colors.dark }}>
+                Incoming Placement Requests
+                {preferences.length > 0 && (
+                  <span className="text-sm font-normal text-gray-500 ml-2">
+                    ({visibleRequests.length} of {requests.length} shown)
+                  </span>
+                )}
+              </CardTitle>
+              {isCountyMode && assignedCounty && (
+                <p className="text-xs text-gray-500 mt-1">Filtered to {assignedCounty}</p>
               )}
-            </CardTitle>
-            {preferences.length > 0 && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowAllRequests(!showAllRequests)}
-                className="gap-2"
-                data-testid="filter-toggle"
-              >
-                <Filter className="h-4 w-4" />
-                {showAllRequests ? "Show Compatible Only" : "Show All"}
-              </Button>
-            )}
+            </div>
+            <div className="flex items-center gap-2">
+              {canExport && visibleRequests.length > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportCSV}
+                  className="gap-2"
+                  data-testid="export-requests-btn"
+                >
+                  <Download className="h-4 w-4" />
+                  Export
+                </Button>
+              )}
+              {preferences.length > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowAllRequests(!showAllRequests)}
+                  className="gap-2"
+                  data-testid="filter-toggle"
+                >
+                  <Filter className="h-4 w-4" />
+                  {showAllRequests ? "Show Compatible Only" : "Show All"}
+                </Button>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
             {isLoading ? (
