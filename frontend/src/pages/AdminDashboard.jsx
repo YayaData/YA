@@ -278,16 +278,18 @@ export default function AdminDashboard() {
                       <div className="flex gap-2 mt-3">
                         <Button 
                           size="sm"
-                          className="bg-green-600 hover:bg-green-700 text-white text-xs"
+                          className="bg-green-600 hover:bg-green-700 text-white text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                           onClick={() => handleApproveAgency(inquiry)}
+                          disabled={isReadOnly}
                           data-testid={`approve-btn-${i}`}
                         >
                           Approve
                         </Button>
                         <Button 
                           size="sm"
-                          className="bg-red-600 hover:bg-red-700 text-white text-xs"
+                          className="bg-red-600 hover:bg-red-700 text-white text-xs disabled:opacity-50 disabled:cursor-not-allowed"
                           onClick={() => handleSuspendAgency(inquiry)}
+                          disabled={isReadOnly}
                           data-testid={`suspend-btn-${i}`}
                         >
                           Suspend
