@@ -91,7 +91,8 @@ export const ORG_TYPE_GROUPS = {
       "INDEPENDENT_HOME_PROVIDER",
       "GROUP_HOME",
       "TRANSITIONAL_HOUSING",
-      "RESPITE_PROVIDER"
+      "RESPITE_PROVIDER",
+      "VETERANS_TRANSITIONAL"
     ]
   },
   shelters: {
