@@ -254,22 +254,53 @@ export default function ProviderDashboard() {
 
         {/* Incoming Requests */}
         <Card className="rounded-2xl shadow-lg border-0" data-testid="requests-list">
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-xl font-bold font-['Poppins']" style={{ color: colors.dark }}>
               Incoming Placement Requests
+              {preferences.length > 0 && (
+                <span className="text-sm font-normal text-gray-500 ml-2">
+                  ({visibleRequests.length} of {requests.length} shown)
+                </span>
+              )}
             </CardTitle>
+            {preferences.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAllRequests(!showAllRequests)}
+                className="gap-2"
+                data-testid="filter-toggle"
+              >
+                <Filter className="h-4 w-4" />
+                {showAllRequests ? "Show Compatible Only" : "Show All"}
+              </Button>
+            )}
           </CardHeader>
           <CardContent>
             {isLoading ? (
               <div className="text-center py-8 text-gray-500">Loading...</div>
-            ) : requests.length === 0 ? (
+            ) : visibleRequests.length === 0 ? (
               <div className="text-center py-12">
                 <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No incoming requests at this time</p>
+                <p className="text-gray-500">
+                  {requests.length > 0 && preferences.length > 0 
+                    ? "No compatible requests match your preferences"
+                    : "No incoming requests at this time"
+                  }
+                </p>
+                {requests.length > 0 && preferences.length > 0 && (
+                  <Button
+                    variant="link"
+                    onClick={() => setShowAllRequests(true)}
+                    className="mt-2"
+                  >
+                    Show all {requests.length} requests
+                  </Button>
+                )}
               </div>
             ) : (
               <div className="space-y-4">
-                {requests.slice(0, 5).map((request, index) => (
+                {visibleRequests.slice(0, 5).map((request, index) => (
                   <div 
                     key={request.id || index} 
                     className="p-4 border rounded-xl hover:bg-gray-50 transition-colors"
@@ -279,6 +310,15 @@ export default function ProviderDashboard() {
                       <div>
                         <p className="font-semibold" style={{ color: colors.dark }}>{request.placement_type_needed}</p>
                         <p className="text-sm text-gray-500">{request.organization_name} • {request.location_preference}</p>
+                        {request.matchFlags && request.matchFlags.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-2">
+                            {request.matchFlags.map((flag, i) => (
+                              <Badge key={i} variant="secondary" className="text-xs">
+                                {flag.replace(/_/g, " ")}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
                         <p className="text-xs text-gray-400 mt-1">
                           {request.created_at ? new Date(request.created_at).toLocaleDateString() : 'Recently submitted'}
                         </p>
