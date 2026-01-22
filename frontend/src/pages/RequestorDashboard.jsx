@@ -144,14 +144,23 @@ export default function RequestorDashboard() {
 
         {/* Quick Actions */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <Card className="rounded-2xl shadow-lg border-0 hover:shadow-xl transition-all cursor-pointer" onClick={() => navigate("/place-client")}>
+          <Card 
+            className="rounded-2xl shadow-lg border-0 hover:shadow-xl transition-all cursor-pointer" 
+            onClick={handleNewRequest}
+            data-testid="new-request-card"
+          >
             <CardContent className="p-6 flex items-center gap-4">
               <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ background: colors.gold }}>
                 <Plus className="h-7 w-7 text-white" />
               </div>
               <div>
                 <h3 className="text-lg font-bold" style={{ color: colors.dark }}>New Placement Request</h3>
-                <p className="text-gray-500 text-sm">Submit a request for housing placement</p>
+                <p className="text-gray-500 text-sm">
+                  {isCountyMode && assignedCounty 
+                    ? `Submit request for ${assignedCounty}` 
+                    : "Submit a request for housing placement"
+                  }
+                </p>
               </div>
             </CardContent>
           </Card>
