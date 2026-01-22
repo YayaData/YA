@@ -34,14 +34,60 @@ export default function ProviderDashboard() {
     acceptedFlags: preferences
   }), [preferences]);
 
+  // Get assigned county/region from user data (for COUNTY_MODE)
+  const assignedCounty = userData.state || userData.county || null;
+  const isCountyMode = FEATURE_FLAGS.COUNTY_MODE;
+  const canExport = FEATURE_FLAGS.EXPORT_REPORTS;
+
   const visibleRequests = useMemo(() => {
-    if (showAllRequests || preferences.length === 0) {
-      return requests;
+    let filtered = requests;
+    
+    // Apply county filter if COUNTY_MODE is enabled
+    if (isCountyMode && assignedCounty) {
+      filtered = filtered.filter(req => {
+        const reqLocation = (req.location_preference || "").toLowerCase();
+        const county = assignedCounty.toLowerCase();
+        return reqLocation.includes(county) || reqLocation === county;
+      });
     }
-    return requests.filter(req =>
-      isCompatibleMatch(provider, req.matchFlags || [])
-    );
-  }, [requests, provider, showAllRequests, preferences]);
+    
+    // Apply preference-based filtering
+    if (!showAllRequests && preferences.length > 0) {
+      filtered = filtered.filter(req =>
+        isCompatibleMatch(provider, req.matchFlags || [])
+      );
+    }
+    
+    return filtered;
+  }, [requests, provider, showAllRequests, preferences, isCountyMode, assignedCounty]);
+
+  // Count requests outside jurisdiction (for display)
+  const outsideJurisdictionCount = useMemo(() => {
+    if (!isCountyMode || !assignedCounty) return 0;
+    return requests.filter(req => {
+      const reqLocation = (req.location_preference || "").toLowerCase();
+      const county = assignedCounty.toLowerCase();
+      return !reqLocation.includes(county) && reqLocation !== county;
+    }).length;
+  }, [requests, isCountyMode, assignedCounty]);
+
+  const handleExportCSV = () => {
+    if (!canExport) return;
+    const headers = ["Type", "Organization", "Location", "Date"];
+    const rows = visibleRequests.map(r => [
+      r.placement_type_needed,
+      r.organization_name,
+      r.location_preference,
+      r.created_at ? new Date(r.created_at).toLocaleDateString() : "N/A"
+    ]);
+    const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `provider-requests-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+  };
 
   useEffect(() => {
     fetchData();
