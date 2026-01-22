@@ -420,7 +420,7 @@ export default function Onboarding() {
 
             {/* Outcome Screen */}
             {isOutcomeScreen && (
-              <div className="space-y-6 text-center">
+              <div className="space-y-6 text-center" data-testid="outcome-screen">
                 <div className="w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-4" style={{ background: `${colors.teal}15` }}>
                   <CheckCircle2 className="h-10 w-10" style={{ color: colors.teal }} />
                 </div>
@@ -438,30 +438,55 @@ export default function Onboarding() {
                 </div>
 
                 <div className="flex flex-col gap-3 mt-6">
-                  {formData.goal === "list_space" && (
+                  {/* Route to appropriate dashboard based on org type */}
+                  {canProvidePlacement(formData.orgType) ? (
                     <Button 
-                      onClick={() => navigate("/placements")}
+                      onClick={() => navigate("/provider-dashboard")}
                       className="w-full h-12 text-lg font-semibold rounded-xl"
                       style={{ background: colors.gold, color: colors.dark }}
+                      data-testid="go-to-provider-dashboard"
                     >
-                      List Your Space
+                      Go to Provider Dashboard
                       <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  ) : (
+                    <Button 
+                      onClick={() => navigate("/requestor-dashboard")}
+                      className="w-full h-12 text-lg font-semibold rounded-xl"
+                      style={{ background: colors.teal }}
+                      data-testid="go-to-requestor-dashboard"
+                    >
+                      Go to Requestor Dashboard
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  )}
+
+                  {/* Quick action based on goal selection */}
+                  {formData.goal === "list_space" && (
+                    <Button 
+                      variant="outline"
+                      onClick={() => navigate("/placements")}
+                      className="w-full h-12 text-lg font-semibold rounded-xl"
+                      data-testid="list-space-button"
+                    >
+                      List Your Space Now
                     </Button>
                   )}
                   {formData.goal === "find_placement" && (
                     <Button 
+                      variant="outline"
                       onClick={() => navigate("/place-client")}
                       className="w-full h-12 text-lg font-semibold rounded-xl"
-                      style={{ background: colors.teal }}
+                      data-testid="find-placement-button"
                     >
-                      Find Placement Options
-                      <ArrowRight className="ml-2 h-5 w-5" />
+                      Find Placement Now
                     </Button>
                   )}
                   <Button 
-                    variant="outline"
+                    variant="ghost"
                     onClick={() => navigate("/")}
                     className="w-full h-12 text-lg font-semibold rounded-xl"
+                    data-testid="go-home-button"
                   >
                     Go to Home
                   </Button>
