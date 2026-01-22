@@ -24,8 +24,23 @@ export default function ProviderDashboard() {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showPreferences, setShowPreferences] = useState(false);
+  const [showAllRequests, setShowAllRequests] = useState(false);
   const [preferences, setPreferences] = useState([]);
   const userData = JSON.parse(localStorage.getItem('anchorplacement_user_data') || '{}');
+
+  // Filter requests based on provider preferences
+  const provider = useMemo(() => ({
+    acceptedFlags: preferences
+  }), [preferences]);
+
+  const visibleRequests = useMemo(() => {
+    if (showAllRequests || preferences.length === 0) {
+      return requests;
+    }
+    return requests.filter(req =>
+      isCompatibleMatch(provider, req.matchFlags || [])
+    );
+  }, [requests, provider, showAllRequests, preferences]);
 
   useEffect(() => {
     fetchData();
