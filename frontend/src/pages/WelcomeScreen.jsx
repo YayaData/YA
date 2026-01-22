@@ -16,14 +16,13 @@ const colors = {
   dark: "#1F2937"
 };
 
-// Caregiving images
+// Caregiving images - Real homes and real people
 const images = {
-  hero: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1600&auto=format&fit=crop",
-  caregiver: "https://images.pexels.com/photos/7551622/pexels-photo-7551622.jpeg?w=800&auto=format&fit=crop",
-  provider: "https://images.unsplash.com/photo-1666066894547-749f0272a630?w=800&auto=format&fit=crop",
-  agency: "https://images.pexels.com/photos/7979597/pexels-photo-7979597.jpeg?w=800&auto=format&fit=crop",
-  community: "https://images.unsplash.com/photo-1641135309825-4d703d0225a8?w=1200&auto=format&fit=crop",
-  hands: "https://images.unsplash.com/photo-1739932885175-5fdaa1bd5989?w=1200&auto=format&fit=crop"
+  hero: "https://images.unsplash.com/photo-1638866109757-9cf3af612f57?w=1600&auto=format&fit=crop",
+  provider: "https://images.pexels.com/photos/2121345/pexels-photo-2121345.jpeg?w=800&auto=format&fit=crop",
+  agency: "https://images.unsplash.com/photo-1565688527174-775059ac429c?w=800&auto=format&fit=crop",
+  community: "https://images.pexels.com/photos/8204963/pexels-photo-8204963.jpeg?w=1200&auto=format&fit=crop",
+  hands: "https://images.unsplash.com/photo-1675179182818-e3518274be24?w=1200&auto=format&fit=crop"
 };
 
 export default function WelcomeScreen() {
