@@ -412,12 +412,7 @@ export default function Dashboard() {
         </div>
 
         {/* Placement Tabs */}
-        <PlacementTabs orgType={orgType}>
-          {{
-            need: <NeedPlacementContent />,
-            available: <PlacementAvailableContent />
-          }}
-        </PlacementTabs>
+        <PlacementTabs orgType={orgType} />
       </main>
     </div>
   );
