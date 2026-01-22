@@ -6,10 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { 
-  ArrowLeft, Users, Building2, Clock, Mail, Phone, MapPin, 
-  RefreshCw, AlertTriangle, CheckCircle2, Shield, Bell, Link2, Copy, UserPlus
+  ArrowLeft, Users, Building2, Clock, Mail, MapPin, 
+  RefreshCw, AlertTriangle, CheckCircle2, Shield, Link2, Copy, UserPlus,
+  Download, FileText, Lock
 } from "lucide-react";
 import { toast } from "sonner";
+import { FEATURE_FLAGS } from "@/constants/featureFlags";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_anchor-place/artifacts/a2v0mwtd_image.png";
