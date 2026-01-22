@@ -5,13 +5,13 @@
 
 export const FEATURE_FLAGS = {
   // County-specific filtering and views
-  COUNTY_MODE: true,
+  COUNTY_MODE: false,
   
   // Read-only audit trail for compliance
-  READ_ONLY_AUDIT: true,
+  READ_ONLY_AUDIT: false,
   
   // Enable report export functionality
-  EXPORT_REPORTS: true,
+  EXPORT_REPORTS: false,
 };
 
 /**
