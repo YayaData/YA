@@ -105,14 +105,41 @@ export default function RequestorDashboard() {
       </header>
 
       <main className="px-6 py-8 max-w-6xl mx-auto">
+        {/* County Mode Banner */}
+        {isCountyMode && assignedCounty && (
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3" data-testid="county-mode-banner">
+            <MapPin className="h-5 w-5 text-blue-600" />
+            <div>
+              <p className="font-semibold text-blue-800">County Mode Active</p>
+              <p className="text-sm text-blue-600">
+                Your submissions are restricted to <strong>{assignedCounty}</strong>.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold font-['Poppins']" style={{ color: colors.dark }}>
-            Welcome{userData.contactName ? `, ${userData.contactName}` : ''}!
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Submit and track housing placement requests from your dashboard.
-          </p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold font-['Poppins']" style={{ color: colors.dark }}>
+              Welcome{userData.contactName ? `, ${userData.contactName}` : ''}!
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Submit and track housing placement requests from your dashboard.
+            </p>
+          </div>
+          {canExport && requests.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExportCSV}
+              className="gap-2"
+              data-testid="export-requests-btn"
+            >
+              <Download className="h-4 w-4" />
+              Export My Requests
+            </Button>
+          )}
         </div>
 
         {/* Quick Actions */}
