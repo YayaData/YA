@@ -191,7 +191,12 @@ export default function ProviderDashboard() {
               </div>
               <div>
                 <h3 className="text-lg font-bold" style={{ color: colors.dark }}>Incoming Requests</h3>
-                <p className="text-gray-500 text-sm">{requests.length} pending</p>
+                <p className="text-gray-500 text-sm">
+                  {visibleRequests.length} compatible
+                  {preferences.length > 0 && visibleRequests.length !== requests.length && (
+                    <span className="text-gray-400"> ({requests.length} total)</span>
+                  )}
+                </p>
               </div>
             </CardContent>
           </Card>
