@@ -69,3 +69,53 @@ export function getRequestPriority(request) {
   
   return { level: "NORMAL", label: "Normal", color: "#6b7280" };
 }
+
+// Check if provider can accommodate all request flags
+export function isCompatibleMatch(provider, requestFlags) {
+  if (!provider.acceptedFlags) return true;
+
+  return requestFlags.every(flag =>
+    provider.acceptedFlags.includes(flag)
+  );
+}
+
+// Find compatible providers for a request
+export function findCompatibleProviders(providers, request) {
+  const requestFlags = generateMatchFlags(request);
+  
+  return providers.filter(provider => 
+    isCompatibleMatch(provider, requestFlags)
+  );
+}
+
+// Score provider match quality (higher is better)
+export function scoreProviderMatch(provider, request) {
+  const requestFlags = generateMatchFlags(request);
+  let score = 100;
+  
+  // Base compatibility check
+  if (!isCompatibleMatch(provider, requestFlags)) {
+    return 0;
+  }
+  
+  // Bonus for location match
+  if (provider.location && request.preferredLocation) {
+    if (provider.location.toLowerCase().includes(request.preferredLocation.toLowerCase())) {
+      score += 20;
+    }
+  }
+  
+  // Bonus for immediate availability when urgent
+  if (requestFlags.includes(MATCH_FLAGS.IMMEDIATE_PLACEMENT) && 
+      provider.availability_status === "Available") {
+    score += 30;
+  }
+  
+  // Bonus for VA contracted when VA eligible
+  if (requestFlags.includes(MATCH_FLAGS.VA_ELIGIBLE) && 
+      provider.acceptedFlags?.includes("VA_CONTRACTED")) {
+    score += 15;
+  }
+  
+  return score;
+}
