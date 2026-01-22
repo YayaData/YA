@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft, ArrowRight, CheckCircle2, Home, Users, Building2, Heart } from "lucide-react";
 import { ORG_TYPE_LABELS, ORG_TYPE_GROUPS, ORG_CAPABILITIES } from "@/constants/organizationCapabilities";
 import { routeByOrgType, canProvidePlacement } from "@/utils/routeByOrgType";
+import { ORG_PLACEMENT_SCHEMAS } from "@/constants/placementSchemas";
 
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_anchor-place/artifacts/a2v0mwtd_image.png";
 
