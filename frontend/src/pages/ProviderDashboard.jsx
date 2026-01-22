@@ -4,9 +4,10 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Plus, Home, Clock, CheckCircle2, Settings, Users, Eye, Filter } from "lucide-react";
+import { ArrowLeft, Plus, Home, Clock, CheckCircle2, Settings, Users, Eye, Filter, Download, FileText, MapPin } from "lucide-react";
 import ProviderPreferences from "@/components/ProviderPreferences";
 import { isCompatibleMatch } from "@/utils/isCompatibleMatch";
+import { FEATURE_FLAGS } from "@/constants/featureFlags";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_anchor-place/artifacts/a2v0mwtd_image.png";
