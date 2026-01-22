@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
   Home, Users, Search, CheckCircle, ArrowRight, 
-  Globe, Heart, Shield, Zap, ArrowDown, Sparkles
+  Globe, Heart, Shield, Zap, ArrowDown, Sparkles, LayoutDashboard
 } from "lucide-react";
+import { getPlacementTabs } from "@/utils/getPlacementTabs";
+import { getDashboardRoute } from "@/utils/routeByOrgType";
 
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_anchor-place/artifacts/a2v0mwtd_image.png";
 
