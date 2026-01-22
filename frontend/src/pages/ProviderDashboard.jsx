@@ -162,6 +162,22 @@ export default function ProviderDashboard() {
       </header>
 
       <main className="px-6 py-8 max-w-6xl mx-auto">
+        {/* County Mode Banner */}
+        {isCountyMode && assignedCounty && (
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3" data-testid="county-mode-banner">
+            <MapPin className="h-5 w-5 text-blue-600" />
+            <div className="flex-1">
+              <p className="font-semibold text-blue-800">County Mode Active</p>
+              <p className="text-sm text-blue-600">
+                Showing requests for <strong>{assignedCounty}</strong> only. 
+                {outsideJurisdictionCount > 0 && (
+                  <span className="ml-1">({outsideJurisdictionCount} requests hidden outside your jurisdiction)</span>
+                )}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Preferences Modal */}
         {showPreferences && (
           <Card className="rounded-2xl shadow-lg border-0 mb-8" data-testid="preferences-panel">
