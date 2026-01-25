@@ -251,7 +251,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 10",
     progressMessage: "Local requirements vary.\nA quick call to your city office can save a lot of time.\nYou're almost there.",
-    completionMessage: "Step 10 complete.\nYour location is compliant and ready for business."
+    completionMessage: "Step 10 complete.\nYour location is compliant and ready for business.",
+    resource: {
+      label: "View Federal Links",
+      url: "/federal-links",
+      type: "internal"
+    }
   },
   11: {
     title: "Start Accepting Referrals",
@@ -270,7 +275,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 11",
     progressMessage: "Building a referral network takes time.\nStart with one or two relationships.\nWord of mouth will grow your agency.",
-    completionMessage: "Congratulations!\nYou've completed all the steps.\nYour peer support agency is ready to serve your community."
+    completionMessage: "Congratulations!\nYou've completed all the steps.\nYour peer support agency is ready to serve your community.",
+    resource: {
+      label: "Learn More",
+      url: "/national-overview",
+      type: "internal"
+    }
   }
 };
 
@@ -282,6 +292,7 @@ const StepDetailModal = ({
   onStartStep,
   stateCode 
 }) => {
+  const navigate = useNavigate();
   const [showProgress, setShowProgress] = useState(false);
   const details = STEP_DETAILS[step?.step] || STEP_DETAILS[1];
 
