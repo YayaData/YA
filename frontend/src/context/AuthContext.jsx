@@ -92,6 +92,24 @@ export const AuthProvider = ({ children }) => {
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
 
+  // Check if user has premium access to a specific state
+  const hasStateAccess = (stateCode) => {
+    if (!user) return false;
+    
+    // Check purchased states
+    const purchasedStates = user.purchased_states || [];
+    if (purchasedStates.includes(stateCode?.toUpperCase())) {
+      return true;
+    }
+    
+    // Check if grandfathered for their selected state
+    if (user.is_grandfathered && user.selected_state?.toUpperCase() === stateCode?.toUpperCase()) {
+      return true;
+    }
+    
+    return false;
+  };
+
   const value = {
     user,
     token,
@@ -103,7 +121,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateProfile,
     getAuthHeaders,
-    refreshUser: () => token && fetchUser(token)
+    refreshUser: () => token && fetchUser(token),
+    hasStateAccess
   };
 
   return (
