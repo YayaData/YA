@@ -505,6 +505,78 @@ const AdminPage = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Broken Links Tab */}
+          <TabsContent value="broken-links">
+            <Card className="border-2 border-slate-200">
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>URL</TableHead>
+                      <TableHead>Page</TableHead>
+                      <TableHead>State</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Reported</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {brokenLinks.map((report, idx) => (
+                      <TableRow key={idx}>
+                        <TableCell className="max-w-[200px]">
+                          <a 
+                            href={report.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-gold hover:underline flex items-center gap-1 truncate"
+                          >
+                            <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                            <span className="truncate">{report.url}</span>
+                          </a>
+                        </TableCell>
+                        <TableCell className="text-sm">{report.page}</TableCell>
+                        <TableCell>{report.state_code || '-'}</TableCell>
+                        <TableCell>
+                          <Badge className={
+                            report.status === "pending" ? "bg-amber-100 text-amber-700" :
+                            report.status === "fixed" ? "bg-green-100 text-green-700" :
+                            "bg-slate-100 text-slate-700"
+                          }>
+                            {report.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-slate-500 text-sm">{formatDate(report.created_at)}</TableCell>
+                        <TableCell>
+                          {report.status === "pending" && (
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => updateBrokenLinkStatus(report.id, "fixed")}
+                                className="p-1 text-green-600 hover:bg-green-50 rounded"
+                                title="Mark as Fixed"
+                              >
+                                <CheckCircle className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => updateBrokenLinkStatus(report.id, "dismissed")}
+                                className="p-1 text-slate-400 hover:bg-slate-50 rounded"
+                                title="Dismiss"
+                              >
+                                <XCircle className="w-4 h-4" />
+                              </button>
+                            </div>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                {brokenLinks.length === 0 && (
+                  <p className="text-slate-500 text-center py-8">No broken link reports</p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </main>
     </div>
