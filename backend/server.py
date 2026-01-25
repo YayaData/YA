@@ -565,7 +565,84 @@ def generate_template_pdf(template_id):
     return buffer
 
 # ============== API ROUTES ==============
-def verify_admin_password(password): return hashlib.sha256(password.encode()).hexdigest() == ADMIN_PASSWORD_HASH
+def verify_admin_password(password: str) -> bool:
+    """Verify admin password against stored hash."""
+    if not ADMIN_PASSWORD_HASH:
+        return False
+    return hashlib.sha256(password.encode()).hexdigest() == ADMIN_PASSWORD_HASH
+
+def create_admin_token(username: str) -> str:
+    """Create JWT token for admin session."""
+    expiration = datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
+    payload = {
+        "sub": username,
+        "role": "admin",
+        "exp": expiration,
+        "iat": datetime.now(timezone.utc)
+    }
+    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+def verify_admin_token(token: str) -> Optional[dict]:
+    """Verify JWT token and return payload if valid."""
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("role") != "admin":
+            return None
+        return payload
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+async def get_current_admin(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
+    """Dependency to verify admin authentication."""
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    payload = verify_admin_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    return payload
+
+def check_rate_limit(client_ip: str) -> tuple[bool, Optional[str]]:
+    """Check if login is rate limited. Returns (allowed, error_message)."""
+    now = datetime.now(timezone.utc)
+    
+    if client_ip in login_attempts:
+        attempt_info = login_attempts[client_ip]
+        
+        # Check if currently locked out
+        if attempt_info.get("locked_until"):
+            if now < attempt_info["locked_until"]:
+                remaining = (attempt_info["locked_until"] - now).seconds // 60 + 1
+                return False, f"Account locked. Try again in {remaining} minute(s)"
+            else:
+                # Lockout expired, reset
+                login_attempts[client_ip] = {"count": 0, "last_attempt": now}
+    
+    return True, None
+
+def record_login_attempt(client_ip: str, success: bool):
+    """Record login attempt for rate limiting."""
+    now = datetime.now(timezone.utc)
+    
+    if success:
+        # Clear attempts on successful login
+        if client_ip in login_attempts:
+            del login_attempts[client_ip]
+        return
+    
+    # Failed attempt
+    if client_ip not in login_attempts:
+        login_attempts[client_ip] = {"count": 0, "last_attempt": now}
+    
+    login_attempts[client_ip]["count"] += 1
+    login_attempts[client_ip]["last_attempt"] = now
+    
+    # Lock out after MAX_LOGIN_ATTEMPTS
+    if login_attempts[client_ip]["count"] >= MAX_LOGIN_ATTEMPTS:
+        login_attempts[client_ip]["locked_until"] = now + timedelta(minutes=LOCKOUT_DURATION_MINUTES)
 
 @api_router.get("/")
 async def root(): return {"message": "Peer Support Agency Launch API", "version": "4.0"}
