@@ -372,6 +372,17 @@ const AdminPage = () => {
 
           {/* Overview Tab */}
           <TabsContent value="overview">
+            <div className="flex justify-end mb-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadCSV('users')}
+                className="text-slate-600"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export All Users
+              </Button>
+            </div>
             <div className="grid lg:grid-cols-2 gap-6">
               {/* Recent Leads */}
               <Card className="border-2 border-slate-200">
