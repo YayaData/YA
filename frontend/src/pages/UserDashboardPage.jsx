@@ -16,7 +16,9 @@ import {
   ArrowRight,
   FileText,
   Users,
-  Building2
+  Building2,
+  Zap,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +32,21 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 // First 3 steps shown by default
 const INITIAL_STEPS_SHOWN = 3;
 
+// Quick wins - easy tasks that build confidence
+const QUICK_WINS = [
+  { step: 1, task: "Get your EIN online", time: "10 min", tip: "It's free and instant at irs.gov", icon: "📋" },
+  { step: 2, task: "Apply for your NPI", time: "15 min", tip: "Free at nppes.cms.hhs.gov", icon: "🆔" },
+  { step: 3, task: "Get an insurance quote", time: "5 min", tip: "Just request a quote — no commitment", icon: "🛡️" },
+  { step: 4, task: "Create your PECOS account", time: "10 min", tip: "You'll need it for Medicaid enrollment", icon: "🔐" },
+  { step: 5, task: "Register on CAQH ProView", time: "15 min", tip: "Many MCOs require this", icon: "📝" },
+  { step: 6, task: "Write a simple job description", time: "10 min", tip: "Start with the basics — refine later", icon: "👥" },
+  { step: 7, task: "Research supervisor options", time: "10 min", tip: "Make a list of 3 potential supervisors", icon: "🎓" },
+  { step: 8, task: "Download a P&P template", time: "2 min", tip: "We have one ready for you", icon: "📄" },
+  { step: 9, task: "Research billing software", time: "10 min", tip: "Compare 2-3 options online", icon: "💻" },
+  { step: 10, task: "Check your local zoning", time: "5 min", tip: "Call your city/county office", icon: "📍" },
+  { step: 11, task: "Join a peer support group", time: "5 min", tip: "Connect with others on this journey", icon: "🤝" }
+];
+
 const UserDashboardPage = () => {
   const navigate = useNavigate();
   const { user, token, logout, isAuthenticated, loading: authLoading } = useAuth();
@@ -38,6 +55,7 @@ const UserDashboardPage = () => {
   const [loading, setLoading] = useState(true);
   const [showAllSteps, setShowAllSteps] = useState(false);
   const [completedSteps, setCompletedSteps] = useState([]);
+  const [quickWinDismissed, setQuickWinDismissed] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -49,6 +67,9 @@ const UserDashboardPage = () => {
     if (token && user) {
       fetchDashboardData();
     }
+    // Check if quick win was dismissed this session
+    const dismissed = sessionStorage.getItem("quickWinDismissed");
+    if (dismissed) setQuickWinDismissed(true);
   }, [token, user]);
 
   const fetchDashboardData = async () => {
