@@ -427,6 +427,17 @@ const AdminPage = () => {
 
           {/* Leads Tab */}
           <TabsContent value="leads">
+            <div className="flex justify-end mb-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadCSV('leads')}
+                className="text-slate-600"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
+            </div>
             <Card className="border-2 border-slate-200">
               <CardContent className="p-0">
                 <Table>
@@ -462,6 +473,17 @@ const AdminPage = () => {
 
           {/* Consultations Tab */}
           <TabsContent value="consultations">
+            <div className="flex justify-end mb-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadCSV('consultations')}
+                className="text-slate-600"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
+            </div>
             <Card className="border-2 border-slate-200">
               <CardContent className="p-0">
                 <Table>
