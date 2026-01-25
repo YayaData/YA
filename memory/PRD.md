@@ -238,6 +238,6 @@ NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 
 ## Next Steps
 1. Get SendGrid API key from user to enable real magic link emails
-2. Add trust indicators (last updated dates, report broken links)
-3. Implement export features (PDF roadmaps, CSV for admin)
-4. Continue populating remaining states
+2. Add Site Visit Readiness section (calm checklist for later steps)
+3. Continue populating remaining 37 states
+4. Consider all-states bundle option in the future
