@@ -129,6 +129,18 @@ const AdminPage = () => {
     }
   };
 
+  const updateBrokenLinkStatus = async (reportId, status) => {
+    try {
+      const headers = { Authorization: `Bearer ${authToken}` };
+      await axios.put(`${API}/admin/broken-links/${reportId}?status=${status}`, {}, { headers });
+      toast.success(`Report marked as ${status}`);
+      // Update local state
+      setBrokenLinks(prev => prev.map(r => r.id === reportId ? { ...r, status } : r));
+    } catch (error) {
+      toast.error("Failed to update status");
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
