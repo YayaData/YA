@@ -1,16 +1,19 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Depends
 from fastapi.responses import StreamingResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 import hashlib
+import jwt
+import secrets
 from pathlib import Path
 from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import List, Optional, Dict
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from io import BytesIO
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
@@ -29,8 +32,19 @@ db = client[os.environ['DB_NAME']]
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
+security = HTTPBearer(auto_error=False)
 
-ADMIN_PASSWORD_HASH = hashlib.sha256("Chris229@@@".encode()).hexdigest()
+# Admin credentials from environment variables
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD_HASH = os.environ.get('ADMIN_PASSWORD_HASH')
+JWT_SECRET = os.environ.get('JWT_SECRET', secrets.token_urlsafe(32))
+JWT_ALGORITHM = "HS256"
+JWT_EXPIRATION_HOURS = 24
+
+# Rate limiting configuration
+MAX_LOGIN_ATTEMPTS = 3
+LOCKOUT_DURATION_MINUTES = 5
+login_attempts = {}  # IP -> {count, last_attempt, locked_until}
 NAVY = colors.HexColor('#0F172A')
 GOLD = colors.HexColor('#B45309')
 
