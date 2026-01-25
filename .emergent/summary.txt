@@ -1,0 +1,191 @@
+<analysis>**original_problem_statement:**
+The user wants to build a web-based application called **“Launch Your Peer Support Agency™ — Step-By-Step in Your State (50-State Edition)”**.
+
+**PRODUCT REQUIREMENTS:**
+The application should serve as a guided, state-selectable platform that provides all the necessary information for a user to open a Medicaid-billable Peer Support Specialist agency in any of the 50 U.S. states.
+
+**Core Features requested over time:**
+1.  **MVP:** A 50-state selector, dynamically loading state-specific requirements (initially for North Carolina), a national overview section, a templates/resources section, and monetization hooks.
+2.  **Monetization & Expansion:** Integrate Stripe for payments, add an email capture form, populate data for more high-demand states (TX, CA, FL, NY).
+3.  **Admin & Further Expansion:** Create a password-protected admin dashboard to view leads and payments, and populate data for 8 additional states.
+4.  **Compliance & Data Depth:** A major overhaul to include detailed, structured information on official links (federal/state), credentialing requirements, laws/statutes, policy & procedure frameworks, and zoning/local compliance guidance. Add extensive disclaimers.
+5.  **Security, UX & User Accounts (Latest Request):**
+    *   **Security:** Secure the admin area with proper authentication (hashed password stored in env vars), move all secrets to environment variables, and add rate limiting.
+    *   **UX:** Add a  onboarding wizard and a user  to show saved progress and resources.
+    *   **Trust:** Add Last Updated dates and a Report broken link feature.
+    *   **Exports:** Implement PDF and CSV export functionalities.
+    *   **User Accounts:** Implement magic link login via SendGrid to allow users to save their progress.
+
+**User's preferred language**: English
+
+**what currently exists?**
+The application is a full-stack (FastAPI, React, MongoDB) web app that has been developed through four major phases.
+-   **Frontend:** A responsive UI with a 50-state selector, a homepage, and detailed state pages presented in a 7-tab layout (Snapshot, Checklist, Official Links, Credentialing, Laws, P&P, Zoning). It also includes pages for national overview, federal links, templates, and a password-protected admin dashboard.
+-   **Backend:** FastAPI server providing data for 13 fully populated states, product information for Stripe, and endpoints for the admin dashboard (stats, leads, consultations).
+-   **Database:** MongoDB stores state data, MCOs, laws, leads (from email capture), and consultation requests.
+-   **Integrations:** Stripe is integrated for payments. PDF generation using ReportLab is implemented for template downloads.
+
+**Last working item**:
+-   Last item agent was working: The agent was about to begin implementation of a large set of features focused on security, user experience, and user accounts, as requested by the user. This includes overhauling the admin login, adding a user account system with magic links, and creating new onboarding/dashboard pages.
+-   Status: NOT STARTED
+-   Agent Testing Done: N
+-   Which testing method agent to use? both
+-   User Testing Done: N
+
+**All Pending/In progress Issue list**:
+  - Issue 1: Failures in the last test run were not investigated. (Priority: P1)
+
+  Issues Detail:
+  - Issue 1: 
+     - Attempted fixes: None. The agent noted the 96% success rate from  but did not view the report to identify or fix the failures.
+     - Next debug checklist:
+       1. View the test report at .
+       2. Identify the tests that failed.
+       3. Re-run the testing agent () with a clear scope to reproduce and confirm the failures.
+       4. Debug and fix the identified issues.
+     - Why fix this issue and what will be achieved with the fix? To ensure the application is stable and free of regressions before adding a new, complex layer of features like user authentication.
+     - Status:  NOT STARTED
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix? both
+     - Blocked on other issue: None
+
+**In progress Task List**:
+There are no tasks currently in progress.
+
+**Upcoming and Future Tasks**
+**Upcoming Tasks:**
+-   **P0: Security & Admin Overhaul:**
+    -   Securely store admin credentials (username: , generated password) and other secrets (Stripe, SendGrid keys) in environment variables, removing all hardcoded values.
+    -   Replace the current simple password check for the admin page with a proper authenticated login system.
+    -   Implement password hashing for the admin user.
+    -   Add rate limiting to the admin login endpoint (lock account for 5 minutes after 3 failed attempts).
+-   **P0: User Accounts & Personalization:**
+    -   Integrate SendGrid to implement a magic link authentication system for users. The user will provide the API key.
+    -   Create a user data model in MongoDB to save checklist progress and other user-specific data.
+    -   Build a  onboarding wizard (Select state -> Choose goal -> Get personalized roadmap).
+    -   Build a user  to display saved progress, downloaded resources, purchases, and bookmarked links.
+-   **P1: Trust & Data Integrity Features:**
+    -   Add Last updated date and Data source type fields to the state data display.
+    -   Implement a Report broken link feature that stores reports in MongoDB.
+    -   Display the broken link reports in the admin dashboard.
+-   **P1: Export Functionality:**
+    -   Add a Download State Roadmap PDF button on each state page.
+    -   Add CSV export functionality with filters (date, state, product) to the admin dashboard for leads, consultations, and payments.
+
+**Future Tasks:**
+-   Populate the remaining 37 states with data.
+-   Implement email notifications for leads and consultations (SendGrid integration was deferred).
+-   Develop a compare states feature.
+-   Build an AI assistant for state-specific guidance.
+
+**Completed work in this session**
+- **Phase 1 (MVP):** Built the foundational app with a 50-state selector, populated NC data, and created pages for National Overview & Templates.
+- **Phase 2 (Monetization):** Integrated Stripe with 5 products, added an email capture modal, and populated data for TX, CA, FL, NY.
+- **Phase 3 (Admin & Expansion):** Added a password-protected  dashboard and populated data for 8 more states (OH, PA, IL, GA, NJ, VA, WA, AZ).
+- **Phase 4 (Compliance & Depth):** Overhauled state pages with 7 detailed tabs (Snapshot, Checklist, Links, Credentialing, Laws, P&P, Zoning) and added a global  page.
+
+**Earlier issues found/mentioned but not fixed**
+   - Issue 1: The test run during Phase 3 () had failures (96% success rate) that were never investigated or resolved. The agent moved on without addressing them.
+     - Debug checklist: View , identify failed tests, and re-run the testing agent to reproduce and fix the issues.
+     - Why to solve this issue and what will be achieved with this? Ensures application stability before adding major new features.
+     - Should Test frontend/backend/both after fix: both
+     - Is recurring issue? N
+
+**Known issue recurrence from previous fork**
+- None.
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+-   **Frontend:** React, Tailwind CSS, Shadcn UI
+-   **Backend:** FastAPI (Python)
+-   **Database:** MongoDB
+-   **Payments:** Stripe
+-   **PDF Generation:** ReportLab
+
+**key DB schema**
+-   **states**: state_name, abbreviation, medicaid_agency_name, various URLs, supervision_required, etc.
+-   **mcos_by_state**: state_abbrev, mco_name, contracting_url, credentialing_url, etc.
+-   **laws_and_rules_by_state**: state_abbrev, title, category, summary_plain_english, official_url, etc.
+-   **templates**: template_name, description, preview_text, download_url.
+-   **leads**: (Implicit) Collection for storing emails from the email capture form.
+-   **consultations**: (Implicit) Collection for storing consultation requests.
+-   **payments**: (Implicit) Collection for tracking payment attempts.
+
+**changes in tech stack**
+- None.
+
+**All files of reference**
+-   : The main FastAPI application logic, serving all data and handling business logic.
+-   : The core frontend component that renders the 7-tab layout with all state-specific information.
+-   : The frontend for the admin dashboard.
+-   : Main React component handling routing for all pages.
+-   : The project requirements document, updated after each major phase.
+-   , : Environment variable files (currently holding insecure defaults).
+
+**Areas that need refactoring**:
+-   **Admin Authentication:** The current admin access is via a hardcoded password check (), which is insecure. This is the top priority for the next phase.
+-   **Secret Management:** Stripe keys and the admin password are not stored in environment variables. This needs to be corrected.
+
+**key api endpoints**
+-   : Get list of all states.
+-   : Get detailed data for a specific state.
+-   : Get list of products for Stripe.
+-   : (Insecure) Login endpoint for the admin dashboard.
+-   : Get statistics for the admin dashboard.
+-   : Endpoint for the email capture form.
+-   : Endpoint for the consultation booking form.
+-   : Creates a Stripe checkout session.
+-   : Serves a generated PDF template.
+
+**Critical Info for New Agent**
+-   The immediate next steps are a major security and UX upgrade. You must prioritize moving all secrets to environment variables and implementing a secure, authenticated admin login.
+-   The user has requested magic link authentication using SendGrid. You will need to get the API key from the user when you are ready to implement it.
+-   Before starting new features, it is crucial to investigate and fix the test failures from the last test run ().
+-   The user is highly detailed. Carefully read the latest prompt (Chat Message 162 & 165) which outlines all the new requirements.
+
+**documents and test reports created in this job**
+-   /app/design_guidelines.json
+-   /app/memory/PRD.md
+-   /app/test_reports/iteration_1.json
+-   /app/test_reports/iteration_2.json
+-   /app/test_reports/iteration_3.json
+
+**Last 10 User Messages and any pending HUMAN messages**
+1.  **User:** Requests a major upgrade including secure admin, user accounts with magic links, an onboarding wizard, a user dashboard, trust indicators (last updated date), and export features. (IN PROGRESS - NOT STARTED)
+2.  **User:** Provides details for the upgrade: use SendGrid for magic links, specifies  as the username, wants a securely generated password stored in env vars, rate limiting for admin login, and clarifies design goals. (IN PROGRESS - NOT STARTED)
+3.  **Agent:** Acknowledges the new requirements and is about to start.
+4.  **User:** Asks for a summary of what has been built so far. (COMPLETED)
+5.  **Agent:** Provides a comprehensive summary of all features built across Phases 1-4.
+6.  **User:** Asks to skip email notifications for now. (COMPLETED)
+7.  **User:** Provides the admin password . (COMPLETED - but needs to be changed)
+8.  **Agent:** Acknowledges the password and proceeds with implementation.
+9.  **User:** Asks to use a professional email service (Emergent integration) and to password-protect the admin dashboard. (COMPLETED)
+10. **Agent:** Acknowledges and plans to use SendGrid and a password-protected admin.
+
+**Project Health Check:**
+-   **Broken:**
+    -   Admin authentication is insecure, using a hardcoded password () directly in the code.
+    -   The last test run reported failures that were not investigated.
+-   **Mocked:**
+    -   Payment integration leads to checkout, but the full order fulfillment flow (e.g., delivering the full course) is not implemented.
+    -   SendGrid integration for email notifications was planned and deferred; it is now planned for magic links but is not yet implemented.
+
+**3rd Party Integrations**
+-   **Stripe (Payments):** Integrated and functional for creating checkout sessions. Uses a system-provided test API key.
+-   **SendGrid (Email):** Not yet integrated. The integration playbook was pulled for email notifications but the feature was deferred. It is now required for the upcoming magic link authentication feature. A user-provided API key will be needed.
+
+**Testing status**
+-   Testing agent used after significant changes: YES
+-   Troubleshoot agent used after agent stuck in loop: NO
+-   Test files created: None.
+-   Known regressions: The test report from  shows a 96% success rate, indicating some tests failed. These failures were not investigated and are unresolved.
+
+**Credentials to test flow:**
+-   **Admin Dashboard:** 
+-   **Password:**  (NOTE: This is a critical security issue and must be changed in the next step).
+
+**What agent forgot to execute**
+-   The agent failed to investigate and resolve the test failures reported in  before finishing the last phase.
+-   The agent did not restart services or run a final test after the last code change (updating ) before providing a summary to the user.</analysis>
