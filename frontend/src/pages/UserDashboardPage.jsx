@@ -255,6 +255,32 @@ const UserDashboardPage = () => {
         </div>
       </header>
 
+      {/* Milestone Celebration - calm and minimal */}
+      {celebration && (
+        <div 
+          className="bg-green-50 border-b border-green-100 animate-in fade-in slide-in-from-top-2 duration-300"
+          data-testid="celebration-banner"
+        >
+          <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5 text-green-600" />
+              </div>
+              <div>
+                <p className="font-medium text-green-900">{celebration.title}</p>
+                <p className="text-sm text-green-700">{celebration.message}</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => setCelebration(null)}
+              className="p-1 text-green-600 hover:text-green-800 rounded"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
