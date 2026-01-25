@@ -164,8 +164,9 @@ const UserDashboardPage = () => {
       const milestone = checkMilestone(previousCount, newCount);
       if (milestone) {
         setCelebration(milestone);
-        // Auto-dismiss after 5 seconds
-        setTimeout(() => setCelebration(null), 5000);
+        // Auto-dismiss after 6 seconds (longer for completion)
+        const timeout = milestone.type === "complete" ? 8000 : 6000;
+        setTimeout(() => setCelebration(null), timeout);
       }
     }
 
