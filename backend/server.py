@@ -884,6 +884,23 @@ async def get_templates(): return {"templates": [{"id": t["id"], "title": t["tit
 async def download_template(template_id: str):
     return StreamingResponse(generate_template_pdf(template_id), media_type="application/pdf", headers={"Content-Disposition": f"attachment; filename={template_id}.pdf"})
 
+@api_router.get("/states/{state_code}/roadmap-pdf")
+async def download_state_roadmap(state_code: str):
+    """Download a clean PDF roadmap for a specific state."""
+    state_code = state_code.upper()
+    state_info = next((s for s in ALL_STATES if s["code"] == state_code), None)
+    if not state_info:
+        raise HTTPException(status_code=404, detail="State not found")
+    
+    pdf_buffer = generate_state_roadmap_pdf(state_code)
+    filename = f"{state_code.lower()}-peer-support-roadmap.pdf"
+    
+    return StreamingResponse(
+        pdf_buffer, 
+        media_type="application/pdf", 
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
 @api_router.post("/email-capture")
 async def capture_email(data: EmailCapture):
     await db.email_captures.insert_one({"id": str(uuid.uuid4()), "email": data.email, "name": data.name, "source": data.source, "template_id": data.template_id, "state": data.state, "created_at": datetime.now(timezone.utc).isoformat()})
