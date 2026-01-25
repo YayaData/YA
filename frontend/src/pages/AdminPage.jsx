@@ -12,7 +12,9 @@ import {
   DollarSign,
   Eye,
   RefreshCw,
-  LogOut
+  LogOut,
+  User,
+  AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +36,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const AdminPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null);
@@ -41,21 +44,38 @@ const AdminPage = () => {
   const [consultations, setConsultations] = useState([]);
   const [payments, setPayments] = useState([]);
   const [activeTab, setActiveTab] = useState("overview");
-  const [storedPassword, setStoredPassword] = useState("");
+  const [authToken, setAuthToken] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  // Check for existing token on mount
+  useEffect(() => {
+    const token = sessionStorage.getItem("adminToken");
+    if (token) {
+      setAuthToken(token);
+      setIsAuthenticated(true);
+      fetchAllData(token);
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setLoginError("");
+    
     try {
-      const response = await axios.post(`${API}/admin/login`, { password });
-      if (response.data.success) {
+      const response = await axios.post(`${API}/admin/login`, { username, password });
+      if (response.data.success && response.data.token) {
+        const token = response.data.token;
+        setAuthToken(token);
+        sessionStorage.setItem("adminToken", token);
         setIsAuthenticated(true);
-        setStoredPassword(password);
         toast.success("Login successful");
-        fetchAllData(password);
+        fetchAllData(token);
       }
     } catch (error) {
-      toast.error("Invalid password");
+      const errorMsg = error.response?.data?.detail || "Login failed";
+      setLoginError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -63,22 +83,26 @@ const AdminPage = () => {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    setStoredPassword("");
+    setAuthToken("");
+    sessionStorage.removeItem("adminToken");
+    setUsername("");
     setPassword("");
     setStats(null);
     setLeads([]);
     setConsultations([]);
     setPayments([]);
+    setLoginError("");
   };
 
-  const fetchAllData = async (pwd) => {
+  const fetchAllData = async (token) => {
     setLoading(true);
     try {
+      const headers = { Authorization: `Bearer ${token}` };
       const [statsRes, leadsRes, consultationsRes, paymentsRes] = await Promise.all([
-        axios.get(`${API}/admin/stats?password=${pwd}`),
-        axios.get(`${API}/admin/leads?password=${pwd}`),
-        axios.get(`${API}/admin/consultations?password=${pwd}`),
-        axios.get(`${API}/admin/payments?password=${pwd}`)
+        axios.get(`${API}/admin/stats`, { headers }),
+        axios.get(`${API}/admin/leads`, { headers }),
+        axios.get(`${API}/admin/consultations`, { headers }),
+        axios.get(`${API}/admin/payments`, { headers })
       ]);
       setStats(statsRes.data);
       setLeads(leadsRes.data.leads);
@@ -86,7 +110,12 @@ const AdminPage = () => {
       setPayments(paymentsRes.data.payments);
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast.error("Failed to fetch data");
+      if (error.response?.status === 401) {
+        handleLogout();
+        toast.error("Session expired. Please login again.");
+      } else {
+        toast.error("Failed to fetch data");
+      }
     } finally {
       setLoading(false);
     }
