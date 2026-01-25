@@ -395,11 +395,70 @@ const UserDashboardPage = () => {
           </CardContent>
         </Card>
 
+        {/* Upgrade Card - Show only for populated states without premium access */}
+        {isStatePopulated && !hasPremiumAccess && (
+          <Card className="border-2 border-gold bg-gradient-to-r from-amber-50 to-orange-50 mb-6" data-testid="upgrade-card">
+            <CardContent className="p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gold/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Unlock className="w-6 h-6 text-gold" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-lg text-navy font-semibold mb-1">
+                      Unlock Full {stateData?.state_name || dashboardData?.selected_state?.state_name} Guide
+                    </h3>
+                    <p className="text-sm text-slate-600 mb-2">
+                      Get state-specific details, advanced steps (4-11), templates, and PDF downloads.
+                    </p>
+                    <ul className="text-xs text-slate-500 space-y-1">
+                      <li className="flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-green-500" />
+                        All 11 detailed steps with state-specific guidance
+                      </li>
+                      <li className="flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-green-500" />
+                        MCO credentialing links & contacts
+                      </li>
+                      <li className="flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-green-500" />
+                        Downloadable PDF roadmap
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="text-center sm:text-right flex-shrink-0">
+                  <p className="text-2xl font-bold text-navy mb-1">${STATE_PRICE}</p>
+                  <p className="text-xs text-slate-500 mb-3">one-time</p>
+                  <Button 
+                    onClick={handlePurchaseAccess}
+                    disabled={purchaseLoading}
+                    className="bg-gold hover:bg-gold/90 text-white w-full sm:w-auto"
+                    data-testid="unlock-state-btn"
+                  >
+                    {purchaseLoading ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Processing...
+                      </span>
+                    ) : (
+                      <>
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Unlock Now
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Quick Win Card - Optional, dismissable */}
         {!quickWinDismissed && completedSteps.length < totalSteps && (() => {
-          // Find the next incomplete step
+          // Find the next incomplete step that is accessible
           const nextStepNum = completedSteps.length > 0 
-            ? Math.min(...[1,2,3,4,5,6,7,8,9,10,11].filter(s => !completedSteps.includes(s)))
+            ? Math.min(...[1,2,3,4,5,6,7,8,9,10,11].filter(s => !completedSteps.includes(s) && isStepAccessible(s)))
             : 1;
           const quickWin = QUICK_WINS.find(q => q.step === nextStepNum);
           
@@ -443,45 +502,68 @@ const UserDashboardPage = () => {
             {visibleSteps?.map((step, index) => {
               const isCompleted = completedSteps.includes(step.step);
               const isNext = !isCompleted && completedSteps.length === index;
+              const isLocked = !isStepAccessible(step.step);
               
               return (
                 <Card 
                   key={step.step} 
-                  className={`border-0 shadow-sm transition-all cursor-pointer hover:shadow-md ${
-                    isNext ? "ring-2 ring-gold ring-offset-2" : ""
-                  }`}
-                  onClick={() => setSelectedStep(step)}
+                  className={`border-0 shadow-sm transition-all ${
+                    isLocked 
+                      ? "opacity-60 cursor-default" 
+                      : "cursor-pointer hover:shadow-md"
+                  } ${isNext && !isLocked ? "ring-2 ring-gold ring-offset-2" : ""}`}
+                  onClick={() => !isLocked && setSelectedStep(step)}
                   data-testid={`step-card-${step.step}`}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start gap-4">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleStep(step.step);
-                        }}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                          isCompleted 
-                            ? "bg-green-500 text-white" 
-                            : "border-2 border-slate-300 hover:border-gold"
-                        }`}
-                      >
-                        {isCompleted ? (
-                          <CheckCircle2 className="w-5 h-5" />
-                        ) : (
-                          <span className="text-sm font-medium text-slate-400">{step.step}</span>
-                        )}
-                      </button>
+                      {isLocked ? (
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-slate-100 border-2 border-slate-200">
+                          <Lock className="w-4 h-4 text-slate-400" />
+                        </div>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleStep(step.step);
+                          }}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
+                            isCompleted 
+                              ? "bg-green-500 text-white" 
+                              : "border-2 border-slate-300 hover:border-gold"
+                          }`}
+                        >
+                          {isCompleted ? (
+                            <CheckCircle2 className="w-5 h-5" />
+                          ) : (
+                            <span className="text-sm font-medium text-slate-400">{step.step}</span>
+                          )}
+                        </button>
+                      )}
                       
                       <div className="flex-1 min-w-0">
-                        <h3 className={`font-medium ${isCompleted ? "text-slate-400 line-through" : "text-navy"}`}>
-                          {step.title}
-                        </h3>
-                        <p className="text-sm text-slate-500 mt-1 line-clamp-2">
-                          {step.description}
+                        <div className="flex items-center gap-2">
+                          <h3 className={`font-medium ${
+                            isLocked 
+                              ? "text-slate-400" 
+                              : isCompleted 
+                                ? "text-slate-400 line-through" 
+                                : "text-navy"
+                          }`}>
+                            {step.title}
+                          </h3>
+                          {isLocked && (
+                            <span className="inline-flex items-center gap-1 text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">
+                              <Lock className="w-3 h-3" />
+                              Premium
+                            </span>
+                          )}
+                        </div>
+                        <p className={`text-sm mt-1 line-clamp-2 ${isLocked ? "text-slate-400" : "text-slate-500"}`}>
+                          {isLocked ? "Unlock full access to see detailed guidance for this step." : step.description}
                         </p>
                         
-                        {isNext && (
+                        {isNext && !isLocked && (
                           <div className="mt-3">
                             <span className="inline-flex items-center gap-1 text-sm text-gold font-medium">
                               View details
