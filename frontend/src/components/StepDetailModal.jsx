@@ -83,7 +83,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 3",
     progressMessage: "Take your time comparing options.\nYou don't have to decide today.\nGetting quotes is a great first step.",
-    completionMessage: "Step 3 complete.\nYour agency is protected and ready for credentialing."
+    completionMessage: "Step 3 complete.\nYour agency is protected and ready for credentialing.",
+    resource: {
+      label: "Search Insurance Providers",
+      url: "https://www.google.com/search?q=professional+liability+insurance+peer+support+agency",
+      type: "external"
+    }
   },
   4: {
     title: "Enroll as Medicaid Provider",
@@ -102,7 +107,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 4",
     progressMessage: "Enrollment applications take time.\nDon't rush — incomplete applications get rejected.\nYou're making progress.",
-    completionMessage: "Step 4 complete.\nYou're now enrolled as a Medicaid provider."
+    completionMessage: "Step 4 complete.\nYou're now enrolled as a Medicaid provider.",
+    resource: {
+      label: "Apply for NPI Number",
+      url: "https://nppes.cms.hhs.gov/",
+      type: "external"
+    }
   },
   5: {
     title: "Credential with MCOs",
@@ -121,7 +131,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 5",
     progressMessage: "MCO credentialing can take 60-120 days.\nThis is normal — keep following up.\nYou're on the right track.",
-    completionMessage: "Step 5 complete.\nYou're credentialed and ready to serve MCO members."
+    completionMessage: "Step 5 complete.\nYou're credentialed and ready to serve MCO members.",
+    resource: {
+      label: "Go to CAQH ProView",
+      url: "https://proview.caqh.org/",
+      type: "external"
+    }
   },
   6: {
     title: "Hire Certified Staff",
