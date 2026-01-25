@@ -85,11 +85,42 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Step 10: "View Federal Links" → /federal-links
   - Step 11: "Learn More" → /national-overview
 
+### Phase 6: Paywall System (January 2025)
+
+**Paywall Implementation - COMPLETED:**
+- ✅ **One-time $49 per state purchase model**
+- ✅ **Free Access (no payment required):**
+  - Account creation & onboarding wizard
+  - General roadmap overview
+  - First 3 foundation steps (Form Business, Get NPI, Get Insurance)
+  - Full access to unpopulated states (37 states)
+- ✅ **Premium Access ($49 per state):**
+  - All 11 detailed steps with state-specific guidance
+  - MCO credentialing links & contacts
+  - Downloadable PDF roadmap
+  - Steps 4-11 (Medicaid enrollment, MCO credentialing, hiring, supervision, etc.)
+- ✅ **Paywall Logic:**
+  - Populated states (13) require purchase for premium content
+  - Unpopulated states are fully free (no upgrade prompt)
+  - Cannot purchase unpopulated states (returns error)
+  - Grandfathered users: created before PAYWALL_LAUNCH_DATE get free premium access to their selected state
+- ✅ **Frontend UI:**
+  - Upgrade card on dashboard for free-tier users on populated states
+  - "Unlock Now" button redirects to Stripe checkout
+  - Locked steps show lock icon and "Premium" badge
+  - Steps 1-3 always accessible (no lock)
+- ✅ **Stripe Integration:**
+  - State-specific checkout sessions via `/api/checkout/state`
+  - Webhook grants state access after successful payment
+  - Payment success page shows state unlock confirmation
+
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
 - Magic link tokens: 15-minute expiry, single-use
 - **Email is MOCKED** - Logs to console, returns `dev_token` in API response for testing
 - Progress saved per-state in MongoDB
+- Paywall constants: `FREE_STEPS=[1,2,3]`, `PREMIUM_STEPS=[4-11]`, `STATE_ACCESS_PRICE=$49`
+- Grandfathering cutoff: `PAYWALL_LAUNCH_DATE="2025-01-15T00:00:00+00:00"`
 
 ---
 
