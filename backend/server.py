@@ -734,9 +734,29 @@ async def stripe_webhook(request: Request):
     return {"received": True}
 
 @api_router.post("/admin/login")
-async def admin_login(data: AdminLogin):
-    if verify_admin_password(data.password): return {"success": True}
-    raise HTTPException(status_code=401, detail="Invalid password")
+async def admin_login(data: AdminLogin, request: Request):
+    """Secure admin login with rate limiting and JWT tokens."""
+    client_ip = request.client.host if request.client else "unknown"
+    
+    # Check rate limiting
+    allowed, error_msg = check_rate_limit(client_ip)
+    if not allowed:
+        raise HTTPException(status_code=429, detail=error_msg)
+    
+    # Verify credentials
+    if data.username != ADMIN_USERNAME or not verify_admin_password(data.password):
+        record_login_attempt(client_ip, success=False)
+        attempts_remaining = MAX_LOGIN_ATTEMPTS - login_attempts.get(client_ip, {}).get("count", 0)
+        if attempts_remaining > 0:
+            raise HTTPException(status_code=401, detail=f"Invalid credentials. {attempts_remaining} attempt(s) remaining")
+        else:
+            raise HTTPException(status_code=429, detail=f"Account locked for {LOCKOUT_DURATION_MINUTES} minutes")
+    
+    # Successful login
+    record_login_attempt(client_ip, success=True)
+    token = create_admin_token(data.username)
+    
+    return {"success": True, "token": token, "message": "Login successful"}
 
 @api_router.get("/admin/leads")
 async def get_leads(password: str = ""):
