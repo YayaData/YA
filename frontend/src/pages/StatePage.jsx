@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { 
   ArrowLeft, Award, Building2, FileCheck, Users, UserCheck, DollarSign,
   CheckCircle2, AlertTriangle, ExternalLink, Phone, Globe, Scale, 
-  FileText, MapPin, Shield, BookOpen, Clock
+  FileText, MapPin, Shield, BookOpen, Clock, Flag, Calendar
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 import axios from "axios";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -22,6 +23,8 @@ const StatePage = () => {
   const [error, setError] = useState(null);
   const [checklist, setChecklist] = useState([]);
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportUrl, setReportUrl] = useState("");
 
   useEffect(() => {
     fetchStateData();
@@ -44,6 +47,22 @@ const StatePage = () => {
 
   const toggleStep = (stepIndex) => {
     setChecklist(prev => prev.map((item, idx) => idx === stepIndex ? { ...item, completed: !item.completed } : item));
+  };
+
+  const reportBrokenLink = async (url) => {
+    try {
+      await axios.post(`${API}/report-broken-link`, {
+        url: url,
+        page: `/state/${stateCode}`,
+        state_code: stateCode,
+        description: "User reported link not working"
+      });
+      toast.success("Thank you! We'll review this link soon.");
+      setShowReportModal(false);
+      setReportUrl("");
+    } catch (err) {
+      toast.error("Failed to submit report. Please try again.");
+    }
   };
 
   const acceptDisclaimer = () => {
