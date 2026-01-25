@@ -142,11 +142,67 @@ const StatePage = () => {
                 </Badge>
               </div>
               <p className="text-slate-600">Peer Support Agency Launch Guide</p>
-              {stateData.last_verified && <p className="text-xs text-slate-400 mt-1">Last verified: {stateData.last_verified}</p>}
+              {stateData.last_updated && (
+                <div className="flex items-center gap-4 mt-2">
+                  <span className="inline-flex items-center gap-1 text-xs text-slate-500">
+                    <Calendar className="w-3 h-3" />
+                    Last updated: {stateData.last_updated}
+                  </span>
+                  <button 
+                    onClick={() => setShowReportModal(true)}
+                    className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-gold transition-colors"
+                  >
+                    <Flag className="w-3 h-3" />
+                    Report broken link
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Report Broken Link Modal */}
+      {showReportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" onClick={() => setShowReportModal(false)}>
+          <Card className="w-full max-w-md" onClick={e => e.stopPropagation()}>
+            <CardHeader>
+              <CardTitle className="text-lg font-serif text-navy flex items-center gap-2">
+                <Flag className="w-5 h-5 text-gold" />
+                Report Broken Link
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate-600">
+                Found a link that doesn't work? Paste it below and we'll fix it.
+              </p>
+              <input
+                type="url"
+                placeholder="Paste the broken link URL"
+                value={reportUrl}
+                onChange={(e) => setReportUrl(e.target.value)}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+              />
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowReportModal(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => reportBrokenLink(reportUrl)}
+                  disabled={!reportUrl}
+                  className="flex-1 bg-gold hover:bg-gold/90 text-white"
+                >
+                  Submit Report
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Progress Bar */}
       <div className="bg-white border-b border-slate-200">
