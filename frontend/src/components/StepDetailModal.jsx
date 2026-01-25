@@ -375,6 +375,34 @@ const StepDetailModal = ({
             </p>
           </div>
 
+          {/* Optional Resource - One simple helper button */}
+          {details.resource && (
+            <div className="flex justify-center">
+              {details.resource.type === "internal" ? (
+                <button
+                  onClick={() => {
+                    onClose();
+                    navigate(details.resource.url);
+                  }}
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gold border border-gold/30 rounded-lg hover:bg-gold/5 transition-colors"
+                >
+                  {details.resource.label}
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <a
+                  href={details.resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gold border border-gold/30 rounded-lg hover:bg-gold/5 transition-colors"
+                >
+                  {details.resource.label}
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+            </div>
+          )}
+
           {/* Common Mistakes */}
           <div>
             <h3 className="font-medium text-navy mb-3 flex items-center gap-2">
