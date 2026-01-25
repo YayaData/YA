@@ -155,7 +155,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 6",
     progressMessage: "Finding the right people takes time.\nStart networking now, even if you're not ready to hire.\nGood candidates are worth waiting for.",
-    completionMessage: "Step 6 complete.\nYour team is ready to serve clients."
+    completionMessage: "Step 6 complete.\nYour team is ready to serve clients.",
+    resource: {
+      label: "Post on Indeed",
+      url: "https://www.indeed.com/hire",
+      type: "external"
+    }
   },
   7: {
     title: "Establish Supervision",
@@ -174,7 +179,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 7",
     progressMessage: "A good supervisor relationship takes time to build.\nStart with clear expectations.\nYou can adjust as you learn what works.",
-    completionMessage: "Step 7 complete.\nYour supervision structure is in place."
+    completionMessage: "Step 7 complete.\nYour supervision structure is in place.",
+    resource: {
+      label: "Download Templates",
+      url: "/templates",
+      type: "internal"
+    }
   },
   8: {
     title: "Develop Policies & Procedures",
@@ -193,7 +203,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 8",
     progressMessage: "Policies don't have to be perfect on day one.\nStart with the essentials.\nYou can refine them over time.",
-    completionMessage: "Step 8 complete.\nYour policies and procedures are documented."
+    completionMessage: "Step 8 complete.\nYour policies and procedures are documented.",
+    resource: {
+      label: "Download P&P Template",
+      url: "/templates",
+      type: "internal"
+    }
   },
   9: {
     title: "Set Up Billing Systems",
@@ -212,7 +227,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 9",
     progressMessage: "Billing can feel intimidating.\nTake it step by step.\nMost software has good support.",
-    completionMessage: "Step 9 complete.\nYour billing system is ready to process claims."
+    completionMessage: "Step 9 complete.\nYour billing system is ready to process claims.",
+    resource: {
+      label: "Compare Billing Software",
+      url: "https://www.google.com/search?q=best+billing+software+behavioral+health+small+agency",
+      type: "external"
+    }
   },
   10: {
     title: "Verify Zoning & Location",
