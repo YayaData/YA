@@ -57,6 +57,7 @@ const UserDashboardPage = () => {
   const [showAllSteps, setShowAllSteps] = useState(false);
   const [completedSteps, setCompletedSteps] = useState([]);
   const [quickWinDismissed, setQuickWinDismissed] = useState(false);
+  const [selectedStep, setSelectedStep] = useState(null);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
