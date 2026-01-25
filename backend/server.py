@@ -893,7 +893,41 @@ async def get_admin_stats(admin: dict = Depends(get_current_admin)):
     payments = await db.payment_transactions.count_documents({})
     paid = await db.payment_transactions.count_documents({"payment_status": "paid"})
     revenue = sum([d.get("amount", 0) for d in await db.payment_transactions.find({"payment_status": "paid"}, {"_id": 0, "amount": 1}).to_list(1000)])
-    return {"leads": leads, "consultations": consultations, "payments": payments, "paid_payments": paid, "total_revenue": revenue}
+    broken_links = await db.broken_link_reports.count_documents({"status": "pending"})
+    return {"leads": leads, "consultations": consultations, "payments": payments, "paid_payments": paid, "total_revenue": revenue, "broken_links_pending": broken_links}
+
+@api_router.get("/admin/broken-links")
+async def get_broken_links(admin: dict = Depends(get_current_admin)):
+    """Get all broken link reports (requires admin authentication)."""
+    return {"reports": await db.broken_link_reports.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)}
+
+@api_router.put("/admin/broken-links/{report_id}")
+async def update_broken_link_status(report_id: str, status: str, admin: dict = Depends(get_current_admin)):
+    """Update broken link report status (requires admin authentication)."""
+    if status not in ["pending", "fixed", "dismissed"]:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    await db.broken_link_reports.update_one(
+        {"id": report_id},
+        {"$set": {"status": status, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    return {"success": True, "message": f"Report marked as {status}"}
+
+# ============== PUBLIC BROKEN LINK REPORT ==============
+@api_router.post("/report-broken-link")
+async def report_broken_link(data: BrokenLinkReport):
+    """Submit a broken link report (public endpoint)."""
+    report = {
+        "id": str(uuid.uuid4()),
+        "url": data.url,
+        "page": data.page,
+        "state_code": data.state_code,
+        "description": data.description,
+        "reporter_email": data.reporter_email,
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.broken_link_reports.insert_one(report)
+    return {"success": True, "message": "Thank you for reporting this issue. We'll review it soon."}
 
 # ============== USER ACCOUNT ENDPOINTS ==============
 @api_router.post("/auth/magic-link")
