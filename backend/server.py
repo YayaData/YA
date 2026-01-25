@@ -671,6 +671,83 @@ def record_login_attempt(client_ip: str, success: bool):
     if login_attempts[client_ip]["count"] >= MAX_LOGIN_ATTEMPTS:
         login_attempts[client_ip]["locked_until"] = now + timedelta(minutes=LOCKOUT_DURATION_MINUTES)
 
+# ============== USER AUTHENTICATION ==============
+MAGIC_LINK_EXPIRY_MINUTES = 15
+USER_JWT_EXPIRATION_HOURS = 72
+
+def generate_magic_token() -> str:
+    """Generate a secure magic link token."""
+    return secrets.token_urlsafe(32)
+
+def create_user_token(user_id: str, email: str) -> str:
+    """Create JWT token for user session."""
+    expiration = datetime.now(timezone.utc) + timedelta(hours=USER_JWT_EXPIRATION_HOURS)
+    payload = {
+        "sub": user_id,
+        "email": email,
+        "role": "user",
+        "exp": expiration,
+        "iat": datetime.now(timezone.utc)
+    }
+    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+def verify_user_token(token: str) -> Optional[dict]:
+    """Verify user JWT token and return payload if valid."""
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("role") != "user":
+            return None
+        return payload
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> Optional[dict]:
+    """Dependency to get current user (optional - returns None if not authenticated)."""
+    if not credentials:
+        return None
+    
+    payload = verify_user_token(credentials.credentials)
+    return payload
+
+async def require_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
+    """Dependency to require user authentication."""
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    payload = verify_user_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    return payload
+
+def send_magic_link_email(email: str, token: str, frontend_url: str):
+    """
+    Send magic link email. Currently mocked - logs to console.
+    Replace with real SendGrid implementation when ready.
+    """
+    magic_link = f"{frontend_url}/auth/verify?token={token}"
+    
+    # MOCK EMAIL - Log to console for development
+    logger.info("=" * 60)
+    logger.info("📧 MOCK MAGIC LINK EMAIL")
+    logger.info(f"To: {email}")
+    logger.info(f"Subject: Your Login Link for Peer Support Agency Launch")
+    logger.info(f"Magic Link: {magic_link}")
+    logger.info(f"Token: {token}")
+    logger.info(f"Expires in: {MAGIC_LINK_EXPIRY_MINUTES} minutes")
+    logger.info("=" * 60)
+    
+    # TODO: Replace with real SendGrid implementation:
+    # from sendgrid import SendGridAPIClient
+    # from sendgrid.helpers.mail import Mail
+    # sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+    # message = Mail(from_email=os.environ.get('SENDER_EMAIL'), to_emails=email, ...)
+    # sg.send(message)
+    
+    return True
+
 @api_router.get("/")
 async def root(): return {"message": "Peer Support Agency Launch API", "version": "4.0"}
 
