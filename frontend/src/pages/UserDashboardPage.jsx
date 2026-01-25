@@ -316,14 +316,19 @@ const UserDashboardPage = () => {
               return (
                 <Card 
                   key={step.step} 
-                  className={`border-0 shadow-sm transition-all ${
+                  className={`border-0 shadow-sm transition-all cursor-pointer hover:shadow-md ${
                     isNext ? "ring-2 ring-gold ring-offset-2" : ""
                   }`}
+                  onClick={() => setSelectedStep(step)}
+                  data-testid={`step-card-${step.step}`}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start gap-4">
                       <button
-                        onClick={() => toggleStep(step.step)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleStep(step.step);
+                        }}
                         className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
                           isCompleted 
                             ? "bg-green-500 text-white" 
@@ -347,13 +352,10 @@ const UserDashboardPage = () => {
                         
                         {isNext && (
                           <div className="mt-3">
-                            <Link 
-                              to={`/state/${user?.selected_state}`}
-                              className="inline-flex items-center gap-1 text-sm text-gold font-medium hover:underline"
-                            >
+                            <span className="inline-flex items-center gap-1 text-sm text-gold font-medium">
                               View details
                               <ChevronRight className="w-4 h-4" />
-                            </Link>
+                            </span>
                           </div>
                         )}
                       </div>
