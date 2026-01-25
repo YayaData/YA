@@ -159,6 +159,33 @@ class AdminTokenResponse(BaseModel):
     token: Optional[str] = None
     message: Optional[str] = None
 
+# User Account Models
+class UserCreate(BaseModel):
+    email: EmailStr
+    name: Optional[str] = None
+
+class MagicLinkRequest(BaseModel):
+    email: EmailStr
+
+class MagicLinkVerify(BaseModel):
+    token: str
+
+class UserProgress(BaseModel):
+    state_code: str
+    completed_steps: List[int] = []
+    bookmarked_links: List[str] = []
+    notes: Optional[str] = None
+
+class UserProfileUpdate(BaseModel):
+    name: Optional[str] = None
+    selected_state: Optional[str] = None
+    goal: Optional[str] = None
+
+class OnboardingData(BaseModel):
+    selected_state: str
+    goal: str
+    name: Optional[str] = None
+
 # ============== CONSTANTS ==============
 PRODUCTS = {
     "pdf-guide": {"name": "Complete PDF Guide", "price": 47.00, "description": "Full 50-state guide in downloadable PDF"},
