@@ -1404,21 +1404,35 @@ async def verify_magic_link(data: MagicLinkVerify):
 
 @api_router.get("/auth/me")
 async def get_current_user_info(user: dict = Depends(require_current_user)):
-    """Get current user's profile."""
+    """Get current user's profile with access information."""
     user_doc = await db.users.find_one({"id": user["sub"]}, {"_id": 0})
     if not user_doc:
         raise HTTPException(status_code=404, detail="User not found")
+    
+    # Calculate state access for selected state
+    state_access = None
+    selected_state = user_doc.get("selected_state")
+    if selected_state:
+        state_access = get_user_state_access(user_doc, selected_state)
+        state_access["state_code"] = selected_state
+    
+    # Get list of all purchased states
+    purchases = user_doc.get("purchases", [])
+    purchased_states = [p.get("state_code") for p in purchases if p.get("type") == "state_access"]
     
     return {
         "id": user_doc["id"],
         "email": user_doc["email"],
         "name": user_doc.get("name"),
-        "selected_state": user_doc.get("selected_state"),
+        "selected_state": selected_state,
         "goal": user_doc.get("goal"),
         "onboarding_complete": user_doc.get("onboarding_complete", False),
         "progress": user_doc.get("progress", {}),
         "bookmarks": user_doc.get("bookmarks", []),
-        "purchases": user_doc.get("purchases", [])
+        "purchases": purchases,
+        "purchased_states": purchased_states,
+        "state_access": state_access,
+        "is_grandfathered": is_user_grandfathered(user_doc)
     }
 
 @api_router.post("/auth/onboarding")
