@@ -523,6 +523,17 @@ const AdminPage = () => {
 
           {/* Payments Tab */}
           <TabsContent value="payments">
+            <div className="flex justify-end mb-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadCSV('payments')}
+                className="text-slate-600"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
+            </div>
             <Card className="border-2 border-slate-200">
               <CardContent className="p-0">
                 <Table>
