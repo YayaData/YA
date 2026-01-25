@@ -208,7 +208,7 @@ const AdminPage = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => fetchAllData(storedPassword)}
+              onClick={() => fetchAllData(authToken)}
               className="text-white hover:bg-white/10"
               data-testid="refresh-btn"
             >
