@@ -55,7 +55,7 @@ const QUICK_WINS = [
 
 const UserDashboardPage = () => {
   const navigate = useNavigate();
-  const { user, token, logout, isAuthenticated, loading: authLoading } = useAuth();
+  const { user, token, logout, isAuthenticated, loading: authLoading, hasStateAccess, refreshUser } = useAuth();
   const [dashboardData, setDashboardData] = useState(null);
   const [stateData, setStateData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -63,6 +63,14 @@ const UserDashboardPage = () => {
   const [completedSteps, setCompletedSteps] = useState([]);
   const [quickWinDismissed, setQuickWinDismissed] = useState(false);
   const [selectedStep, setSelectedStep] = useState(null);
+  const [purchaseLoading, setPurchaseLoading] = useState(false);
+
+  // Calculate if user has premium access to their selected state
+  const hasPremiumAccess = dashboardData?.state_access?.has_access && 
+    dashboardData?.state_access?.access_type === "premium";
+  
+  // Check if state is populated (unpopulated states are always free)
+  const isStatePopulated = dashboardData?.selected_state?.is_fully_populated;
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -114,6 +122,46 @@ const UserDashboardPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Handle state purchase
+  const handlePurchaseAccess = async () => {
+    if (!user?.selected_state) return;
+    
+    setPurchaseLoading(true);
+    try {
+      const response = await axios.post(
+        `${API}/checkout/state`,
+        {
+          state_code: user.selected_state,
+          origin_url: window.location.origin
+        },
+        { headers: { Authorization: `Bearer ${token}` }}
+      );
+      
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (err) {
+      console.error("Failed to create checkout:", err);
+      toast.error(err.response?.data?.detail || "Failed to start checkout");
+    } finally {
+      setPurchaseLoading(false);
+    }
+  };
+
+  // Check if a step is accessible based on paywall
+  const isStepAccessible = (stepNumber) => {
+    // Free steps (1-3) are always accessible
+    if (FREE_STEPS.includes(stepNumber)) return true;
+    
+    // Unpopulated states are fully accessible
+    if (!isStatePopulated) return true;
+    
+    // Premium users have full access
+    if (hasPremiumAccess) return true;
+    
+    return false;
   };
 
   // Milestone celebrations - calm and minimal
