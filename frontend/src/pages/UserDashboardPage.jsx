@@ -18,7 +18,10 @@ import {
   Users,
   Building2,
   Zap,
-  X
+  X,
+  Lock,
+  Unlock,
+  CreditCard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +35,8 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 // First 3 steps shown by default
 const INITIAL_STEPS_SHOWN = 3;
+const FREE_STEPS = [1, 2, 3];
+const STATE_PRICE = 49;
 
 // Quick wins - easy tasks that build confidence
 const QUICK_WINS = [
