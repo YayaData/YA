@@ -86,10 +86,19 @@ const UserDashboardPage = () => {
       setDashboardData(dashRes.data);
       if (stateRes) {
         setStateData(stateRes.data);
-        // Load saved progress
-        const stateProgress = dashRes.data.progress?.[user.selected_state];
-        if (stateProgress) {
-          setCompletedSteps(stateProgress.completed_steps || []);
+      }
+      
+      // Fetch detailed progress for selected state
+      if (user?.selected_state) {
+        try {
+          const progressRes = await axios.get(
+            `${API}/user/progress/${user.selected_state}`,
+            { headers: { Authorization: `Bearer ${token}` }}
+          );
+          setCompletedSteps(progressRes.data.completed_steps || []);
+        } catch (err) {
+          // Progress might not exist yet
+          setCompletedSteps([]);
         }
       }
     } catch (err) {
