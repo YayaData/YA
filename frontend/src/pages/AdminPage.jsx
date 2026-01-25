@@ -14,7 +14,11 @@ import {
   RefreshCw,
   LogOut,
   User,
-  AlertTriangle
+  AlertTriangle,
+  Flag,
+  CheckCircle,
+  XCircle,
+  ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +47,7 @@ const AdminPage = () => {
   const [leads, setLeads] = useState([]);
   const [consultations, setConsultations] = useState([]);
   const [payments, setPayments] = useState([]);
+  const [brokenLinks, setBrokenLinks] = useState([]);
   const [activeTab, setActiveTab] = useState("overview");
   const [authToken, setAuthToken] = useState("");
   const [loginError, setLoginError] = useState("");
