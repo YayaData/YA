@@ -330,6 +330,10 @@ const AdminPage = () => {
               <CreditCard className="w-4 h-4 mr-2" />
               Payments ({payments.length})
             </TabsTrigger>
+            <TabsTrigger value="broken-links" className="data-[state=active]:bg-gold data-[state=active]:text-white">
+              <Flag className="w-4 h-4 mr-2" />
+              Links ({brokenLinks.filter(r => r.status === 'pending').length})
+            </TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
