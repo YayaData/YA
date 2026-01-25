@@ -1012,6 +1012,102 @@ async def get_checkout_status(session_id: str, http_request: Request):
     await db.payment_transactions.update_one({"session_id": session_id}, {"$set": {"status": status.status, "payment_status": status.payment_status, "updated_at": datetime.now(timezone.utc).isoformat()}})
     return {"status": status.status, "payment_status": status.payment_status, "amount_total": status.amount_total, "currency": status.currency, "metadata": status.metadata}
 
+# ============== STATE ACCESS PURCHASE (PAYWALL) ==============
+@api_router.post("/checkout/state")
+async def create_state_checkout(request: StateCheckoutRequest, http_request: Request, user: dict = Depends(require_current_user)):
+    """Create a checkout session for purchasing access to a specific state."""
+    state_code = request.state_code.upper()
+    
+    # Check if state exists
+    state_info = next((s for s in ALL_STATES if s["code"] == state_code), None)
+    if not state_info:
+        raise HTTPException(status_code=404, detail="State not found")
+    
+    # Check if state is fully populated - can't purchase unpopulated states
+    if state_code not in FULLY_POPULATED_STATES:
+        raise HTTPException(
+            status_code=400, 
+            detail="This state's guide is not yet available for purchase. It's currently free to view."
+        )
+    
+    # Check if user already has access
+    user_doc = await db.users.find_one({"id": user["sub"]}, {"_id": 0})
+    if user_doc:
+        access = get_user_state_access(user_doc, state_code)
+        if access["has_access"] and access["access_type"] == "premium":
+            raise HTTPException(
+                status_code=400, 
+                detail="You already have full access to this state"
+            )
+    
+    # Create Stripe checkout session
+    api_key = os.environ.get('STRIPE_API_KEY')
+    webhook_url = f"{str(http_request.base_url).rstrip('/')}/api/webhook/stripe"
+    stripe_checkout = StripeCheckout(api_key=api_key, webhook_url=webhook_url)
+    
+    session = await stripe_checkout.create_checkout_session(
+        CheckoutSessionRequest(
+            amount=STATE_ACCESS_PRICE,
+            currency="usd",
+            success_url=f"{request.origin_url.rstrip('/')}/payment-success?session_id={{CHECKOUT_SESSION_ID}}&type=state&state={state_code}",
+            cancel_url=f"{request.origin_url.rstrip('/')}/dashboard",
+            metadata={
+                "type": "state_access",
+                "state_code": state_code,
+                "state_name": state_info["name"],
+                "user_id": user["sub"],
+                "user_email": user["email"]
+            }
+        )
+    )
+    
+    # Record the pending transaction
+    await db.payment_transactions.insert_one({
+        "id": str(uuid.uuid4()),
+        "session_id": session.session_id,
+        "product_id": f"state-{state_code}",
+        "product_name": f"{state_info['name']} State Access",
+        "type": "state_access",
+        "state_code": state_code,
+        "user_id": user["sub"],
+        "user_email": user["email"],
+        "amount": STATE_ACCESS_PRICE,
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "url": session.url,
+        "session_id": session.session_id,
+        "state_code": state_code,
+        "amount": STATE_ACCESS_PRICE
+    }
+
+@api_router.get("/user/access/{state_code}")
+async def check_user_state_access(state_code: str, user: dict = Depends(require_current_user)):
+    """Check user's access level for a specific state."""
+    state_code = state_code.upper()
+    
+    user_doc = await db.users.find_one({"id": user["sub"]}, {"_id": 0})
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    access = get_user_state_access(user_doc, state_code)
+    
+    # Add state info
+    state_info = next((s for s in ALL_STATES if s["code"] == state_code), None)
+    is_populated = state_code in FULLY_POPULATED_STATES
+    
+    return {
+        **access,
+        "state_code": state_code,
+        "state_name": state_info["name"] if state_info else state_code,
+        "is_populated": is_populated,
+        "price": STATE_ACCESS_PRICE if is_populated else 0,
+        "free_steps": FREE_STEPS,
+        "premium_steps": PREMIUM_STEPS
+    }
+
 @api_router.post("/webhook/stripe")
 async def stripe_webhook(request: Request):
     try:
