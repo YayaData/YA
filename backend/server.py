@@ -915,7 +915,11 @@ async def submit_consultation(data: ConsultationRequest):
 async def get_national_overview(): return NATIONAL_OVERVIEW
 
 @api_router.get("/products")
-async def get_products(): return {"products": PRODUCTS}
+async def get_products(): 
+    return {
+        "products": PRODUCTS,
+        "fully_populated_states": FULLY_POPULATED_STATES
+    }
 
 @api_router.post("/checkout/create-session")
 async def create_checkout_session(request: CheckoutRequest, http_request: Request):
