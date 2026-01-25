@@ -151,7 +151,13 @@ class CheckoutRequest(BaseModel):
     origin_url: str
 
 class AdminLogin(BaseModel):
+    username: str
     password: str
+
+class AdminTokenResponse(BaseModel):
+    success: bool
+    token: Optional[str] = None
+    message: Optional[str] = None
 
 # ============== CONSTANTS ==============
 PRODUCTS = {
