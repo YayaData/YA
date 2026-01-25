@@ -96,6 +96,7 @@ const AdminPage = () => {
     setLeads([]);
     setConsultations([]);
     setPayments([]);
+    setBrokenLinks([]);
     setLoginError("");
   };
 
@@ -103,16 +104,18 @@ const AdminPage = () => {
     setLoading(true);
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      const [statsRes, leadsRes, consultationsRes, paymentsRes] = await Promise.all([
+      const [statsRes, leadsRes, consultationsRes, paymentsRes, brokenLinksRes] = await Promise.all([
         axios.get(`${API}/admin/stats`, { headers }),
         axios.get(`${API}/admin/leads`, { headers }),
         axios.get(`${API}/admin/consultations`, { headers }),
-        axios.get(`${API}/admin/payments`, { headers })
+        axios.get(`${API}/admin/payments`, { headers }),
+        axios.get(`${API}/admin/broken-links`, { headers })
       ]);
       setStats(statsRes.data);
       setLeads(leadsRes.data.leads);
       setConsultations(consultationsRes.data.consultations);
       setPayments(paymentsRes.data.payments);
+      setBrokenLinks(brokenLinksRes.data.reports);
     } catch (error) {
       console.error("Error fetching data:", error);
       if (error.response?.status === 401) {
