@@ -141,11 +141,11 @@ NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 - [x] Store broken link reports in MongoDB
 - [x] Display broken link reports in admin dashboard with actions (Mark Fixed, Dismiss)
 - [x] Show pending link reports count in admin stats
+- [x] PDF roadmap downloads for users (clean, simple format with checklist)
+- [x] CSV exports for admin (leads, consultations, payments, users with progress)
 
 ### P1 (Important) - PENDING
 - [ ] Connect real SendGrid for magic link emails
-- [ ] Add PDF export for state roadmaps
-- [ ] Add CSV export to admin dashboard
 - [ ] Populate remaining 37 states
 
 ### P2 (Nice to Have)
