@@ -194,6 +194,10 @@ class BrokenLinkReport(BaseModel):
     description: Optional[str] = None
     reporter_email: Optional[EmailStr] = None
 
+class StateCheckoutRequest(BaseModel):
+    state_code: str
+    origin_url: str
+
 # ============== CONSTANTS ==============
 PRODUCTS = {
     "premium-access": {"name": "Premium Access", "price": 49.00, "description": "Unlock all steps, templates, and state-specific guidance", "state_specific": True, "grants_premium": True},
@@ -205,6 +209,11 @@ PRODUCTS = {
 # Free vs Premium access rules
 FREE_STEPS = [1, 2, 3]  # Steps 1-3 are free
 PREMIUM_STEPS = [4, 5, 6, 7, 8, 9, 10, 11]  # Steps 4-11 require premium
+STATE_ACCESS_PRICE = 49.00  # $49 per state one-time purchase
+
+# Paywall grandfathering cutoff date (users created before this date get free access to their selected state)
+# Set to the current date when paywall goes live
+PAYWALL_LAUNCH_DATE = "2025-01-15T00:00:00+00:00"
 
 ALL_STATES = [
     {"code": "AL", "name": "Alabama"}, {"code": "AK", "name": "Alaska"}, {"code": "AZ", "name": "Arizona"}, {"code": "AR", "name": "Arkansas"},
