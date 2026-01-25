@@ -8,7 +8,9 @@ import {
   ArrowRight,
   Lock,
   CreditCard,
-  Sparkles
+  Sparkles,
+  Clock,
+  AlertCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import ResourceCard from "@/components/ResourceCard";
 import EmailCaptureModal from "@/components/EmailCaptureModal";
@@ -30,8 +33,10 @@ import ConsultationModal from "@/components/ConsultationModal";
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const TemplatesPage = () => {
+  const { user, isAuthenticated } = useAuth();
   const [templates, setTemplates] = useState([]);
   const [products, setProducts] = useState({});
+  const [fullyPopulatedStates, setFullyPopulatedStates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -39,6 +44,9 @@ const TemplatesPage = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [consultationOpen, setConsultationOpen] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(null);
+
+  // Check if user's state is fully populated
+  const userStatePopulated = !user?.selected_state || fullyPopulatedStates.includes(user.selected_state);
 
   useEffect(() => {
     fetchData();
@@ -52,6 +60,7 @@ const TemplatesPage = () => {
       ]);
       setTemplates(templatesRes.data.templates);
       setProducts(productsRes.data.products);
+      setFullyPopulatedStates(productsRes.data.fully_populated_states || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
