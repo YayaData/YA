@@ -1115,9 +1115,51 @@ async def stripe_webhook(request: Request):
         api_key = os.environ.get('STRIPE_API_KEY')
         stripe_checkout = StripeCheckout(api_key=api_key, webhook_url=f"{str(request.base_url).rstrip('/')}/api/webhook/stripe")
         webhook_response = await stripe_checkout.handle_webhook(body, request.headers.get("Stripe-Signature"))
+        
         if webhook_response.session_id:
-            await db.payment_transactions.update_one({"session_id": webhook_response.session_id}, {"$set": {"status": webhook_response.event_type, "payment_status": webhook_response.payment_status, "updated_at": datetime.now(timezone.utc).isoformat()}})
-    except Exception as e: logger.error(f"Webhook error: {e}")
+            # Update transaction status
+            await db.payment_transactions.update_one(
+                {"session_id": webhook_response.session_id}, 
+                {"$set": {
+                    "status": webhook_response.event_type, 
+                    "payment_status": webhook_response.payment_status, 
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+            
+            # If payment succeeded, grant access for state purchases
+            if webhook_response.payment_status == "paid":
+                # Find the transaction to get metadata
+                transaction = await db.payment_transactions.find_one(
+                    {"session_id": webhook_response.session_id}, 
+                    {"_id": 0}
+                )
+                
+                if transaction and transaction.get("type") == "state_access":
+                    user_id = transaction.get("user_id")
+                    state_code = transaction.get("state_code")
+                    
+                    if user_id and state_code:
+                        # Grant state access to user
+                        purchase_record = {
+                            "type": "state_access",
+                            "state_code": state_code,
+                            "session_id": webhook_response.session_id,
+                            "amount": transaction.get("amount"),
+                            "purchased_at": datetime.now(timezone.utc).isoformat()
+                        }
+                        
+                        await db.users.update_one(
+                            {"id": user_id},
+                            {
+                                "$addToSet": {"purchases": purchase_record},
+                                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+                            }
+                        )
+                        logger.info(f"✅ Granted {state_code} access to user {user_id}")
+                        
+    except Exception as e: 
+        logger.error(f"Webhook error: {e}")
     return {"received": True}
 
 @api_router.post("/admin/login")
