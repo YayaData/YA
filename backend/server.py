@@ -196,11 +196,11 @@ class BrokenLinkReport(BaseModel):
 
 # ============== CONSTANTS ==============
 PRODUCTS = {
-    "pdf-guide": {"name": "Complete PDF Guide", "price": 47.00, "description": "Full 50-state guide in downloadable PDF"},
-    "templates-bundle": {"name": "Editable Templates Bundle", "price": 97.00, "description": "All templates in Word/Excel format"},
-    "state-bundle": {"name": "5-State Bundle", "price": 147.00, "description": "Complete guides for any 5 states"},
-    "consultation": {"name": "Strategy Consultation", "price": 197.00, "description": "1-hour strategy call with expert"},
-    "full-course": {"name": "Full Launch Course", "price": 297.00, "description": "Video course + templates + support"}
+    "pdf-guide": {"name": "Complete PDF Guide", "price": 47.00, "description": "Full 50-state guide in downloadable PDF", "state_specific": True},
+    "templates-bundle": {"name": "Editable Templates Bundle", "price": 97.00, "description": "All templates in Word/Excel format", "state_specific": False},
+    "state-bundle": {"name": "5-State Bundle", "price": 147.00, "description": "Complete guides for any 5 states", "state_specific": True},
+    "consultation": {"name": "Strategy Consultation", "price": 197.00, "description": "1-hour strategy call with expert", "state_specific": False},
+    "full-course": {"name": "Full Launch Course", "price": 297.00, "description": "Video course + templates + support", "state_specific": True}
 }
 
 ALL_STATES = [
