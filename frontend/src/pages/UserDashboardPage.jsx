@@ -438,6 +438,21 @@ const UserDashboardPage = () => {
           </p>
         </div>
       </main>
+
+      {/* Step Detail Modal */}
+      {selectedStep && (
+        <StepDetailModal
+          step={selectedStep}
+          isCompleted={completedSteps.includes(selectedStep.step)}
+          onClose={() => setSelectedStep(null)}
+          onMarkComplete={(stepNum) => {
+            if (!completedSteps.includes(stepNum)) {
+              toggleStep(stepNum);
+            }
+          }}
+          stateCode={user?.selected_state}
+        />
+      )}
     </div>
   );
 };
