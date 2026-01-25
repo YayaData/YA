@@ -1015,6 +1015,72 @@ async def update_broken_link_status(report_id: str, status: str, admin: dict = D
     )
     return {"success": True, "message": f"Report marked as {status}"}
 
+# ============== ADMIN CSV EXPORTS ==============
+@api_router.get("/admin/export/leads")
+async def export_leads_csv(admin: dict = Depends(get_current_admin)):
+    """Export all leads as CSV."""
+    leads = await db.email_captures.find({}, {"_id": 0}).sort("created_at", -1).to_list(5000)
+    fields = ["email", "name", "source", "state", "template_id", "created_at"]
+    csv_data = generate_csv(leads, fields)
+    return StreamingResponse(
+        iter([csv_data.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=leads.csv"}
+    )
+
+@api_router.get("/admin/export/consultations")
+async def export_consultations_csv(admin: dict = Depends(get_current_admin)):
+    """Export all consultations as CSV."""
+    consultations = await db.consultation_requests.find({}, {"_id": 0}).sort("created_at", -1).to_list(5000)
+    fields = ["name", "email", "phone", "state", "message", "status", "created_at"]
+    csv_data = generate_csv(consultations, fields)
+    return StreamingResponse(
+        iter([csv_data.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=consultations.csv"}
+    )
+
+@api_router.get("/admin/export/payments")
+async def export_payments_csv(admin: dict = Depends(get_current_admin)):
+    """Export all payments as CSV."""
+    payments = await db.payment_transactions.find({}, {"_id": 0}).sort("created_at", -1).to_list(5000)
+    fields = ["product_name", "amount", "payment_status", "session_id", "created_at"]
+    csv_data = generate_csv(payments, fields)
+    return StreamingResponse(
+        iter([csv_data.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=payments.csv"}
+    )
+
+@api_router.get("/admin/export/users")
+async def export_users_csv(admin: dict = Depends(get_current_admin)):
+    """Export all registered users as CSV."""
+    users = await db.users.find({}, {"_id": 0}).sort("created_at", -1).to_list(5000)
+    # Flatten user data for CSV
+    flat_users = []
+    for u in users:
+        progress_summary = ""
+        if u.get("progress"):
+            for state, prog in u.get("progress", {}).items():
+                completed = len(prog.get("completed_steps", []))
+                progress_summary += f"{state}:{completed}/11 "
+        flat_users.append({
+            "email": u.get("email"),
+            "name": u.get("name"),
+            "selected_state": u.get("selected_state"),
+            "goal": u.get("goal"),
+            "onboarding_complete": u.get("onboarding_complete"),
+            "progress": progress_summary.strip(),
+            "created_at": u.get("created_at")
+        })
+    fields = ["email", "name", "selected_state", "goal", "onboarding_complete", "progress", "created_at"]
+    csv_data = generate_csv(flat_users, fields)
+    return StreamingResponse(
+        iter([csv_data.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=users.csv"}
+    )
+
 # ============== PUBLIC BROKEN LINK REPORT ==============
 @api_router.post("/report-broken-link")
 async def report_broken_link(data: BrokenLinkReport):
