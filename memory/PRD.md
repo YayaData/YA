@@ -58,6 +58,13 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Optional - can be dismissed with X button
   - Warm amber/orange styling, non-intrusive
   - Time estimates and helpful tips for each task
+- ✅ **Step Detail Modal**:
+  - Opens when clicking any step in the roadmap
+  - Shows: intro, what you'll do, why it matters, common mistakes
+  - Reassuring language throughout ("You don't need to finish everything at once")
+  - Progress message after clicking "Start Step"
+  - Completion message when marked complete
+  - No scrolling required - simple, focused view
 
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
