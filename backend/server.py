@@ -601,6 +601,90 @@ def generate_template_pdf(template_id):
     buffer.seek(0)
     return buffer
 
+def generate_state_roadmap_pdf(state_code: str):
+    """Generate a clean, simple PDF roadmap for a state."""
+    state_data = STATE_DATA.get(state_code) or create_placeholder_state(state_code, next((s["name"] for s in ALL_STATES if s["code"] == state_code), state_code))
+    
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, topMargin=0.6*inch, bottomMargin=0.6*inch, leftMargin=0.75*inch, rightMargin=0.75*inch)
+    styles = getSampleStyleSheet()
+    
+    # Custom styles
+    title_style = ParagraphStyle('Title', parent=styles['Heading1'], fontSize=22, textColor=NAVY, alignment=TA_CENTER, spaceAfter=6)
+    subtitle_style = ParagraphStyle('Subtitle', fontSize=11, textColor=colors.gray, alignment=TA_CENTER, spaceAfter=20)
+    section_style = ParagraphStyle('Section', parent=styles['Heading2'], fontSize=14, textColor=NAVY, spaceBefore=16, spaceAfter=8)
+    body_style = ParagraphStyle('Body', fontSize=10, leading=14, spaceAfter=6)
+    step_title_style = ParagraphStyle('StepTitle', fontSize=11, textColor=NAVY, fontName='Helvetica-Bold')
+    step_desc_style = ParagraphStyle('StepDesc', fontSize=9, textColor=colors.gray, leftIndent=20)
+    footer_style = ParagraphStyle('Footer', fontSize=8, textColor=colors.gray, alignment=TA_CENTER)
+    
+    story = []
+    
+    # Header
+    story.append(Paragraph(f"{state_data['state_name']} Peer Support Agency Roadmap", title_style))
+    story.append(Paragraph(f"Launch Your Peer Support Agency™ | Last updated: {state_data.get('last_updated', 'N/A')}", subtitle_style))
+    
+    # Quick Info Section
+    story.append(Paragraph("Quick Reference", section_style))
+    quick_info = [
+        f"<b>Certification:</b> {state_data.get('certification_name', 'See state requirements')}",
+        f"<b>Certifying Body:</b> {state_data.get('certification_authority', 'Contact state agency')}",
+        f"<b>Medicaid Agency:</b> {state_data.get('medicaid_agency_name', 'See state Medicaid')}",
+        f"<b>Supervision Required:</b> {state_data.get('supervision_required', 'Yes')}",
+        f"<b>Virtual Services:</b> {state_data.get('virtual_allowed', 'Verify with state')}"
+    ]
+    for info in quick_info:
+        story.append(Paragraph(info, body_style))
+    
+    story.append(Spacer(1, 0.2*inch))
+    
+    # Checklist Section
+    story.append(Paragraph("Your 11-Step Roadmap", section_style))
+    
+    checklist = state_data.get('checklist', get_standard_checklist())
+    for step in checklist:
+        story.append(Paragraph(f"☐ Step {step['step']}: {step['title']}", step_title_style))
+        story.append(Paragraph(step['description'], step_desc_style))
+        story.append(Spacer(1, 0.1*inch))
+    
+    story.append(Spacer(1, 0.2*inch))
+    
+    # Key Links Section
+    story.append(Paragraph("Key Resources", section_style))
+    links = [
+        f"• Medicaid Enrollment: {state_data.get('medicaid_enrollment_url', 'Contact state Medicaid')}",
+        f"• Certification Info: {state_data.get('certification_url', 'Contact certifying body')}",
+        f"• Business Registration: {state_data.get('secretary_of_state_url', 'Secretary of State website')}"
+    ]
+    for link in links:
+        story.append(Paragraph(link, body_style))
+    
+    story.append(Spacer(1, 0.3*inch))
+    
+    # Footer/Disclaimer
+    story.append(Paragraph("—" * 60, footer_style))
+    story.append(Paragraph("This roadmap is for educational purposes only. Requirements change frequently.", footer_style))
+    story.append(Paragraph("Always verify current requirements with official state agencies before proceeding.", footer_style))
+    story.append(Paragraph("© Launch Your Peer Support Agency™", footer_style))
+    
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+# ============== CSV GENERATION ==============
+import csv
+from io import StringIO
+
+def generate_csv(data: list, fields: list) -> StringIO:
+    """Generate a CSV file from a list of dictionaries."""
+    output = StringIO()
+    writer = csv.DictWriter(output, fieldnames=fields, extrasaction='ignore')
+    writer.writeheader()
+    for row in data:
+        writer.writerow(row)
+    output.seek(0)
+    return output
+
 # ============== API ROUTES ==============
 def verify_admin_password(password: str) -> bool:
     """Verify admin password against stored hash."""
