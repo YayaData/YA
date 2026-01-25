@@ -887,6 +887,255 @@ async def get_admin_stats(admin: dict = Depends(get_current_admin)):
     revenue = sum([d.get("amount", 0) for d in await db.payment_transactions.find({"payment_status": "paid"}, {"_id": 0, "amount": 1}).to_list(1000)])
     return {"leads": leads, "consultations": consultations, "payments": payments, "paid_payments": paid, "total_revenue": revenue}
 
+# ============== USER ACCOUNT ENDPOINTS ==============
+@api_router.post("/auth/magic-link")
+async def request_magic_link(data: MagicLinkRequest, request: Request):
+    """Request a magic link for passwordless login."""
+    email = data.email.lower()
+    
+    # Check if user exists, if not create one
+    user = await db.users.find_one({"email": email}, {"_id": 0})
+    if not user:
+        user_id = str(uuid.uuid4())
+        await db.users.insert_one({
+            "id": user_id,
+            "email": email,
+            "name": None,
+            "selected_state": None,
+            "goal": None,
+            "onboarding_complete": False,
+            "progress": {},
+            "bookmarks": [],
+            "purchases": [],
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        })
+    else:
+        user_id = user["id"]
+    
+    # Generate magic token
+    token = generate_magic_token()
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=MAGIC_LINK_EXPIRY_MINUTES)
+    
+    # Store magic token
+    await db.magic_tokens.insert_one({
+        "token": token,
+        "user_id": user_id,
+        "email": email,
+        "expires_at": expires_at.isoformat(),
+        "used": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # Get frontend URL from request origin or use default
+    origin = request.headers.get("origin", "http://localhost:3000")
+    
+    # Send magic link email (mocked for now)
+    send_magic_link_email(email, token, origin)
+    
+    return {
+        "success": True,
+        "message": "Magic link sent to your email",
+        "dev_token": token  # Remove in production - only for development testing
+    }
+
+@api_router.post("/auth/verify")
+async def verify_magic_link(data: MagicLinkVerify):
+    """Verify magic link token and return JWT."""
+    # Find token
+    token_doc = await db.magic_tokens.find_one({"token": data.token, "used": False}, {"_id": 0})
+    
+    if not token_doc:
+        raise HTTPException(status_code=400, detail="Invalid or expired token")
+    
+    # Check expiration
+    expires_at = datetime.fromisoformat(token_doc["expires_at"].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="Token has expired")
+    
+    # Mark token as used
+    await db.magic_tokens.update_one({"token": data.token}, {"$set": {"used": True}})
+    
+    # Get user
+    user = await db.users.find_one({"id": token_doc["user_id"]}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Create JWT
+    jwt_token = create_user_token(user["id"], user["email"])
+    
+    return {
+        "success": True,
+        "token": jwt_token,
+        "user": {
+            "id": user["id"],
+            "email": user["email"],
+            "name": user.get("name"),
+            "selected_state": user.get("selected_state"),
+            "goal": user.get("goal"),
+            "onboarding_complete": user.get("onboarding_complete", False)
+        }
+    }
+
+@api_router.get("/auth/me")
+async def get_current_user_info(user: dict = Depends(require_current_user)):
+    """Get current user's profile."""
+    user_doc = await db.users.find_one({"id": user["sub"]}, {"_id": 0})
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {
+        "id": user_doc["id"],
+        "email": user_doc["email"],
+        "name": user_doc.get("name"),
+        "selected_state": user_doc.get("selected_state"),
+        "goal": user_doc.get("goal"),
+        "onboarding_complete": user_doc.get("onboarding_complete", False),
+        "progress": user_doc.get("progress", {}),
+        "bookmarks": user_doc.get("bookmarks", []),
+        "purchases": user_doc.get("purchases", [])
+    }
+
+@api_router.post("/auth/onboarding")
+async def complete_onboarding(data: OnboardingData, user: dict = Depends(require_current_user)):
+    """Complete user onboarding with state and goal selection."""
+    await db.users.update_one(
+        {"id": user["sub"]},
+        {"$set": {
+            "selected_state": data.selected_state,
+            "goal": data.goal,
+            "name": data.name,
+            "onboarding_complete": True,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"success": True, "message": "Onboarding complete"}
+
+@api_router.put("/user/profile")
+async def update_user_profile(data: UserProfileUpdate, user: dict = Depends(require_current_user)):
+    """Update user profile."""
+    update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    if data.name is not None:
+        update_data["name"] = data.name
+    if data.selected_state is not None:
+        update_data["selected_state"] = data.selected_state
+    if data.goal is not None:
+        update_data["goal"] = data.goal
+    
+    await db.users.update_one({"id": user["sub"]}, {"$set": update_data})
+    return {"success": True, "message": "Profile updated"}
+
+@api_router.post("/user/progress/{state_code}")
+async def update_state_progress(state_code: str, data: UserProgress, user: dict = Depends(require_current_user)):
+    """Update user's progress for a specific state."""
+    state_code = state_code.upper()
+    
+    await db.users.update_one(
+        {"id": user["sub"]},
+        {"$set": {
+            f"progress.{state_code}": {
+                "completed_steps": data.completed_steps,
+                "bookmarked_links": data.bookmarked_links,
+                "notes": data.notes,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            },
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"success": True, "message": f"Progress updated for {state_code}"}
+
+@api_router.get("/user/progress/{state_code}")
+async def get_state_progress(state_code: str, user: dict = Depends(require_current_user)):
+    """Get user's progress for a specific state."""
+    state_code = state_code.upper()
+    user_doc = await db.users.find_one({"id": user["sub"]}, {"_id": 0, "progress": 1})
+    
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    progress = user_doc.get("progress", {}).get(state_code, {
+        "completed_steps": [],
+        "bookmarked_links": [],
+        "notes": None
+    })
+    
+    return progress
+
+@api_router.post("/user/bookmark")
+async def add_bookmark(link: str, user: dict = Depends(require_current_user)):
+    """Add a bookmark."""
+    await db.users.update_one(
+        {"id": user["sub"]},
+        {"$addToSet": {"bookmarks": link}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    return {"success": True, "message": "Bookmark added"}
+
+@api_router.delete("/user/bookmark")
+async def remove_bookmark(link: str, user: dict = Depends(require_current_user)):
+    """Remove a bookmark."""
+    await db.users.update_one(
+        {"id": user["sub"]},
+        {"$pull": {"bookmarks": link}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    return {"success": True, "message": "Bookmark removed"}
+
+@api_router.get("/user/dashboard")
+async def get_user_dashboard(user: dict = Depends(require_current_user)):
+    """Get user dashboard data including progress, purchases, and recommendations."""
+    user_doc = await db.users.find_one({"id": user["sub"]}, {"_id": 0})
+    
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Get user's state data if they have one selected
+    state_data = None
+    if user_doc.get("selected_state"):
+        state_code = user_doc["selected_state"]
+        if state_code in STATE_DATA:
+            state_data = {
+                "state_code": state_code,
+                "state_name": STATE_DATA[state_code]["state_name"],
+                "is_fully_populated": True
+            }
+        else:
+            state_info = next((s for s in ALL_STATES if s["code"] == state_code), None)
+            if state_info:
+                state_data = {
+                    "state_code": state_code,
+                    "state_name": state_info["name"],
+                    "is_fully_populated": False
+                }
+    
+    # Calculate overall progress
+    progress = user_doc.get("progress", {})
+    total_steps = 11  # Standard checklist has 11 steps
+    overall_progress = {}
+    
+    for state_code, state_progress in progress.items():
+        completed = len(state_progress.get("completed_steps", []))
+        overall_progress[state_code] = {
+            "completed": completed,
+            "total": total_steps,
+            "percentage": round((completed / total_steps) * 100, 1)
+        }
+    
+    return {
+        "user": {
+            "id": user_doc["id"],
+            "email": user_doc["email"],
+            "name": user_doc.get("name"),
+            "goal": user_doc.get("goal"),
+            "onboarding_complete": user_doc.get("onboarding_complete", False)
+        },
+        "selected_state": state_data,
+        "progress": overall_progress,
+        "bookmarks": user_doc.get("bookmarks", []),
+        "purchases": user_doc.get("purchases", []),
+        "recent_activity": []  # Can be expanded later
+    }
+
 @api_router.get("/health")
 async def health_check(): return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
 
