@@ -253,6 +253,46 @@ const UserDashboardPage = () => {
           </CardContent>
         </Card>
 
+        {/* Quick Win Card - Optional, dismissable */}
+        {!quickWinDismissed && completedSteps.length < totalSteps && (() => {
+          // Find the next incomplete step
+          const nextStepNum = completedSteps.length > 0 
+            ? Math.min(...[1,2,3,4,5,6,7,8,9,10,11].filter(s => !completedSteps.includes(s)))
+            : 1;
+          const quickWin = QUICK_WINS.find(q => q.step === nextStepNum);
+          
+          if (!quickWin) return null;
+          
+          return (
+            <Card className="border-0 shadow-sm mb-6 bg-gradient-to-r from-amber-50 to-orange-50 relative" data-testid="quick-win-card">
+              <button
+                onClick={() => {
+                  setQuickWinDismissed(true);
+                  sessionStorage.setItem("quickWinDismissed", "true");
+                }}
+                className="absolute top-3 right-3 p-1 text-slate-400 hover:text-slate-600 rounded-full hover:bg-white/50"
+                aria-label="Dismiss"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <CardContent className="p-4 pr-10">
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl">{quickWin.icon}</div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Zap className="w-4 h-4 text-amber-500" />
+                      <span className="text-xs font-medium text-amber-700 uppercase tracking-wide">Quick Win</span>
+                      <span className="text-xs text-slate-500">• {quickWin.time}</span>
+                    </div>
+                    <p className="text-sm font-medium text-navy">{quickWin.task}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{quickWin.tip}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })()}
+
         {/* Roadmap Steps */}
         <div className="mb-8">
           <h2 className="font-serif text-xl text-navy mb-4">Your Roadmap</h2>
