@@ -134,10 +134,16 @@ NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 - [x] Onboarding wizard
 - [x] User dashboard with progress tracking
 
+### P1 (Important) - COMPLETED
+- [x] Add "Last updated date" to state data (shows "Last updated: January 2025")
+- [x] Add "Data source" field ("Official state agency websites and Medicaid provider manuals")
+- [x] Implement "Report broken link" feature with modal
+- [x] Store broken link reports in MongoDB
+- [x] Display broken link reports in admin dashboard with actions (Mark Fixed, Dismiss)
+- [x] Show pending link reports count in admin stats
+
 ### P1 (Important) - PENDING
 - [ ] Connect real SendGrid for magic link emails
-- [ ] Add "Last updated date" to state data
-- [ ] Implement "Report broken link" feature
 - [ ] Add PDF export for state roadmaps
 - [ ] Add CSV export to admin dashboard
 - [ ] Populate remaining 37 states
