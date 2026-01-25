@@ -308,6 +308,22 @@ const AdminPage = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {stats.broken_links_pending > 0 && (
+              <Card className="border-2 border-amber-200 bg-amber-50" data-testid="stat-broken-links">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-amber-600 mb-1">Pending Link Reports</p>
+                      <p className="text-3xl font-bold text-amber-700">{stats.broken_links_pending}</p>
+                    </div>
+                    <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                      <Flag className="w-6 h-6 text-amber-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         )}
 
