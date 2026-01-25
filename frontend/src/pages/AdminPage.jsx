@@ -152,6 +152,23 @@ const AdminPage = () => {
     });
   };
 
+  const downloadCSV = (type) => {
+    const url = `${API}/admin/export/${type}`;
+    // Create a link with auth header via fetch
+    fetch(url, {
+      headers: { Authorization: `Bearer ${authToken}` }
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${type}.csv`;
+      link.click();
+      toast.success(`${type}.csv downloaded`);
+    })
+    .catch(() => toast.error("Download failed"));
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4" data-testid="admin-login">
