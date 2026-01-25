@@ -111,12 +111,63 @@ const UserDashboardPage = () => {
     }
   };
 
+  // Milestone celebrations - calm and minimal
+  const checkMilestone = (previousCount, newCount) => {
+    const total = 11;
+    const halfwayPoint = Math.ceil(total / 2); // 6 steps
+    
+    // Milestone 1: First 3 steps completed
+    if (previousCount < 3 && newCount >= 3) {
+      return {
+        type: "first-three",
+        title: "Great start",
+        message: "You've completed your first 3 steps. You're building momentum."
+      };
+    }
+    
+    // Milestone 2: 50% progress
+    if (previousCount < halfwayPoint && newCount >= halfwayPoint) {
+      return {
+        type: "halfway",
+        title: "Halfway there",
+        message: "You've completed half the roadmap. Keep going at your own pace."
+      };
+    }
+    
+    // Milestone 3: Full completion
+    if (previousCount < total && newCount >= total) {
+      return {
+        type: "complete",
+        title: "All steps complete",
+        message: "You've finished the roadmap. Your agency is ready to launch."
+      };
+    }
+    
+    return null;
+  };
+
+  const [celebration, setCelebration] = useState(null);
+
   const toggleStep = async (stepNumber) => {
-    const newCompleted = completedSteps.includes(stepNumber)
+    const wasCompleted = completedSteps.includes(stepNumber);
+    const newCompleted = wasCompleted
       ? completedSteps.filter(s => s !== stepNumber)
       : [...completedSteps, stepNumber];
     
+    const previousCount = completedSteps.length;
+    const newCount = newCompleted.length;
+    
     setCompletedSteps(newCompleted);
+
+    // Check for milestone (only when completing, not uncompleting)
+    if (!wasCompleted) {
+      const milestone = checkMilestone(previousCount, newCount);
+      if (milestone) {
+        setCelebration(milestone);
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => setCelebration(null), 5000);
+      }
+    }
 
     // Save to backend
     try {
