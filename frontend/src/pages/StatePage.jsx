@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { 
   ArrowLeft, Award, Building2, FileCheck, Users, UserCheck, DollarSign,
   CheckCircle2, AlertTriangle, ExternalLink, Phone, Globe, Scale, 
-  FileText, MapPin, Shield, BookOpen, Clock, Flag, Calendar
+  FileText, MapPin, Shield, BookOpen, Clock, Flag, Calendar, Download
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -25,6 +25,11 @@ const StatePage = () => {
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportUrl, setReportUrl] = useState("");
+
+  const downloadPDF = () => {
+    window.open(`${API}/states/${stateCode}/roadmap-pdf`, '_blank');
+    toast.success("Your PDF is downloading");
+  };
 
   useEffect(() => {
     fetchStateData();
