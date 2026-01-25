@@ -190,26 +190,30 @@ NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 ## API Endpoints
 
 ### Public
-- `GET /api/states` - List all states
+- `GET /api/states` - List all states (includes `is_fully_populated` status)
 - `GET /api/states/{code}` - State details
 - `GET /api/federal-links` - Federal resources
 - `GET /api/templates` - Template list
-- `GET /api/products` - Product list
+- `GET /api/products` - Product list (includes `fully_populated_states`)
 - `POST /api/email-capture` - Capture email
 - `POST /api/consultation-request` - Book consultation
-- `POST /api/checkout/create-session` - Stripe checkout
+- `POST /api/checkout/create-session` - Stripe checkout for products
 
 ### User Auth (Magic Link)
 - `POST /api/auth/magic-link` - Request magic link
 - `POST /api/auth/verify` - Verify token, get JWT
-- `GET /api/auth/me` - Get current user (requires JWT)
+- `GET /api/auth/me` - Get current user with access info (requires JWT)
 - `POST /api/auth/onboarding` - Complete onboarding (requires JWT)
 
 ### User Data (Requires JWT)
-- `GET /api/user/dashboard` - Dashboard data
+- `GET /api/user/dashboard` - Dashboard data with paywall info
 - `GET /api/user/progress/{state}` - Get progress
 - `POST /api/user/progress/{state}` - Save progress
 - `PUT /api/user/profile` - Update profile
+- `GET /api/user/access/{state}` - Check user's access level for a state
+
+### Paywall/Checkout (Requires JWT)
+- `POST /api/checkout/state` - Create Stripe checkout for state access ($49)
 
 ### Admin (Requires JWT)
 - `POST /api/admin/login` - Login (returns JWT)
