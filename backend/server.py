@@ -759,23 +759,23 @@ async def admin_login(data: AdminLogin, request: Request):
     return {"success": True, "token": token, "message": "Login successful"}
 
 @api_router.get("/admin/leads")
-async def get_leads(password: str = ""):
-    if not verify_admin_password(password): raise HTTPException(status_code=401, detail="Unauthorized")
+async def get_leads(admin: dict = Depends(get_current_admin)):
+    """Get all captured leads (requires admin authentication)."""
     return {"leads": await db.email_captures.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)}
 
 @api_router.get("/admin/consultations")
-async def get_consultations(password: str = ""):
-    if not verify_admin_password(password): raise HTTPException(status_code=401, detail="Unauthorized")
+async def get_consultations(admin: dict = Depends(get_current_admin)):
+    """Get all consultation requests (requires admin authentication)."""
     return {"consultations": await db.consultation_requests.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)}
 
 @api_router.get("/admin/payments")
-async def get_payments(password: str = ""):
-    if not verify_admin_password(password): raise HTTPException(status_code=401, detail="Unauthorized")
+async def get_payments(admin: dict = Depends(get_current_admin)):
+    """Get all payment transactions (requires admin authentication)."""
     return {"payments": await db.payment_transactions.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)}
 
 @api_router.get("/admin/stats")
-async def get_admin_stats(password: str = ""):
-    if not verify_admin_password(password): raise HTTPException(status_code=401, detail="Unauthorized")
+async def get_admin_stats(admin: dict = Depends(get_current_admin)):
+    """Get dashboard statistics (requires admin authentication)."""
     leads = await db.email_captures.count_documents({})
     consultations = await db.consultation_requests.count_documents({})
     payments = await db.payment_transactions.count_documents({})
