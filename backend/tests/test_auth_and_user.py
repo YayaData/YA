@@ -313,11 +313,11 @@ class TestUserDashboard:
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
         data = response.json()
         assert "user" in data
-        assert "state_data" in data
+        assert "selected_state" in data  # API returns selected_state, not state_data
         assert "progress" in data
         assert data["user"]["email"] == email
-        assert data["state_data"]["state_code"] == "CA"
-        print(f"✓ User dashboard retrieved: state={data['state_data']['state_code']}")
+        assert data["selected_state"]["state_code"] == "CA"
+        print(f"✓ User dashboard retrieved: state={data['selected_state']['state_code']}")
     
     def test_dashboard_requires_auth(self):
         """Test that dashboard endpoint requires authentication"""
