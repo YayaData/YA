@@ -327,7 +327,9 @@ def create_state_data(code, name, cert_name, cert_authority, cert_url, medicaid_
         "documentation_requirements": "Date, start/end time, service location, description of activities, progress toward goals, signatures",
         "reimbursement_notes": "Rates vary by MCO. Contact each plan for current fee schedules.",
         "checklist": get_standard_checklist(),
-        "last_verified": "2025-01"
+        "last_verified": "2025-01",
+        "last_updated": "January 2025",
+        "data_source": "Official state agency websites and Medicaid provider manuals"
     }
 
 STATE_DATA = {
