@@ -16,95 +16,153 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
 - National Overview section
 - Downloadable PDF templates
 - Mobile-responsive design
-- No login required for MVP
 - Blue & gold color scheme on white background
 
 ---
 
 ## What's Been Implemented
 
-### December 2025 - MVP + Phase 2 + Phase 3
-
-**Backend (FastAPI)**
-- Complete API with 20+ endpoints
-- PDF generation with reportlab
+### Phase 1-4: MVP + Monetization + Admin + Compliance (Previous)
+- Complete 50-state selector with 13 fully populated states
+- 7-tab state page layout (Snapshot, Checklist, Links, Credentialing, Laws, P&P, Zoning)
 - Stripe payment integration (5 products)
-- Email capture and consultation request storage
-- Password-protected admin API
+- Email capture and consultation booking
+- Password-protected admin dashboard
+- Federal links page
 
-**Fully Populated States (13):**
-- North Carolina (NC)
-- Texas (TX)
-- California (CA)
-- Florida (FL)
-- New York (NY)
-- Ohio (OH)
-- Pennsylvania (PA)
-- Illinois (IL)
-- Georgia (GA)
-- New Jersey (NJ)
-- Virginia (VA)
-- Washington (WA)
-- Arizona (AZ)
+### Phase 5: Security & User Accounts (January 2025)
 
-**Products (5):**
+**Security Overhaul:**
+- ✅ JWT-based admin authentication (24-hour tokens)
+- ✅ Admin credentials stored in environment variables (not in code)
+- ✅ Password hashing with SHA-256
+- ✅ Rate limiting: Account locks for 5 minutes after 3 failed login attempts
+- ✅ All admin endpoints now require Bearer token authentication
+
+**User Account System:**
+- ✅ Magic link authentication (passwordless login)
+- ✅ User data model in MongoDB (email, name, state, goal, progress)
+- ✅ `/start` onboarding wizard:
+  - Step 1: State selection (8 popular + all 50)
+  - Step 2: Goal selection (4 options)
+  - Progressive disclosure - one decision at a time
+  - "Skip" options and reassuring language
+- ✅ `/dashboard` user dashboard:
+  - Progress tracking with visual progress bar
+  - Step-by-step roadmap (first 3 visible, expandable to 11)
+  - Quick action cards (Templates, Federal Links, Learn More)
+  - Automatic progress saving
+
+**Technical Implementation:**
+- Auth tokens: 72-hour expiry for users, 24-hour for admin
+- Magic link tokens: 15-minute expiry, single-use
+- **Email is MOCKED** - Logs to console, returns `dev_token` in API response for testing
+- Progress saved per-state in MongoDB
+
+---
+
+## Fully Populated States (13)
+NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
+
+## Products (5)
 - Complete PDF Guide: $47
 - Editable Templates Bundle: $97
-- **5-State Bundle: $147** (NEW)
+- 5-State Bundle: $147
 - Strategy Consultation: $197
 - Full Launch Course: $297
 
-**Admin Dashboard:**
-- Password-protected access at `/admin`
-- Stats overview (leads, consultations, payments, revenue)
-- Tabs for Leads, Consultations, Payments
-- Refresh and logout functionality
+---
 
-**Frontend Pages:**
-- HomePage with hero, features, state selector
-- StatePage with 7 tabbed sections
-- NationalOverviewPage
-- TemplatesPage with email capture
-- PaymentSuccessPage / PaymentCancelPage
-- **AdminPage** (NEW)
+## Credentials
+
+### Admin Access
+- **URL**: `/admin`
+- **Username**: `admin`
+- **Password**: `SYsEnntj4zvaQrNiPPYNsQ`
+
+### User Access
+- **URL**: `/start` (onboarding) or `/dashboard` (returning users)
+- **Auth**: Magic link (email verification)
 
 ---
 
 ## Prioritized Backlog
 
 ### P0 (Critical) - COMPLETED
-- [x] All 50 states selectable
+- [x] 50 states selectable
 - [x] 13 states fully populated with real data
 - [x] Step-by-step checklist with progress tracking
 - [x] PDF templates downloadable
 - [x] Stripe payment integration
 - [x] Email capture system
 - [x] Consultation booking
-- [x] Admin dashboard
-- [x] State Bundle product
+- [x] Admin dashboard with JWT auth
+- [x] Rate limiting on admin login
+- [x] User account system with magic links
+- [x] Onboarding wizard
+- [x] User dashboard with progress tracking
 
-### P1 (Important)
-- [ ] Populate remaining 37 states with real data
-- [ ] Email notifications when leads/consultations submitted (SendGrid)
-- [ ] Export leads to CSV from admin
-- [ ] Update consultation status from admin
+### P1 (Important) - PENDING
+- [ ] Connect real SendGrid for magic link emails
+- [ ] Add "Last updated date" to state data
+- [ ] Implement "Report broken link" feature
+- [ ] Add PDF export for state roadmaps
+- [ ] Add CSV export to admin dashboard
+- [ ] Populate remaining 37 states
 
 ### P2 (Nice to Have)
-- [ ] User accounts for saved progress
-- [ ] Provider directory
+- [ ] Compare states feature
 - [ ] AI assistant per state
 - [ ] Newsletter integration (Mailchimp/ConvertKit)
+- [ ] Email notifications for leads/consultations
 
 ---
 
-## Admin Access
-- **URL**: `/admin`
-- **Password**: Chris229@@@
+## API Endpoints
+
+### Public
+- `GET /api/states` - List all states
+- `GET /api/states/{code}` - State details
+- `GET /api/federal-links` - Federal resources
+- `GET /api/templates` - Template list
+- `GET /api/products` - Product list
+- `POST /api/email-capture` - Capture email
+- `POST /api/consultation-request` - Book consultation
+- `POST /api/checkout/create-session` - Stripe checkout
+
+### User Auth (Magic Link)
+- `POST /api/auth/magic-link` - Request magic link
+- `POST /api/auth/verify` - Verify token, get JWT
+- `GET /api/auth/me` - Get current user (requires JWT)
+- `POST /api/auth/onboarding` - Complete onboarding (requires JWT)
+
+### User Data (Requires JWT)
+- `GET /api/user/dashboard` - Dashboard data
+- `GET /api/user/progress/{state}` - Get progress
+- `POST /api/user/progress/{state}` - Save progress
+- `PUT /api/user/profile` - Update profile
+
+### Admin (Requires JWT)
+- `POST /api/admin/login` - Login (returns JWT)
+- `GET /api/admin/stats` - Dashboard stats
+- `GET /api/admin/leads` - All leads
+- `GET /api/admin/consultations` - All consultations
+- `GET /api/admin/payments` - All payments
 
 ---
 
-## Next Action Items
-1. **Populate more states** - Next batch: MI, MA, TN, MD, IN, MO, WI, SC
-2. **Add SendGrid email notifications** - Alert when leads captured
-3. **Admin enhancements** - Export to CSV, update consultation status
-4. **SEO optimization** - Meta tags, sitemap, structured data
+## Tech Stack
+- **Frontend**: React, Tailwind CSS, Shadcn UI
+- **Backend**: FastAPI (Python)
+- **Database**: MongoDB
+- **Payments**: Stripe
+- **PDF**: ReportLab
+- **Auth**: JWT (PyJWT)
+
+---
+
+## Next Steps
+1. Get SendGrid API key from user to enable real magic link emails
+2. Add trust indicators (last updated dates, report broken links)
+3. Implement export features (PDF roadmaps, CSV for admin)
+4. Continue populating remaining states
