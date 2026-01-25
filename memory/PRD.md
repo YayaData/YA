@@ -52,6 +52,12 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Step-by-step roadmap (first 3 visible, expandable to 11)
   - Quick action cards (Templates, Federal Links, Learn More)
   - Automatic progress saving
+- ✅ **Quick Win feature**:
+  - Shows one small, easy task at a time
+  - Dynamically updates based on user's progress
+  - Optional - can be dismissed with X button
+  - Warm amber/orange styling, non-intrusive
+  - Time estimates and helpful tips for each task
 
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
