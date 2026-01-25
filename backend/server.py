@@ -196,12 +196,15 @@ class BrokenLinkReport(BaseModel):
 
 # ============== CONSTANTS ==============
 PRODUCTS = {
-    "pdf-guide": {"name": "Complete PDF Guide", "price": 47.00, "description": "Full 50-state guide in downloadable PDF", "state_specific": True},
-    "templates-bundle": {"name": "Editable Templates Bundle", "price": 97.00, "description": "All templates in Word/Excel format", "state_specific": False},
-    "state-bundle": {"name": "5-State Bundle", "price": 147.00, "description": "Complete guides for any 5 states", "state_specific": True},
-    "consultation": {"name": "Strategy Consultation", "price": 197.00, "description": "1-hour strategy call with expert", "state_specific": False},
-    "full-course": {"name": "Full Launch Course", "price": 297.00, "description": "Video course + templates + support", "state_specific": True}
+    "premium-access": {"name": "Premium Access", "price": 49.00, "description": "Unlock all steps, templates, and state-specific guidance", "state_specific": True, "grants_premium": True},
+    "templates-bundle": {"name": "Editable Templates Bundle", "price": 97.00, "description": "All templates in Word/Excel format", "state_specific": False, "grants_premium": True},
+    "consultation": {"name": "Strategy Consultation", "price": 197.00, "description": "1-hour strategy call with expert", "state_specific": False, "grants_premium": False},
+    "full-course": {"name": "Full Launch Course", "price": 297.00, "description": "Video course + all templates + premium access", "state_specific": True, "grants_premium": True}
 }
+
+# Free vs Premium access rules
+FREE_STEPS = [1, 2, 3]  # Steps 1-3 are free
+PREMIUM_STEPS = [4, 5, 6, 7, 8, 9, 10, 11]  # Steps 4-11 require premium
 
 ALL_STATES = [
     {"code": "AL", "name": "Alabama"}, {"code": "AK", "name": "Alaska"}, {"code": "AZ", "name": "Arizona"}, {"code": "AR", "name": "Arkansas"},
