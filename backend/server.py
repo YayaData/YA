@@ -186,6 +186,14 @@ class OnboardingData(BaseModel):
     goal: str
     name: Optional[str] = None
 
+# Broken Link Report Model
+class BrokenLinkReport(BaseModel):
+    url: str
+    page: str
+    state_code: Optional[str] = None
+    description: Optional[str] = None
+    reporter_email: Optional[EmailStr] = None
+
 # ============== CONSTANTS ==============
 PRODUCTS = {
     "pdf-guide": {"name": "Complete PDF Guide", "price": 47.00, "description": "Full 50-state guide in downloadable PDF"},
