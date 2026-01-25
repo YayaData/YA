@@ -854,6 +854,66 @@ def send_magic_link_email(email: str, token: str, frontend_url: str):
     
     return True
 
+# ============== PAYWALL HELPERS ==============
+def is_user_grandfathered(user_doc: dict) -> bool:
+    """Check if user was created before paywall launch and should get free access."""
+    created_at = user_doc.get("created_at")
+    if not created_at:
+        return False
+    try:
+        user_created = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+        paywall_date = datetime.fromisoformat(PAYWALL_LAUNCH_DATE)
+        return user_created < paywall_date
+    except:
+        return False
+
+def get_user_state_access(user_doc: dict, state_code: str) -> dict:
+    """
+    Determine user's access level for a specific state.
+    Returns: { has_access: bool, reason: str, is_free_tier: bool }
+    """
+    state_code = state_code.upper()
+    
+    # Check if state is fully populated - unpopulated states are free for everyone
+    if state_code not in FULLY_POPULATED_STATES:
+        return {
+            "has_access": True,
+            "reason": "unpopulated_state",
+            "is_free_tier": True,
+            "access_type": "free"
+        }
+    
+    # Check if user has purchased this state
+    purchases = user_doc.get("purchases", [])
+    purchased_states = [p.get("state_code") for p in purchases if p.get("type") == "state_access"]
+    
+    if state_code in purchased_states:
+        return {
+            "has_access": True,
+            "reason": "purchased",
+            "is_free_tier": False,
+            "access_type": "premium"
+        }
+    
+    # Check if user is grandfathered (created before paywall) AND this is their selected state
+    if is_user_grandfathered(user_doc):
+        selected_state = user_doc.get("selected_state", "").upper()
+        if selected_state == state_code:
+            return {
+                "has_access": True,
+                "reason": "grandfathered",
+                "is_free_tier": False,
+                "access_type": "premium"
+            }
+    
+    # Default: free tier access only (steps 1-3)
+    return {
+        "has_access": False,
+        "reason": "no_purchase",
+        "is_free_tier": True,
+        "access_type": "free"
+    }
+
 @api_router.get("/")
 async def root(): return {"message": "Peer Support Agency Launch API", "version": "4.0"}
 
