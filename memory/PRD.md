@@ -72,6 +72,18 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Subtle green banner, auto-dismisses after 6-8 seconds
   - Can be manually dismissed with X button
   - No animations, pop-ups, or game-like elements
+- ✅ **Contextual Resources** (one per step):
+  - Step 1: "Apply for EIN" → irs.gov
+  - Step 2: "Download Templates" → /templates
+  - Step 3: "Search Insurance Providers" → Google search
+  - Step 4: "Apply for NPI Number" → nppes.cms.hhs.gov
+  - Step 5: "Go to CAQH ProView" → proview.caqh.org
+  - Step 6: "Post on Indeed" → indeed.com/hire
+  - Step 7: "Download Templates" → /templates
+  - Step 8: "Download P&P Template" → /templates
+  - Step 9: "Compare Billing Software" → Google search
+  - Step 10: "View Federal Links" → /federal-links
+  - Step 11: "Learn More" → /national-overview
 
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
