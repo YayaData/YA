@@ -1522,7 +1522,7 @@ async def remove_bookmark(link: str, user: dict = Depends(require_current_user))
 
 @api_router.get("/user/dashboard")
 async def get_user_dashboard(user: dict = Depends(require_current_user)):
-    """Get user dashboard data including progress, purchases, and recommendations."""
+    """Get user dashboard data including progress, purchases, access info, and recommendations."""
     user_doc = await db.users.find_one({"id": user["sub"]}, {"_id": 0})
     
     if not user_doc:
@@ -1530,8 +1530,13 @@ async def get_user_dashboard(user: dict = Depends(require_current_user)):
     
     # Get user's state data if they have one selected
     state_data = None
-    if user_doc.get("selected_state"):
-        state_code = user_doc["selected_state"]
+    state_access = None
+    selected_state = user_doc.get("selected_state")
+    
+    if selected_state:
+        state_code = selected_state.upper()
+        state_access = get_user_state_access(user_doc, state_code)
+        
         if state_code in STATE_DATA:
             state_data = {
                 "state_code": state_code,
@@ -1552,13 +1557,17 @@ async def get_user_dashboard(user: dict = Depends(require_current_user)):
     total_steps = 11  # Standard checklist has 11 steps
     overall_progress = {}
     
-    for state_code, state_progress in progress.items():
+    for sc, state_progress in progress.items():
         completed = len(state_progress.get("completed_steps", []))
-        overall_progress[state_code] = {
+        overall_progress[sc] = {
             "completed": completed,
             "total": total_steps,
             "percentage": round((completed / total_steps) * 100, 1)
         }
+    
+    # Get purchased states
+    purchases = user_doc.get("purchases", [])
+    purchased_states = [p.get("state_code") for p in purchases if p.get("type") == "state_access"]
     
     return {
         "user": {
@@ -1569,9 +1578,17 @@ async def get_user_dashboard(user: dict = Depends(require_current_user)):
             "onboarding_complete": user_doc.get("onboarding_complete", False)
         },
         "selected_state": state_data,
+        "state_access": state_access,
         "progress": overall_progress,
         "bookmarks": user_doc.get("bookmarks", []),
-        "purchases": user_doc.get("purchases", []),
+        "purchases": purchases,
+        "purchased_states": purchased_states,
+        "is_grandfathered": is_user_grandfathered(user_doc),
+        "paywall": {
+            "free_steps": FREE_STEPS,
+            "premium_steps": PREMIUM_STEPS,
+            "state_price": STATE_ACCESS_PRICE
+        },
         "recent_activity": []  # Can be expanded later
     }
 
