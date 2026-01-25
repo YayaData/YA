@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 
 class PeerSupportAPITester:
-    def __init__(self, base_url="https://peersupport-3.preview.emergentagent.com"):
+    def __init__(self, base_url="https://supportsteps.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
@@ -352,7 +352,7 @@ class PeerSupportAPITester:
         headers = {'Content-Type': 'application/json'}
         test_data = {
             "product_id": "pdf-guide",
-            "origin_url": "https://peersupport-3.preview.emergentagent.com"
+            "origin_url": "https://supportsteps.preview.emergentagent.com"
         }
 
         self.tests_run += 1
