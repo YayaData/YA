@@ -164,6 +164,7 @@ NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 - [x] User account system with magic links
 - [x] Onboarding wizard
 - [x] User dashboard with progress tracking
+- [x] **Paywall system ($49/state, free steps 1-3)**
 
 ### P1 (Important) - COMPLETED
 - [x] Add "Last updated date" to state data (shows "Last updated: January 2025")
@@ -178,6 +179,7 @@ NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 ### P1 (Important) - PENDING
 - [ ] Connect real SendGrid for magic link emails
 - [ ] Populate remaining 37 states
+- [ ] Site Visit Readiness Section (calm checklist for later steps)
 
 ### P2 (Nice to Have)
 - [ ] Compare states feature
