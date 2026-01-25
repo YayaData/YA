@@ -148,7 +148,7 @@ const StatePage = () => {
               </div>
               <p className="text-slate-600">Peer Support Agency Launch Guide</p>
               {stateData.last_updated && (
-                <div className="flex items-center gap-4 mt-2">
+                <div className="flex flex-wrap items-center gap-4 mt-2">
                   <span className="inline-flex items-center gap-1 text-xs text-slate-500">
                     <Calendar className="w-3 h-3" />
                     Last updated: {stateData.last_updated}
@@ -159,6 +159,13 @@ const StatePage = () => {
                   >
                     <Flag className="w-3 h-3" />
                     Report broken link
+                  </button>
+                  <button 
+                    onClick={downloadPDF}
+                    className="inline-flex items-center gap-1 text-xs text-gold hover:text-gold/80 transition-colors font-medium"
+                  >
+                    <Download className="w-3 h-3" />
+                    Download PDF
                   </button>
                 </div>
               )}
