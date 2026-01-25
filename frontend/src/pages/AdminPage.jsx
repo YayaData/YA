@@ -140,27 +140,50 @@ const AdminPage = () => {
               <Lock className="w-8 h-8 text-white" />
             </div>
             <CardTitle className="font-serif text-2xl text-navy">Admin Dashboard</CardTitle>
-            <p className="text-slate-600 text-sm">Enter your password to access the dashboard</p>
+            <p className="text-slate-600 text-sm">Enter your credentials to access the dashboard</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
-              <Input
-                type="password"
-                placeholder="Enter admin password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="text-center"
-                data-testid="admin-password-input"
-              />
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="mb-3"
+                  data-testid="admin-username-input"
+                />
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  data-testid="admin-password-input"
+                />
+              </div>
+              
+              {loginError && (
+                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+                  <span>{loginError}</span>
+                </div>
+              )}
+              
               <Button 
                 type="submit" 
                 className="w-full bg-gold hover:bg-gold/90 text-white"
-                disabled={loading}
+                disabled={loading || !username || !password}
                 data-testid="admin-login-btn"
               >
                 {loading ? "Logging in..." : "Login"}
               </Button>
             </form>
+            
+            <div className="mt-4 text-center">
+              <p className="text-xs text-slate-500">
+                Secure login with rate limiting protection
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
