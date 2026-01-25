@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   X, 
   CheckCircle2, 
@@ -8,12 +9,14 @@ import {
   Folder,
   FileText,
   Download,
-  ChevronRight
+  ChevronRight,
+  ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 // Step details with reassuring, simple content
+// Each step has ONE optional resource to reduce searching
 const STEP_DETAILS = {
   1: {
     title: "Form Your Business Entity",
@@ -32,7 +35,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 1",
     progressMessage: "You're doing great.\nMost people complete this step over a few days.\nYou can stop and return whenever you need.",
-    completionMessage: "Step 1 complete.\nYour business is legally established and ready for the next step."
+    completionMessage: "Step 1 complete.\nYour business is legally established and ready for the next step.",
+    resource: {
+      label: "Apply for EIN",
+      url: "https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online",
+      type: "external"
+    }
   },
   2: {
     title: "Collect Required Documents",
@@ -51,7 +59,12 @@ const STEP_DETAILS = {
     ],
     actionLabel: "Start Step 2",
     progressMessage: "You're doing well.\nMost people complete this step a little at a time.\nYou can stop and return whenever you need.",
-    completionMessage: "Step 2 complete.\nYour documents are organized and ready for the next step."
+    completionMessage: "Step 2 complete.\nYour documents are organized and ready for the next step.",
+    resource: {
+      label: "Download Templates",
+      url: "/templates",
+      type: "internal"
+    }
   },
   3: {
     title: "Obtain Business Insurance",
