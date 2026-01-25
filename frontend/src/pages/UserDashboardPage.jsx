@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/context/AuthContext";
+import StepDetailModal from "@/components/StepDetailModal";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -35,7 +36,7 @@ const INITIAL_STEPS_SHOWN = 3;
 // Quick wins - easy tasks that build confidence
 const QUICK_WINS = [
   { step: 1, task: "Get your EIN online", time: "10 min", tip: "It's free and instant at irs.gov", icon: "📋" },
-  { step: 2, task: "Apply for your NPI", time: "15 min", tip: "Free at nppes.cms.hhs.gov", icon: "🆔" },
+  { step: 2, task: "Download a document template", time: "2 min", tip: "We have templates ready for you", icon: "📄" },
   { step: 3, task: "Get an insurance quote", time: "5 min", tip: "Just request a quote — no commitment", icon: "🛡️" },
   { step: 4, task: "Create your PECOS account", time: "10 min", tip: "You'll need it for Medicaid enrollment", icon: "🔐" },
   { step: 5, task: "Register on CAQH ProView", time: "15 min", tip: "Many MCOs require this", icon: "📝" },
