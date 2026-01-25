@@ -65,6 +65,13 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Progress message after clicking "Start Step"
   - Completion message when marked complete
   - No scrolling required - simple, focused view
+- ✅ **Milestone Celebrations** (calm and minimal):
+  - First 3 steps: "Great start" banner
+  - 50% progress: "Halfway there" banner
+  - Full completion: "All steps complete" banner
+  - Subtle green banner, auto-dismisses after 6-8 seconds
+  - Can be manually dismissed with X button
+  - No animations, pop-ups, or game-like elements
 
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
