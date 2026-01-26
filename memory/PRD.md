@@ -202,6 +202,19 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Shows 1-2 calm sentences explaining location requirements
   - Prevents users from buying unusable products
 
+### Phase 11: Business Address & Service Location Section (January 2025)
+
+**Business Address & Service Location on State Pages - COMPLETED:**
+- ✅ **New informational section** on each populated state page's Snapshot tab
+- ✅ **Four status types:**
+  - **Allowed (Administrative address only)** - Green badge: NC, TX, FL, OH, PA, IL, GA, VA, WA, AZ
+  - **Allowed with conditions** - Amber badge: CA, NY, NJ
+  - **Must verify** - Blue badge: Default for unpopulated states
+  - **Not recommended** - Red badge: Reserved for future use
+- ✅ **State-specific notes** explaining location requirements for each state
+- ✅ **Standard explanation text:** "This refers to your business or administrative address and how your service location is listed during enrollment. Rules vary by state, payer, and enrollment type. Always confirm with official Medicaid or MCO guidance before submitting enrollment."
+- ✅ **Informational only** - Does not block progress or purchases
+
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
 - Magic link tokens: 15-minute expiry, single-use
