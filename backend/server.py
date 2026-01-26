@@ -1091,6 +1091,10 @@ async def get_state_data(state_code: str):
     state_code = state_code.upper()
     state_info = next((s for s in ALL_STATES if s["code"] == state_code), None)
     if not state_info: raise HTTPException(status_code=404, detail="State not found")
+    
+    # Get tier information for this state
+    tier_info = get_state_tier(state_code)
+    
     if state_code in STATE_DATA:
         data = STATE_DATA[state_code]
         # Convert Pydantic models to dicts
@@ -1102,10 +1106,14 @@ async def get_state_data(state_code: str):
         result["zoning_info"] = data.get("zoning_info").model_dump() if hasattr(data.get("zoning_info"), 'model_dump') else data.get("zoning_info")
         # Add location status for Business Address & Service Location section
         result["location_status"] = LOCATION_STATUS.get(state_code, DEFAULT_LOCATION_STATUS)
+        # Add tier info
+        result["tier_info"] = tier_info
         return result
-    # For unpopulated states, return placeholder with location status
+    
+    # For unpopulated states, return placeholder with location status and tier info
     placeholder = get_placeholder_state_data(state_code, state_info["name"])
     placeholder["location_status"] = LOCATION_STATUS.get(state_code, DEFAULT_LOCATION_STATUS)
+    placeholder["tier_info"] = tier_info
     return placeholder
 
 @api_router.get("/federal-links")
