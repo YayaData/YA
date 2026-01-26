@@ -52,12 +52,12 @@ module.exports = {
                         ring: 'hsl(var(--ring))',
                         // Dark purple accent colors (replacing gold)
                         gold: {
-                                DEFAULT: 'hsl(262, 83%, 58%)',
-                                light: 'hsl(262, 50%, 94%)',
-                                dark: 'hsl(262, 80%, 45%)'
+                                DEFAULT: '#7c3aed',
+                                light: '#ede9fe',
+                                dark: '#6d28d9'
                         },
-                        'gold-light': 'hsl(262, 50%, 94%)',
-                        navy: 'hsl(222, 47%, 11%)',
+                        'gold-light': '#ede9fe',
+                        navy: '#0f172a',
                         chart: {
                                 '1': 'hsl(var(--chart-1))',
                                 '2': 'hsl(var(--chart-2))',
