@@ -107,7 +107,7 @@ const StatePage = () => {
   // Disclaimer Modal
   if (!disclaimerAccepted) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4" data-testid="disclaimer-modal">
+      <div className="min-h-screen bg-[hsl(40,20%,98%)] flex items-center justify-center p-4" data-testid="disclaimer-modal">
         <Card className="max-w-2xl border-2 border-gold">
           <CardHeader className="bg-gold-light">
             <CardTitle className="font-serif text-navy flex items-center gap-2">
@@ -133,9 +133,9 @@ const StatePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50" data-testid="state-page">
+    <div className="min-h-screen bg-[hsl(40,20%,98%)]" data-testid="state-page">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200">
+      <div className="bg-[hsl(40,15%,99%)] border-b border-[hsl(40,15%,88%)]">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <Link to="/" className="inline-flex items-center gap-2 text-slate-600 hover:text-navy mb-6" data-testid="back-link">
             <ArrowLeft className="w-4 h-4" />Back to State Selection
@@ -219,7 +219,7 @@ const StatePage = () => {
       )}
 
       {/* Progress Bar */}
-      <div className="bg-white border-b border-slate-200">
+      <div className="bg-[hsl(40,15%,99%)] border-b border-[hsl(40,15%,88%)]">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="font-medium text-navy">{completedSteps} of {checklist.length} steps completed</span>
@@ -263,7 +263,7 @@ const StatePage = () => {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Certification */}
               <Card className="border-2 border-slate-200">
-                <CardHeader className="bg-slate-50 border-b py-4">
+                <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                   <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
                     <Award className="w-5 h-5 text-gold" />Certification
                   </CardTitle>
@@ -282,7 +282,7 @@ const StatePage = () => {
 
               {/* Medicaid */}
               <Card className="border-2 border-slate-200">
-                <CardHeader className="bg-slate-50 border-b py-4">
+                <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                   <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
                     <Building2 className="w-5 h-5 text-gold" />Medicaid
                   </CardTitle>
@@ -304,7 +304,7 @@ const StatePage = () => {
 
               {/* Supervision */}
               <Card className="border-2 border-slate-200">
-                <CardHeader className="bg-slate-50 border-b py-4">
+                <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                   <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
                     <UserCheck className="w-5 h-5 text-gold" />Supervision
                   </CardTitle>
@@ -327,7 +327,7 @@ const StatePage = () => {
 
               {/* Virtual/Telehealth */}
               <Card className="border-2 border-slate-200">
-                <CardHeader className="bg-slate-50 border-b py-4">
+                <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                   <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
                     <Globe className="w-5 h-5 text-gold" />Virtual Services
                   </CardTitle>
@@ -342,7 +342,7 @@ const StatePage = () => {
             {/* Business Address & Service Location */}
             {stateData.location_status && (
               <Card className="border-2 border-slate-200" data-testid="location-status-section">
-                <CardHeader className="bg-slate-50 border-b py-4">
+                <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                   <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
                     <MapPin className="w-5 h-5 text-gold" />Business Address & Service Location
                   </CardTitle>
@@ -384,7 +384,7 @@ const StatePage = () => {
             {/* MCOs */}
             {stateData.managed_care_orgs?.length > 0 && (
               <Card className="border-2 border-slate-200">
-                <CardHeader className="bg-slate-50 border-b py-4">
+                <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                   <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
                     <Users className="w-5 h-5 text-gold" />Managed Care Organizations (MCOs)
                   </CardTitle>
@@ -409,7 +409,7 @@ const StatePage = () => {
 
             {/* Billing Overview */}
             <Card className="border-2 border-slate-200">
-              <CardHeader className="bg-slate-50 border-b py-4">
+              <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                 <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
                   <DollarSign className="w-5 h-5 text-gold" />Billing Overview
                 </CardTitle>
@@ -474,7 +474,7 @@ const StatePage = () => {
           {/* TAB 3: Official Links */}
           <TabsContent value="links" className="space-y-6" data-testid="tab-links">
             <Card className="border-2 border-slate-200">
-              <CardHeader className="bg-slate-50 border-b py-4">
+              <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                 <CardTitle className="font-serif text-navy">State Medicaid Agency</CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-2">
@@ -484,7 +484,7 @@ const StatePage = () => {
             </Card>
 
             <Card className="border-2 border-slate-200">
-              <CardHeader className="bg-slate-50 border-b py-4">
+              <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                 <CardTitle className="font-serif text-navy">Behavioral Health Authority</CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-2">
@@ -495,7 +495,7 @@ const StatePage = () => {
             </Card>
 
             <Card className="border-2 border-slate-200">
-              <CardHeader className="bg-slate-50 border-b py-4">
+              <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                 <CardTitle className="font-serif text-navy">Business Formation</CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-2">
@@ -508,7 +508,7 @@ const StatePage = () => {
             {/* MCO Links */}
             {stateData.managed_care_orgs?.length > 0 && (
               <Card className="border-2 border-slate-200">
-                <CardHeader className="bg-slate-50 border-b py-4">
+                <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                   <CardTitle className="font-serif text-navy">MCO Credentialing Portals</CardTitle>
                 </CardHeader>
                 <CardContent className="p-4">
@@ -531,7 +531,7 @@ const StatePage = () => {
           {/* TAB 4: Credentialing */}
           <TabsContent value="credentialing" className="space-y-6" data-testid="tab-credentialing">
             <Card className="border-2 border-slate-200">
-              <CardHeader className="bg-slate-50 border-b py-4">
+              <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                 <CardTitle className="font-serif text-navy">Universal Credentialing Requirements</CardTitle>
               </CardHeader>
               <CardContent className="p-4">
@@ -623,7 +623,7 @@ const StatePage = () => {
           {/* TAB 6: Policies & Procedures */}
           <TabsContent value="policies" className="space-y-6" data-testid="tab-policies">
             <Card className="border-2 border-slate-200">
-              <CardHeader className="bg-slate-50 border-b py-4">
+              <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                 <CardTitle className="font-serif text-navy flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-gold" />
                   P&P Framework for Peer Support Agencies
@@ -666,7 +666,7 @@ const StatePage = () => {
             </div>
 
             <Card className="border-2 border-slate-200">
-              <CardHeader className="bg-slate-50 border-b py-4">
+              <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                 <CardTitle className="font-serif text-navy flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-gold" />
                   Location & Zoning Overview
@@ -690,7 +690,7 @@ const StatePage = () => {
             </Card>
 
             <Card className="border-2 border-slate-200">
-              <CardHeader className="bg-slate-50 border-b py-4">
+              <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
                 <CardTitle className="font-serif text-navy">Zoning Quick Checklist</CardTitle>
               </CardHeader>
               <CardContent className="p-4">
