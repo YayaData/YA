@@ -206,6 +206,100 @@ PRODUCTS = {
     "full-course": {"name": "Full Launch Course", "price": 297.00, "description": "Video course + all templates + premium access", "state_specific": True, "grants_premium": True}
 }
 
+# Document Shop - À-la-carte document purchases for experienced users
+DOCUMENT_SHOP_PRODUCTS = {
+    "doc-pp-manual": {
+        "id": "doc-pp-manual",
+        "name": "Policies & Procedures Manual",
+        "price": 47.00,
+        "description": "Comprehensive P&P manual with all required policies for peer support agencies",
+        "includes": ["Operations policies", "HIPAA policies", "Client rights", "Emergency procedures", "Quality assurance"],
+        "format": "Word (.docx) - fully editable",
+        "scope": "core",
+        "scope_label": "Core (works in all states)",
+        "scope_note": "Universal policies that apply nationwide. May need minor state-specific additions."
+    },
+    "doc-hiring-packet": {
+        "id": "doc-hiring-packet",
+        "name": "Hiring + Onboarding Packet",
+        "price": 37.00,
+        "description": "Complete hiring documentation from job posting to first-day onboarding",
+        "includes": ["Job descriptions", "Interview guides", "Offer letter templates", "Onboarding checklist", "New hire forms"],
+        "format": "Word (.docx) + Excel (.xlsx)",
+        "scope": "core",
+        "scope_label": "Core (works in all states)",
+        "scope_note": "Standard HR documents. Verify state-specific employment law requirements."
+    },
+    "doc-employee-handbook": {
+        "id": "doc-employee-handbook",
+        "name": "Staff Rules / Employee Handbook",
+        "price": 37.00,
+        "description": "Professional employee handbook covering workplace policies and expectations",
+        "includes": ["Code of conduct", "Attendance policy", "Leave policies", "Grievance procedures", "Termination process"],
+        "format": "Word (.docx) - fully editable",
+        "scope": "core",
+        "scope_label": "Core (works in all states)",
+        "scope_note": "Standard policies. Review state labor laws for required additions."
+    },
+    "doc-supervision-packet": {
+        "id": "doc-supervision-packet",
+        "name": "Supervision Packet",
+        "price": 29.00,
+        "description": "Complete supervision documentation for QP oversight requirements",
+        "includes": ["QP responsibilities outline", "Supervision log templates", "Supervisor agreement template", "Competency tracking"],
+        "format": "Word (.docx) + Excel (.xlsx)",
+        "scope": "addendum",
+        "scope_label": "State addendum may be required",
+        "scope_note": "Supervision requirements vary by state. Check your state's QP definitions."
+    },
+    "doc-documentation-pack": {
+        "id": "doc-documentation-pack",
+        "name": "Documentation Pack",
+        "price": 29.00,
+        "description": "Service documentation templates that meet Medicaid requirements",
+        "includes": ["Service note templates", "Required elements checklist", "Progress note examples", "Treatment plan template"],
+        "format": "Word (.docx) + PDF examples",
+        "scope": "addendum",
+        "scope_label": "State addendum may be required",
+        "scope_note": "Documentation requirements vary. Verify with your MCO for specific formats."
+    },
+    "doc-site-visit-binder": {
+        "id": "doc-site-visit-binder",
+        "name": "Site Visit Readiness Binder",
+        "price": 24.00,
+        "description": "Everything you need to organize and prepare for site visits",
+        "includes": ["Complete checklist", "Binder section labels", "Document index template", "Reviewer request list", "Common questions prep"],
+        "format": "Word (.docx) + PDF printables",
+        "scope": "core",
+        "scope_label": "Core (works in all states)",
+        "scope_note": "Universal organization system. Works for Medicaid and MCO visits."
+    }
+}
+
+# Business location status for peer support services by state
+LOCATION_STATUS = {
+    "NC": {"status": "allowed", "label": "Allowed", "note": "North Carolina allows peer support services from home offices, community locations, and traditional office settings. Verify local zoning for home-based operations."},
+    "TX": {"status": "allowed", "label": "Allowed", "note": "Texas permits peer support services in various settings including home offices. Check local zoning ordinances for home-based business requirements."},
+    "CA": {"status": "allowed_conditions", "label": "Allowed with conditions", "note": "California allows peer support services but requirements vary by county. Contact your county Mental Health Plan for specific location requirements."},
+    "FL": {"status": "allowed", "label": "Allowed", "note": "Florida permits peer support services from multiple locations. Ensure compliance with AHCA guidelines and local business licensing."},
+    "NY": {"status": "allowed_conditions", "label": "Allowed with conditions", "note": "New York allows peer support services but OMH has specific site requirements. Verify with your regional office before finalizing location."},
+    "OH": {"status": "allowed", "label": "Allowed", "note": "Ohio permits peer support services from various locations. Check with your local ADAMHS board for any additional requirements."},
+    "PA": {"status": "allowed", "label": "Allowed", "note": "Pennsylvania allows peer support services from approved locations. Verify with your managed care organization for site requirements."},
+    "IL": {"status": "allowed", "label": "Allowed", "note": "Illinois permits peer support services. Contact HFS for specific location guidance and licensing requirements."},
+    "GA": {"status": "allowed", "label": "Allowed", "note": "Georgia allows peer support services from various settings. Check with your CMO for any specific site requirements."},
+    "NJ": {"status": "allowed_conditions", "label": "Allowed with conditions", "note": "New Jersey has specific requirements for service locations. Verify with the Division of Mental Health Services before establishing your site."},
+    "VA": {"status": "allowed", "label": "Allowed", "note": "Virginia permits peer support services from community and office settings. Check DBHDS requirements for your service area."},
+    "WA": {"status": "allowed", "label": "Allowed", "note": "Washington allows peer support services. Verify with HCA for specific Medicaid billing location requirements."},
+    "AZ": {"status": "allowed", "label": "Allowed", "note": "Arizona permits peer support services from various locations. Confirm with AHCCCS for billing-eligible service sites."}
+}
+
+# Default location status for states without specific data
+DEFAULT_LOCATION_STATUS = {
+    "status": "verify",
+    "label": "Must verify",
+    "note": "Contact your state Medicaid agency to confirm approved service locations before establishing your business address."
+}
+
 # Free vs Premium access rules
 FREE_STEPS = [1, 2, 3]  # Steps 1-3 are free
 PREMIUM_STEPS = [4, 5, 6, 7, 8, 9, 10, 11]  # Steps 4-11 require premium
