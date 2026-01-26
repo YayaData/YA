@@ -9,9 +9,11 @@ import {
   Users,
   Laptop,
   Shield,
-  Clock
+  Clock,
+  HelpCircle
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import FAQAssistant from "@/components/FAQAssistant";
 
 const EstimatedCosts = () => {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -40,9 +42,28 @@ const EstimatedCosts = () => {
     <Card className="border-2 border-slate-200" data-testid="estimated-costs-section">
       <CardHeader className="bg-slate-50 border-b py-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
-            <DollarSign className="w-5 h-5 text-gold" />
-            Estimated Cost to Start & Operate a Peer Support Agency
+          <div className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
+              <DollarSign className="w-5 h-5 text-gold" />
+              Estimated Cost to Start & Operate a Peer Support Agency
+            </CardTitle>
+          </div>
+          <div className="flex items-center gap-2">
+            <FAQAssistant context="Estimated Costs section" buttonStyle="icon" />
+            <button 
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              aria-label={isExpanded ? "Collapse" : "Expand"}
+            >
+              {isExpanded ? (
+                <ChevronUp className="w-5 h-5 text-slate-500" />
+              ) : (
+                <ChevronDown className="w-5 h-5 text-slate-500" />
+              )}
+            </button>
+          </div>
+        </div>
+      </CardHeader>
           </CardTitle>
           <button 
             onClick={() => setIsExpanded(!isExpanded)}
