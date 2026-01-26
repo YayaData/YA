@@ -16,7 +16,7 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
 - National Overview section
 - Downloadable PDF templates
 - Mobile-responsive design
-- Blue & gold color scheme on white background
+- Dark purple & navy color scheme on soft white background
 
 ---
 
