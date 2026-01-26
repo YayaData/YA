@@ -326,7 +326,46 @@ ALL_STATES = [
     {"code": "WI", "name": "Wisconsin"}, {"code": "WY", "name": "Wyoming"}
 ]
 
-FULLY_POPULATED_STATES = ["NC", "TX", "CA", "FL", "NY", "OH", "PA", "IL", "GA", "NJ", "VA", "WA", "AZ"]
+# State coverage tiers
+# Tier 1: Full Guidance Available - complete state-specific data, purchasable
+FULL_GUIDANCE_STATES = ["NC", "TX", "CA", "FL", "NY", "OH", "PA", "IL", "GA", "NJ", "VA", "WA", "AZ"]
+
+# Tier 2: Core Setup Supported - basic state info, state addendum coming soon, NOT purchasable
+CORE_SETUP_STATES = ["TN", "MI", "MO", "IN", "WI", "MN", "CO", "SC", "KY", "OR", "LA", "OK", "CT", "MD", "MA"]
+
+# Tier 3: Planning Tools Only - universal roadmap, documents, cost planning only, NOT purchasable
+# (All remaining states not in Tier 1 or 2)
+
+# Legacy alias for backwards compatibility
+FULLY_POPULATED_STATES = FULL_GUIDANCE_STATES
+
+def get_state_tier(state_code: str) -> dict:
+    """Get the coverage tier for a state"""
+    if state_code in FULL_GUIDANCE_STATES:
+        return {
+            "tier": "full_guidance",
+            "label": "Full Guidance Available",
+            "description": "Complete state-specific guidance, enrollment steps, and resources",
+            "purchasable": True,
+            "has_state_addendum": True
+        }
+    elif state_code in CORE_SETUP_STATES:
+        return {
+            "tier": "core_setup",
+            "label": "Core Setup Supported",
+            "description": "Universal roadmap with basic state info. State addendum coming soon.",
+            "purchasable": False,
+            "has_state_addendum": False,
+            "coming_soon": True
+        }
+    else:
+        return {
+            "tier": "planning_tools",
+            "label": "Planning Tools Only",
+            "description": "Access to universal roadmap, documents, and cost planning tools",
+            "purchasable": False,
+            "has_state_addendum": False
+        }
 
 # Federal/Universal Links
 FEDERAL_LINKS = {
