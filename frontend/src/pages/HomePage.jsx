@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import StateSelector from "@/components/StateSelector";
 import ConsultationModal from "@/components/ConsultationModal";
+import TwoPathsSection from "@/components/TwoPathsSection";
 import axios from "axios";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
