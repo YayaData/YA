@@ -144,11 +144,40 @@ const StatePage = () => {
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-3xl sm:text-4xl font-serif font-bold text-navy">{stateData.state_name}</h1>
-                <Badge className={stateData.is_fully_populated ? "bg-green-100 text-green-700" : "bg-gold-light text-gold"}>
-                  {stateData.is_fully_populated ? <><CheckCircle2 className="w-3 h-3 mr-1" />Full Guide</> : <><AlertTriangle className="w-3 h-3 mr-1" />Basic Info</>}
-                </Badge>
+                {/* Tier-based badge */}
+                {stateData.tier_info?.tier === "full_guidance" ? (
+                  <Badge className="bg-green-100 text-green-700 border border-green-200">
+                    <CheckCircle2 className="w-3 h-3 mr-1" />Full Guidance Available
+                  </Badge>
+                ) : stateData.tier_info?.tier === "core_setup" ? (
+                  <Badge className="bg-amber-100 text-amber-700 border border-amber-200">
+                    <Clock className="w-3 h-3 mr-1" />Core Setup Supported
+                  </Badge>
+                ) : (
+                  <Badge className="bg-slate-100 text-slate-600 border border-slate-200">
+                    Planning Tools Only
+                  </Badge>
+                )}
               </div>
               <p className="text-slate-600">Peer Support Agency Launch Guide</p>
+              
+              {/* Tier description notice */}
+              {stateData.tier_info && stateData.tier_info.tier !== "full_guidance" && (
+                <div className="mt-3 p-3 bg-amber-50 border border-amber-100 rounded-lg text-sm text-amber-800 max-w-xl">
+                  {stateData.tier_info.tier === "core_setup" ? (
+                    <>
+                      <strong>State addendum coming soon.</strong> You have access to the universal roadmap, documents, and cost planning tools. 
+                      State-specific details will be added in a future update.
+                    </>
+                  ) : (
+                    <>
+                      <strong>Planning tools available.</strong> You have access to the universal roadmap, documents, and cost planning tools. 
+                      This state does not yet have state-specific guidance.
+                    </>
+                  )}
+                </div>
+              )}
+              
               {stateData.last_updated && (
                 <div className="flex flex-wrap items-center gap-4 mt-2">
                   <span className="inline-flex items-center gap-1 text-xs text-slate-500">
