@@ -276,6 +276,38 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
 - ✅ **Calm, non-judgmental language** - neither path implied as better
 - ✅ **Reassurance text:** "Both paths provide professional, high-quality resources."
 
+### Phase 13: FAQ Assistant (January 2025)
+
+**Limited AI Help Assistant - COMPLETED:**
+- ✅ **Purpose:** Help users understand content in simple language and guide them to correct sections
+- ✅ **Scope:** Answers FAQs using ONLY existing app content:
+  - General Peer Support agency questions
+  - Document explanations (P&P, hiring packet, supervision)
+  - Cost and planning questions
+  - Checklist item explanations
+  - App navigation help (what steps mean, why something is locked)
+- ✅ **Response style:**
+  - Plain, non-technical language
+  - Short answers (2-4 sentences max)
+  - Points to relevant pages when helpful
+  - Always includes disclaimer: "This information is for educational purposes only. Always verify with official Medicaid or state guidance."
+- ✅ **Restrictions:**
+  - Does NOT provide legal advice
+  - Does NOT interpret state laws
+  - Does NOT confirm compliance status
+  - Does NOT invent requirements not in app
+- ✅ **Placement (user-triggered only, no auto-popups):**
+  - State pages: Checklist tab header ("Need help?" link)
+  - State pages: Estimated Costs section (? icon)
+  - Document Shop page: Header ("Help" pill button)
+  - User Dashboard: Roadmap section ("Need help?" link)
+  - NOT on homepage (as requested)
+- ✅ **Design:**
+  - No long conversations or memory
+  - Single-turn responses only
+  - Optimized for low AI credit usage (GPT-4o-mini)
+  - Modal interface with suggested questions
+
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
 - Magic link tokens: 15-minute expiry, single-use
