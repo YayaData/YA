@@ -50,6 +50,14 @@ module.exports = {
                         border: 'hsl(var(--border))',
                         input: 'hsl(var(--input))',
                         ring: 'hsl(var(--ring))',
+                        // Dark purple accent colors (replacing gold)
+                        gold: {
+                                DEFAULT: 'hsl(262, 83%, 58%)',
+                                light: 'hsl(262, 50%, 94%)',
+                                dark: 'hsl(262, 80%, 45%)'
+                        },
+                        'gold-light': 'hsl(262, 50%, 94%)',
+                        navy: 'hsl(222, 47%, 11%)',
                         chart: {
                                 '1': 'hsl(var(--chart-1))',
                                 '2': 'hsl(var(--chart-2))',
