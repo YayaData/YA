@@ -362,7 +362,29 @@ def get_standard_checklist():
         {"step": 5, "title": "Credential with MCOs", "description": "Apply for credentialing with each Managed Care Organization in your service area.", "category": "Credentialing", "documents": ["Credentialing Application", "CAQH Profile (if applicable)", "Attestations"], "common_mistakes": ["Not applying to all MCOs", "Incomplete CAQH profile", "Missing required documents"]},
         {"step": 6, "title": "Hire Certified Peer Support Specialists", "description": "Recruit and hire staff with current state peer certification.", "category": "Staffing", "documents": ["Certification Verification", "Background Check Results", "Employment Agreement"], "common_mistakes": ["Expired certifications", "Missing background checks", "No credential verification process"]},
         {"step": 7, "title": "Establish Supervision Structure", "description": "Contract with or hire a licensed professional to provide required supervision.", "category": "Staffing", "documents": ["Supervisor Agreement", "License Verification", "Supervision Schedule"], "common_mistakes": ["Wrong license type", "No written agreement", "Inadequate supervision frequency"]},
-        {"step": 8, "title": "Develop Policies & Procedures", "description": "Create comprehensive P&P manual meeting state Medicaid and MCO requirements.", "category": "Compliance", "documents": ["P&P Manual", "HIPAA Policies", "Emergency Procedures"], "common_mistakes": ["Using generic templates without customization", "Missing required policies", "No review/update schedule"]},
+        {
+            "step": 8, 
+            "title": "Prepare Policies & Procedures", 
+            "description": "Policies & Procedures explain how your agency operates and are required for approval and site visits.",
+            "category": "Compliance", 
+            "documents": ["P&P Manual", "HIPAA Policies", "Emergency Procedures"],
+            "common_mistakes": ["Using generic templates without customization", "Missing required policies", "No review/update schedule"],
+            "expanded_text": "At some point before approval or a site visit, agencies are expected to have written Policies & Procedures.\n\nThese documents show reviewers that your agency understands the rules and has a plan to follow them.\n\nYou do not need to complete this step right away. Most agencies work on this closer to the end.",
+            "key_areas": [
+                "How Peer Support services are provided",
+                "Staff roles and supervision",
+                "Training and onboarding",
+                "Documentation and record keeping",
+                "Confidentiality and incident reporting",
+                "Site visit readiness"
+            ],
+            "options": [
+                {"id": "upload", "label": "Upload My Policies", "action": "upload"},
+                {"id": "purchase", "label": "Get Policies & Procedures Toolkit", "action": "purchase", "price": 47}
+            ],
+            "reassurance": "There is no deadline for this step. You can come back to it when you feel ready.",
+            "non_blocking": True
+        },
         {"step": 9, "title": "Set Up Billing Systems", "description": "Implement EHR and billing software compatible with state claims submission.", "category": "Billing", "documents": ["Software Setup Documentation", "Claims Testing Results", "Staff Training Records"], "common_mistakes": ["Incompatible software", "No claims testing", "Staff not trained"]},
         {"step": 10, "title": "Verify Zoning & Location Compliance", "description": "Confirm your service location meets local zoning and occupancy requirements.", "category": "Compliance", "documents": ["Zoning Verification", "Business License", "Occupancy Permit (if applicable)"], "common_mistakes": ["Operating in residential zone without permit", "Missing local business license", "ADA non-compliance"]},
         {"step": 11, "title": "Start Accepting Referrals", "description": "Network with referral sources and begin providing billable services.", "category": "Operations", "documents": ["Referral Agreements", "Marketing Materials", "Go-Live Checklist"], "common_mistakes": ["Starting before credentialing complete", "No referral tracking system", "Missing documentation training"]}
