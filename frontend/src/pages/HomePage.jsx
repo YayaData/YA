@@ -167,6 +167,9 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Two Paths Section - Guided vs Documents Only */}
+      <TwoPathsSection />
+
       {/* CTA Section */}
       <section className="py-16 md:py-24 bg-navy relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
