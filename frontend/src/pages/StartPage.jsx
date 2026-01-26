@@ -135,8 +135,8 @@ const StartPage = () => {
   if (step === 0 && !isAuthenticated) {
     if (magicLinkSent) {
       return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
-          <Card className="w-full max-w-md border-0 shadow-xl">
+        <div className="min-h-screen bg-[hsl(40,20%,98%)] flex items-center justify-center p-4">
+          <Card className="w-full max-w-md border border-[hsl(40,15%,90%)] shadow-lg bg-[hsl(40,15%,99%)]">
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Mail className="w-8 h-8 text-green-600" />
@@ -162,7 +162,7 @@ const StartPage = () => {
     }
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[hsl(40,20%,98%)] flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <h1 className="font-serif text-3xl text-navy mb-3">
@@ -173,7 +173,7 @@ const StartPage = () => {
             </p>
           </div>
 
-          <Card className="border-0 shadow-xl">
+          <Card className="border border-[hsl(40,15%,90%)] shadow-lg bg-[hsl(40,15%,99%)]">
             <CardContent className="p-8">
               <form onSubmit={handleEmailSubmit} className="space-y-4">
                 <Input
@@ -181,12 +181,12 @@ const StartPage = () => {
                   placeholder="your@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="text-center text-lg py-6"
+                  className="text-center text-lg py-6 bg-white border-[hsl(40,15%,88%)]"
                   required
                 />
                 <Button 
                   type="submit" 
-                  className="w-full bg-gold hover:bg-gold/90 text-white py-6"
+                  className="w-full bg-gold hover:bg-gold/90 text-white py-6 shadow-sm"
                   disabled={loading}
                 >
                   {loading ? "Sending..." : "Continue"}
