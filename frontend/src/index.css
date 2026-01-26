@@ -15,7 +15,7 @@
         --popover-foreground: 222 47% 11%;
         --primary: 222 47% 11%;
         --primary-foreground: 40 20% 98%;
-        --secondary: 36 85% 48%;
+        --secondary: 262 83% 58%;
         --secondary-foreground: 0 0% 100%;
         --muted: 40 15% 95%;
         --muted-foreground: 215 16% 47%;
@@ -25,13 +25,13 @@
         --destructive-foreground: 0 0% 98%;
         --border: 40 15% 88%;
         --input: 40 15% 90%;
-        --ring: 36 85% 48%;
+        --ring: 262 83% 58%;
         --radius: 0.75rem;
         
-        /* Warm accent colors - soft gold/amber */
-        --gold-light: 43 80% 92%;
-        --gold: 36 85% 48%;
-        --gold-dark: 32 80% 40%;
+        /* Dark purple accent colors */
+        --gold-light: 262 50% 94%;
+        --gold: 262 83% 58%;
+        --gold-dark: 262 80% 45%;
         --blue-light: 199 70% 94%;
         --navy: 222 47% 11%;
         --slate-muted: 215 20% 65%;
