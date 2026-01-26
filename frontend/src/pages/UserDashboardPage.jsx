@@ -599,6 +599,14 @@ const UserDashboardPage = () => {
           )}
         </div>
 
+        {/* Site Visit Readiness - Shows when user has completed 6+ steps */}
+        {completedSteps.length >= 6 && (hasPremiumAccess || !isStatePopulated) && (
+          <SiteVisitReadiness 
+            completedSteps={completedSteps}
+            stateCode={user?.selected_state}
+          />
+        )}
+
         {/* Quick Actions */}
         <div className="grid sm:grid-cols-3 gap-4 mb-8">
           <Link to="/templates">
