@@ -645,7 +645,7 @@ const UserDashboardPage = () => {
               </div>
               <Link to="/document-shop">
                 <Button variant="outline" className="border-violet-200 text-violet-700 hover:bg-violet-50" data-testid="document-shop-btn">
-                  Browse Document Shop
+                  Documents & Templates Only
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </Link>
