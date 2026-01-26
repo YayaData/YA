@@ -312,28 +312,38 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
 
 **Public Landing Page - COMPLETED:**
 - ✅ **Accessible without login** - Anyone can view the full landing page
-- ✅ **Hero Section:**
-  - Badge: "50-State Edition • No Experience Required"
-  - Main headline: "Launch Your Peer Support Agency™"
-  - Sub-headline with value proposition
-  - Two CTAs: "Select Your State" and "Get Started Free"
-  - Trust badges: "Free to explore", "No account required", "Start in minutes"
-  - Hero image with overlay text
-- ✅ **Stats Bar:** 50 States, 11 Steps, $300-$2K Startup Cost, 13 Populated States
-- ✅ **Features Section:** 4 key features with icons
-- ✅ **How It Works:** 4-step visual process (Select State → Follow Checklist → Get Documents → Start Agency)
-- ✅ **State Selector:** Full 50-state grid with search
-- ✅ **Choose Your Path:** Guided Setup vs Documents Only cards
-- ✅ **Testimonials:** 3 social proof cards from users in NC, TX, FL
-- ✅ **FAQ Section:** 6 expandable questions with answers:
-  - What is a Peer Support agency?
-  - Do I need a clinical license to start?
-  - How much does it cost to start?
-  - How long does it take to launch?
-  - Is this guide state-specific?
-  - What if I already know the process?
-- ✅ **Final CTA:** "Ready to Turn Your Experience Into Impact?" with "Start Now - It's Free" button
-- ✅ **Footer:** Contact info, quick links, legal links, disclaimer
+- ✅ **Hero Section:** Clear headline, description, "Get Started Free" button
+- ✅ **What You Can Do:** 5 key platform capabilities
+- ✅ **State Selector:** All 50 states with tier badges
+- ✅ **Two Paths:** Guided Setup vs Documents Only cards
+- ✅ **Estimated Costs:** $300–$2K one-time, $550–$2,500 monthly
+- ✅ **Final CTA:** "Ready to Get Started?" with free start button
+- ✅ **Footer Disclaimer:** Educational guidance only notice
+
+### Phase 15: Full 50-State National Coverage (January 2025)
+
+**All 50 U.S. States Available - COMPLETED:**
+- ✅ **Three-tier coverage system:**
+  - **Full Guidance Available** (13 states): NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
+    - Complete state-specific guidance, enrollment steps, and resources
+    - Purchasable ($49 for premium access)
+  - **Core Setup Supported** (15 states): TN, MI, MO, IN, WI, MN, CO, SC, KY, OR, LA, OK, CT, MD, MA
+    - Universal roadmap with basic state info
+    - State addendum coming soon
+    - NOT purchasable - universal tools are free
+  - **Planning Tools Only** (22 states): All remaining states
+    - Access to universal roadmap, documents, and cost planning tools
+    - NOT purchasable - universal tools are free
+
+- ✅ **Clear tier labeling in UI:**
+  - State selector shows color-coded badges (gold/amber/neutral)
+  - State pages show tier badge and explanatory notice
+  - Legend explains what each tier means
+
+- ✅ **Honest access controls:**
+  - Non-full states cannot be purchased (checkout blocked with clear message)
+  - All states have access to universal content (roadmap, documents, cost tools)
+  - No misleading "unlock" options for states without full content
 
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
