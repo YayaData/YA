@@ -365,21 +365,95 @@ const StepDetailModal = ({
             </p>
           </div>
 
-          {/* Main Instructions */}
-          <div>
-            <h3 className="font-medium text-navy mb-3 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-gold" />
-              What you'll do
-            </h3>
-            <ul className="space-y-2">
-              {details.instructions.map((instruction, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <ChevronRight className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                  <span className="text-slate-600">{instruction}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Key Areas - Only for P&P step */}
+          {details.keyAreas && (
+            <div>
+              <h3 className="font-medium text-navy mb-3 flex items-center gap-2">
+                <Folder className="w-4 h-4 text-violet-500" />
+                Key areas to cover
+              </h3>
+              <ul className="space-y-2">
+                {details.keyAreas.map((area, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-violet-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-600">{area}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Two Options - Only for P&P step */}
+          {details.hasOptions && details.options && (
+            <div className="space-y-3">
+              <h3 className="font-medium text-navy mb-3 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-gold" />
+                Your options
+              </h3>
+              <div className="grid gap-3">
+                {/* Option 1: Upload */}
+                <button
+                  onClick={() => {
+                    onClose();
+                    navigate('/dashboard');
+                  }}
+                  className="w-full p-4 border border-slate-200 rounded-xl hover:border-violet-300 hover:bg-violet-50/30 transition-all text-left group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-slate-100 group-hover:bg-violet-100 rounded-lg flex items-center justify-center transition-colors">
+                      <Upload className="w-5 h-5 text-slate-600 group-hover:text-violet-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-navy">Upload My Policies</p>
+                      <p className="text-sm text-slate-500">Track your existing policies in the dashboard</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-violet-500" />
+                  </div>
+                </button>
+
+                {/* Option 2: Purchase */}
+                <button
+                  onClick={() => {
+                    onClose();
+                    navigate('/document-shop');
+                  }}
+                  className="w-full p-4 border-2 border-violet-200 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 hover:border-violet-300 transition-all text-left group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
+                      <ShoppingCart className="w-5 h-5 text-violet-600" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-navy">Get Policies & Procedures Toolkit</p>
+                        <span className="text-xs bg-violet-200 text-violet-700 px-2 py-0.5 rounded-full">$47</span>
+                      </div>
+                      <p className="text-sm text-slate-500">Professional, editable templates ready to use</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-violet-500" />
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Main Instructions - Hide for P&P step if hasOptions */}
+          {!details.hasOptions && (
+            <div>
+              <h3 className="font-medium text-navy mb-3 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-gold" />
+                What you'll do
+              </h3>
+              <ul className="space-y-2">
+                {details.instructions.map((instruction, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <ChevronRight className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-600">{instruction}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Why It Matters */}
           <div className="bg-blue-50 rounded-xl p-4">
@@ -392,8 +466,20 @@ const StepDetailModal = ({
             </p>
           </div>
 
-          {/* Optional Resource - One simple helper button */}
-          {details.resource && (
+          {/* Reassurance - Only for steps with reassurance text */}
+          {details.reassurance && (
+            <div className="bg-green-50 rounded-xl p-4 border border-green-100">
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <p className="text-green-800 text-sm">
+                  {details.reassurance}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Optional Resource - One simple helper button (hide for P&P with options) */}
+          {details.resource && !details.hasOptions && (
             <div className="flex justify-center">
               {details.resource.type === "internal" ? (
                 <button
