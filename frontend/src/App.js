@@ -15,6 +15,7 @@ import AdminPage from "@/pages/AdminPage";
 import StartPage from "@/pages/StartPage";
 import AuthVerifyPage from "@/pages/AuthVerifyPage";
 import UserDashboardPage from "@/pages/UserDashboardPage";
+import DocumentShopPage from "@/pages/DocumentShopPage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/start" element={<StartPage />} />
             <Route path="/auth/verify" element={<AuthVerifyPage />} />
             <Route path="/dashboard" element={<UserDashboardPage />} />
+            <Route path="/document-shop" element={<DocumentShopPage />} />
             
             {/* Main pages with navbar/footer */}
             <Route path="/*" element={
