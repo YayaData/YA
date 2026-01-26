@@ -251,7 +251,7 @@ const UserDashboardPage = () => {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[hsl(40,20%,98%)] flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600">Loading your dashboard...</p>
@@ -262,8 +262,8 @@ const UserDashboardPage = () => {
 
   if (!user?.onboarding_complete) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md border-0 shadow-lg">
+      <div className="min-h-screen bg-[hsl(40,20%,98%)] flex items-center justify-center p-4">
+        <Card className="w-full max-w-md border border-[hsl(40,15%,90%)] shadow-lg bg-[hsl(40,15%,99%)]">
           <CardContent className="p-8 text-center">
             <Sparkles className="w-12 h-12 text-gold mx-auto mb-4" />
             <h1 className="font-serif text-2xl text-navy mb-3">Let's set up your roadmap</h1>
@@ -272,7 +272,7 @@ const UserDashboardPage = () => {
             </p>
             <Button 
               onClick={() => navigate("/start")}
-              className="bg-gold hover:bg-gold/90 text-white"
+              className="bg-gold hover:bg-gold/90 text-white shadow-sm"
             >
               Get Started
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -290,9 +290,9 @@ const UserDashboardPage = () => {
     : stateData?.checklist?.slice(0, INITIAL_STEPS_SHOWN);
 
   return (
-    <div className="min-h-screen bg-slate-50" data-testid="user-dashboard">
+    <div className="min-h-screen bg-[hsl(40,20%,98%)]" data-testid="user-dashboard">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
+      <header className="bg-[hsla(40,20%,98%,0.95)] backdrop-blur-md border-b border-[hsl(40,15%,88%)] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="font-serif text-lg text-navy font-bold">
             Peer Support Launch
