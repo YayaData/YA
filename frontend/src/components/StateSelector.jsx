@@ -134,11 +134,11 @@ const StateSelector = () => {
       {/* Legend */}
       <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-slate-600">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-[hsl(43,80%,94%)] border-2 border-gold"></div>
+          <div className="w-4 h-4 rounded bg-[hsl(262,50%,96%)] border-2 border-gold"></div>
           <span>Full Guidance Available</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-amber-50 border-2 border-amber-300"></div>
+          <div className="w-4 h-4 rounded bg-violet-50 border-2 border-violet-300"></div>
           <span>Core Setup (Addendum Soon)</span>
         </div>
         <div className="flex items-center gap-2">
