@@ -1051,8 +1051,13 @@ async def get_state_data(state_code: str):
         result["laws_and_rules"] = [l.model_dump() if hasattr(l, 'model_dump') else l for l in data.get("laws_and_rules", [])]
         result["credentialing_requirements"] = [c.model_dump() if hasattr(c, 'model_dump') else c for c in data.get("credentialing_requirements", [])]
         result["zoning_info"] = data.get("zoning_info").model_dump() if hasattr(data.get("zoning_info"), 'model_dump') else data.get("zoning_info")
+        # Add location status for Business Address & Service Location section
+        result["location_status"] = LOCATION_STATUS.get(state_code, DEFAULT_LOCATION_STATUS)
         return result
-    return get_placeholder_state_data(state_code, state_info["name"])
+    # For unpopulated states, return placeholder with location status
+    placeholder = get_placeholder_state_data(state_code, state_info["name"])
+    placeholder["location_status"] = LOCATION_STATUS.get(state_code, DEFAULT_LOCATION_STATUS)
+    return placeholder
 
 @api_router.get("/federal-links")
 async def get_federal_links(): return {"links": FEDERAL_LINKS}
