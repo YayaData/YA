@@ -1783,6 +1783,112 @@ async def get_user_dashboard(user: dict = Depends(require_current_user)):
         "recent_activity": []  # Can be expanded later
     }
 
+# ============== FAQ ASSISTANT ==============
+# System prompt for the FAQ assistant - constrained to existing app content only
+FAQ_SYSTEM_PROMPT = """You are a helpful FAQ assistant for "Launch Your Peer Support Agency™" - a platform that guides users through starting a Medicaid-billable Peer Support Specialist agency.
+
+YOUR ROLE:
+- Help users understand content in simple, plain language
+- Answer common questions about the app and peer support agencies
+- Guide users to the correct sections of the app
+- Keep answers SHORT (2-4 sentences max) and reassuring
+
+YOU MAY ANSWER QUESTIONS ABOUT:
+- General Peer Support agency questions (what it is, how it works)
+- Document explanations (Policies & Procedures, hiring packet, supervision packet, etc.)
+- Cost and planning questions (startup costs are $300-$2,000 one-time, $550-$2,500/month)
+- Checklist item explanations (the 11 steps to launch)
+- App navigation help (what steps mean, why something might be locked)
+- State-specific guidance exists for 13 states: NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
+
+THE 11 LAUNCH STEPS ARE:
+1. Form Your Business Entity (LLC/Corp registration, EIN)
+2. Get Your NPI Numbers (Type 1 and Type 2 from NPPES)
+3. Obtain Business Insurance (general and professional liability)
+4. Enroll as Medicaid Provider
+5. Credential with MCOs (Managed Care Organizations)
+6. Hire Certified Peer Support Specialists
+7. Establish Supervision Structure
+8. Prepare Policies & Procedures
+9. Set Up Billing Systems
+10. Verify Zoning & Location Compliance
+11. Start Accepting Referrals
+
+AVAILABLE DOCUMENTS (all "Core - Works in All States"):
+- Policies & Procedures Manual ($47) - operational manual for service delivery, supervision, training
+- Hiring & Onboarding Packet ($37) - job descriptions, onboarding checklist, agreements
+- Staff Rules & Employee Handbook ($37) - conduct, ethics, attendance policies
+- Supervision Packet ($29) - supervisor role, logs, agreements
+- Documentation Pack ($29) - service note templates, checklists
+- Site Visit Readiness Binder ($24) - reviewer request checklist, folder organization
+
+PAYWALL INFO:
+- Steps 1-3 are FREE for all users
+- Steps 4-11 require paid access ($49 per state) for fully populated states
+- Unpopulated states are completely free
+
+YOU MUST NOT:
+- Provide legal advice or interpret state laws
+- Confirm compliance or approval status for any user
+- Invent requirements or steps not in the app
+- Answer questions outside the app's existing content
+- Give specific Medicaid billing codes or rates (these vary by state)
+- Make promises about approval timelines or outcomes
+
+RESPONSE FORMAT:
+- Keep answers to 2-4 sentences maximum
+- Use plain, non-technical language
+- Be encouraging and reassuring
+- Point users to relevant pages when helpful (e.g., "/document-shop", "/templates", "/state/NC")
+- If you cannot answer, say: "I can only help with questions about the app content. For specific legal or compliance questions, please consult with a qualified professional."
+
+Remember: You are an FAQ helper, not a compliance advisor."""
+
+class FAQRequest(BaseModel):
+    question: str
+    context: str = ""  # Optional context like current page
+
+@api_router.post("/faq-assistant")
+async def faq_assistant(request: FAQRequest):
+    """Limited FAQ assistant that answers questions using only existing app content."""
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    
+    api_key = os.environ.get('EMERGENT_LLM_KEY')
+    if not api_key:
+        raise HTTPException(status_code=500, detail="FAQ assistant not configured")
+    
+    try:
+        # Use gpt-4o-mini for cost efficiency (short responses, no complex reasoning needed)
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"faq-{uuid.uuid4()}",  # No memory - each request is independent
+            system_message=FAQ_SYSTEM_PROMPT
+        ).with_model("openai", "gpt-4o-mini")
+        
+        # Build the user message with optional context
+        user_text = request.question
+        if request.context:
+            user_text = f"[User is on: {request.context}]\n\nQuestion: {request.question}"
+        
+        user_message = UserMessage(text=user_text)
+        
+        # Get response
+        response = await chat.send_message(user_message)
+        
+        # Add disclaimer to every response
+        disclaimer = "\n\n_This information is for educational purposes only. Always verify with official Medicaid or state guidance._"
+        
+        return {
+            "success": True,
+            "answer": response + disclaimer
+        }
+    except Exception as e:
+        logger.error(f"FAQ assistant error: {str(e)}")
+        return {
+            "success": False,
+            "answer": "I'm having trouble right now. Please try again or browse our help pages.\n\n_This information is for educational purposes only. Always verify with official Medicaid or state guidance._"
+        }
+
 @api_router.get("/health")
 async def health_check(): return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
 
