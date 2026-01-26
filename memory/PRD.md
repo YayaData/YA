@@ -114,11 +114,31 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Webhook grants state access after successful payment
   - Payment success page shows state unlock confirmation
 
+### Phase 7: Site Visit Readiness (January 2025)
+
+**Site Visit Readiness Section - COMPLETED:**
+- ✅ **Calm, checklist-based preparation tool for Medicaid/MCO approval visits**
+- ✅ **Visibility:** Appears only when user has completed 6+ steps AND has premium access or is on unpopulated state
+- ✅ **Structure:** 4 categories with 12 total items:
+  1. **Documentation (3 items):** P&P Manual, Client Intake Forms, Staff Credentials
+  2. **Staffing & Supervision (3 items):** Clinical Supervisor Agreement, Job Descriptions, Training Documentation
+  3. **Compliance & Safety (3 items):** Insurance Certificates, HIPAA Compliance, Emergency Procedures
+  4. **Physical Space (3 items):** ADA Accessibility, Private Meeting Space, Required Postings
+- ✅ **Features:**
+  - Expandable/collapsible section
+  - Progress bar (0/12 to 12/12)
+  - Checkable items with persistence in localStorage
+  - Reassuring "You're doing great!" message
+  - Links to templates where applicable
+  - Helpful tip about keeping physical copies
+  - Completion celebration message at 100%
+
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
 - Magic link tokens: 15-minute expiry, single-use
 - **Email is MOCKED** - Logs to console, returns `dev_token` in API response for testing
 - Progress saved per-state in MongoDB
+- Site Visit checklist saved in localStorage: `siteVisitChecklist_{stateCode}`
 - Paywall constants: `FREE_STEPS=[1,2,3]`, `PREMIUM_STEPS=[4-11]`, `STATE_ACCESS_PRICE=$49`
 - Grandfathering cutoff: `PAYWALL_LAUNCH_DATE="2025-01-15T00:00:00+00:00"`
 
