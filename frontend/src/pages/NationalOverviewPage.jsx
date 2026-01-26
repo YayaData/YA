@@ -182,13 +182,18 @@ const NationalOverviewPage = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {data?.universal_requirements.map((req, idx) => (
+            {data?.universal_requirements?.map((req, idx) => (
               <Card key={idx} className="border-2 border-slate-200 card-hover" data-testid={`universal-req-${idx}`}>
                 <CardContent className="p-6 flex items-start gap-4">
                   <div className="flex-shrink-0 w-10 h-10 bg-blue-light rounded-lg flex items-center justify-center">
                     <CheckCircle2 className="w-5 h-5 text-blue-600" />
                   </div>
-                  <p className="text-slate-700">{req}</p>
+                  <div>
+                    <p className="text-slate-700 font-medium">{req.item || req}</p>
+                    {req.description && (
+                      <p className="text-slate-500 text-sm mt-1">{req.description}</p>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             ))}
