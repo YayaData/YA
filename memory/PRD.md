@@ -177,6 +177,31 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Connection to Site Visit Readiness checklist
   - Link to free templates page
 
+### Phase 10: Document Shop (January 2025)
+
+**Document Shop - COMPLETED:**
+- ✅ **À-la-carte document purchases for experienced users**
+- ✅ **"I only need documents" CTA on:**
+  - User Dashboard
+  - Templates page
+- ✅ **6 Document Products:**
+  1. **Policies & Procedures Manual** - $47 (Core)
+  2. **Hiring + Onboarding Packet** - $37 (Core)
+  3. **Staff Rules / Employee Handbook** - $37 (Core)
+  4. **Supervision Packet** - $29 (State addendum may be required)
+  5. **Documentation Pack** - $29 (State addendum may be required)
+  6. **Site Visit Readiness Binder** - $24 (Core)
+- ✅ **Scope Labels:**
+  - **Core (works in all states)** - Green badge - 4 products
+  - **State addendum may be required** - Amber badge - 2 products
+- ✅ **Bundle Savings:** Individual total $203 vs Bundle $97 (Save $106)
+- ✅ **Business Address & Service Location Status:**
+  - **Allowed** (green): NC, TX, FL, OH, PA, IL, GA, VA, WA, AZ
+  - **Allowed with conditions** (amber): CA, NY, NJ
+  - **Must verify** (blue): Default for unknown states
+  - Shows 1-2 calm sentences explaining location requirements
+  - Prevents users from buying unusable products
+
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
 - Magic link tokens: 15-minute expiry, single-use
