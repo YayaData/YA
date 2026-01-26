@@ -80,6 +80,22 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* SELECT YOUR STATE */}
+      <section className="bg-[hsl(40,15%,95%)] py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-xl sm:text-2xl font-serif font-semibold text-navy mb-3">
+              Select Your State
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              All 50 states are available. States with full guidance have complete step-by-step instructions.
+              All states have access to universal roadmap, documents, and planning tools.
+            </p>
+          </div>
+          <StateSelector />
+        </div>
+      </section>
+
       {/* TWO PATHS */}
       <section className="bg-[hsl(40,15%,95%)] py-16">
         <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-6">
