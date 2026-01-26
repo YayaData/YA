@@ -49,7 +49,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 glass-nav border-b border-slate-200" data-testid="navbar">
+      <nav className="sticky top-0 z-50 bg-[hsla(40,20%,98%,0.95)] backdrop-blur-md border-b border-[hsl(40,15%,88%)]" data-testid="navbar">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -58,7 +58,7 @@ const Navbar = () => {
               className="flex items-center gap-2 group"
               data-testid="navbar-logo"
             >
-              <div className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 bg-navy rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
                 <span className="text-white font-bold text-lg font-serif">PS</span>
               </div>
               <div className="hidden sm:block">
