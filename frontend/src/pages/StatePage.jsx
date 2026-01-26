@@ -337,6 +337,48 @@ const StatePage = () => {
               </Card>
             </div>
 
+            {/* Business Address & Service Location */}
+            {stateData.location_status && (
+              <Card className="border-2 border-slate-200" data-testid="location-status-section">
+                <CardHeader className="bg-slate-50 border-b py-4">
+                  <CardTitle className="flex items-center gap-2 text-navy font-serif text-lg">
+                    <MapPin className="w-5 h-5 text-gold" />Business Address & Service Location
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-4 space-y-4">
+                  {/* Status Badge */}
+                  <div className="flex items-center gap-3">
+                    <Badge className={
+                      stateData.location_status.status === "allowed" ? "bg-green-100 text-green-700 border border-green-200" :
+                      stateData.location_status.status === "allowed_conditions" ? "bg-amber-100 text-amber-700 border border-amber-200" :
+                      stateData.location_status.status === "not_recommended" ? "bg-red-100 text-red-700 border border-red-200" :
+                      "bg-blue-100 text-blue-700 border border-blue-200"
+                    }>
+                      {stateData.location_status.status === "allowed" && <CheckCircle2 className="w-3 h-3 mr-1" />}
+                      {stateData.location_status.status === "allowed_conditions" && <AlertTriangle className="w-3 h-3 mr-1" />}
+                      {stateData.location_status.status === "not_recommended" && <AlertTriangle className="w-3 h-3 mr-1" />}
+                      {stateData.location_status.status === "verify" && <Clock className="w-3 h-3 mr-1" />}
+                      {stateData.location_status.label}
+                    </Badge>
+                  </div>
+                  
+                  {/* State-specific note */}
+                  {stateData.location_status.note && (
+                    <p className="text-sm text-slate-600">{stateData.location_status.note}</p>
+                  )}
+                  
+                  {/* Explanation text */}
+                  <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      This refers to your business or administrative address and how your service location is listed during enrollment.
+                      Rules vary by state, payer, and enrollment type.
+                      <span className="font-medium text-slate-700"> Always confirm with official Medicaid or MCO guidance before submitting enrollment.</span>
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* MCOs */}
             {stateData.managed_care_orgs?.length > 0 && (
               <Card className="border-2 border-slate-200">
