@@ -164,9 +164,9 @@ const HomePage = () => {
                       className={`
                         p-4 rounded-xl border-2 text-left transition-all duration-200 hover:shadow-md
                         ${state.tier === "full_guidance" 
-                          ? "border-gold bg-[hsl(43,80%,94%)]" 
+                          ? "border-gold bg-[hsl(262,50%,96%)]" 
                           : state.tier === "core_setup"
-                          ? "border-amber-300 bg-amber-50"
+                          ? "border-violet-300 bg-violet-50"
                           : "border-[hsl(40,15%,88%)] bg-[hsl(40,15%,99%)]"
                         }
                       `}
