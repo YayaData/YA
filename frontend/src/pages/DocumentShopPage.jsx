@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "sonner";
+import FAQAssistant from "@/components/FAQAssistant";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
