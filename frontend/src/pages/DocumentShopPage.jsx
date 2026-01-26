@@ -32,6 +32,7 @@ const DocumentShopPage = () => {
 
   useEffect(() => {
     fetchProducts();
+    // Only fetch location status if user has a selected state
     if (user?.selected_state) {
       fetchLocationStatus(user.selected_state);
     }
@@ -106,7 +107,7 @@ const DocumentShopPage = () => {
                 Back
               </Button>
               <div className="h-6 w-px bg-slate-200" />
-              <h1 className="text-lg font-serif font-semibold text-navy">Document Shop</h1>
+              <h1 className="text-lg font-serif font-semibold text-navy">Documents & Templates</h1>
             </div>
             {isAuthenticated && user?.selected_state && (
               <div className="text-sm text-slate-500">
@@ -119,21 +120,53 @@ const DocumentShopPage = () => {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8">
-        {/* Intro Section */}
+        {/* Page Title & Intro */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Package className="w-4 h-4" />
-            For Experienced Users
-          </div>
-          <h2 className="text-3xl font-serif font-bold text-navy mb-3">
-            Already know what you need?
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-navy mb-3">
+            Documents & Templates Only
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Buy only the documents you need. Perfect for experienced providers who don't need step-by-step guidance.
+          <p className="text-lg text-slate-600 mb-6">
+            For providers who already understand the process and only need required documentation.
           </p>
         </div>
 
-        {/* Location Status Card */}
+        {/* Intro Text Card */}
+        <Card className="border border-slate-200 bg-white mb-8">
+          <CardContent className="p-6">
+            <div className="prose prose-slate max-w-none">
+              <p className="text-slate-600 mb-4">
+                If you are already familiar with starting or operating a Peer Support agency, you can 
+                purchase individual documents without step-by-step guidance.
+              </p>
+              <p className="text-slate-600 mb-4">
+                These documents are designed to help you prepare for approval, site visits, and compliance reviews.
+              </p>
+              <p className="text-slate-600 mb-0">
+                Guidance and setup support are optional and not required to purchase documents.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Important Notice */}
+        <Card className="border border-amber-200 bg-amber-50 mb-8" data-testid="important-notice">
+          <CardContent className="p-5">
+            <div className="flex gap-4">
+              <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <AlertCircle className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="font-medium text-amber-800 mb-2">Important Notice</h3>
+                <p className="text-sm text-amber-700">
+                  Some documents apply across all states, while others may require state-specific addendums. 
+                  Always confirm requirements with official Medicaid or MCO guidance for your state.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Location Status Card - Only show for logged in users with selected state */}
         {locationStatus && (
           <Card className={`mb-8 border ${getStatusColor(locationStatus.status).border} ${getStatusColor(locationStatus.status).bg}`} data-testid="location-status-card">
             <CardContent className="p-5">
