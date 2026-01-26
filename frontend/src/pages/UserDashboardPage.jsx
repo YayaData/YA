@@ -29,6 +29,7 @@ import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/context/AuthContext";
 import StepDetailModal from "@/components/StepDetailModal";
 import SiteVisitReadiness from "@/components/SiteVisitReadiness";
+import ComplianceReference from "@/components/ComplianceReference";
 import axios from "axios";
 import { toast } from "sonner";
 
