@@ -222,7 +222,7 @@ const StartPage = () => {
   // Step 1: State Selection
   if (step === 1) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[hsl(40,20%,98%)] py-12 px-4">
         <div className="max-w-2xl mx-auto">
           {/* Progress indicator */}
           <div className="flex items-center justify-center gap-2 mb-8">
@@ -311,7 +311,7 @@ const StartPage = () => {
   // Step 2: Goal Selection
   if (step === 2) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[hsl(40,20%,98%)] py-12 px-4">
         <div className="max-w-xl mx-auto">
           {/* Progress indicator */}
           <div className="flex items-center justify-center gap-2 mb-8">
@@ -375,8 +375,8 @@ const StartPage = () => {
   if (step === 3 && !isAuthenticated) {
     if (magicLinkSent) {
       return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
-          <Card className="w-full max-w-md border-0 shadow-xl">
+        <div className="min-h-screen bg-[hsl(40,20%,98%)] flex items-center justify-center p-4">
+          <Card className="w-full max-w-md border border-[hsl(40,15%,90%)] shadow-lg bg-[hsl(40,15%,99%)]">
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Mail className="w-8 h-8 text-green-600" />
@@ -395,7 +395,7 @@ const StartPage = () => {
     }
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[hsl(40,20%,98%)] py-12 px-4">
         <div className="max-w-md mx-auto">
           <button
             onClick={() => setStep(2)}
@@ -417,7 +417,7 @@ const StartPage = () => {
             </p>
           </div>
 
-          <Card className="border-0 shadow-xl">
+          <Card className="border border-[hsl(40,15%,90%)] shadow-lg bg-[hsl(40,15%,99%)]">
             <CardContent className="p-8">
               <form onSubmit={handleFinalSubmit} className="space-y-4">
                 <Input
