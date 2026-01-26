@@ -1074,7 +1074,17 @@ def get_user_state_access(user_doc: dict, state_code: str) -> dict:
 async def root(): return {"message": "Peer Support Agency Launch API", "version": "4.0"}
 
 @api_router.get("/states")
-async def get_all_states(): return {"states": [{"code": s["code"], "name": s["name"], "is_fully_populated": s["code"] in FULLY_POPULATED_STATES} for s in ALL_STATES]}
+async def get_all_states(): 
+    return {
+        "states": [
+            {
+                "code": s["code"], 
+                "name": s["name"], 
+                "is_fully_populated": s["code"] in FULL_GUIDANCE_STATES,
+                **get_state_tier(s["code"])
+            } for s in ALL_STATES
+        ]
+    }
 
 @api_router.get("/states/{state_code}")
 async def get_state_data(state_code: str):
