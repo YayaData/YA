@@ -601,6 +601,19 @@ const UserDashboardPage = () => {
           )}
         </div>
 
+        {/* Policies & Procedures Section - Shows at later steps (5+) */}
+        {completedSteps.length >= 5 && (hasPremiumAccess || !isStatePopulated) && (
+          <PoliciesProceduresSection 
+            stateCode={user?.selected_state}
+            token={token}
+            hasPremiumAccess={hasPremiumAccess}
+            onPurchaseToolkit={() => {
+              // Redirect to templates bundle checkout
+              window.location.href = `/templates?purchase=templates-bundle`;
+            }}
+          />
+        )}
+
         {/* Site Visit Readiness - Shows when user has completed 6+ steps */}
         {completedSteps.length >= 6 && (hasPremiumAccess || !isStatePopulated) && (
           <SiteVisitReadiness 
