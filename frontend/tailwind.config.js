@@ -5,6 +5,18 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     "./public/index.html"
   ],
+  safelist: [
+    'bg-gold',
+    'text-gold',
+    'border-gold',
+    'hover:bg-gold/90',
+    'hover:text-gold',
+    'bg-gold/10',
+    'bg-gold/20',
+    'focus:border-gold',
+    'focus:ring-gold/30',
+    'hover:bg-gold/10',
+  ],
   theme: {
         extend: {
                 fontFamily: {
