@@ -608,6 +608,14 @@ const UserDashboardPage = () => {
           />
         )}
 
+        {/* Compliance Reference - Shows for all authenticated users with a selected state */}
+        {user?.selected_state && (
+          <ComplianceReference 
+            stateCode={user?.selected_state}
+            stateName={stateData?.state_name || dashboardData?.selected_state?.state_name}
+          />
+        )}
+
         {/* Quick Actions */}
         <div className="grid sm:grid-cols-3 gap-4 mb-8">
           <Link to="/templates">
