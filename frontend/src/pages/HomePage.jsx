@@ -182,7 +182,7 @@ const HomePage = () => {
                 ) : (
                   <div className="col-span-full text-center py-8">
                     <MapPin className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-                    <p className="text-slate-500">No states found matching "{searchQuery}"</p>
+                    <p className="text-slate-500">No states found matching &ldquo;{searchQuery}&rdquo;</p>
                     <Button
                       variant="link"
                       onClick={() => setSearchQuery("")}
