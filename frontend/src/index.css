@@ -67,16 +67,16 @@
         font-family: 'DM Sans', sans-serif;
     }
     .text-gold {
-        color: hsl(36, 85%, 48%);
+        color: #7c3aed;
     }
     .bg-gold {
-        background-color: hsl(36, 85%, 48%);
+        background-color: #7c3aed;
     }
     .bg-gold\/90 {
-        background-color: hsla(36, 85%, 48%, 0.9);
+        background-color: rgba(124, 58, 237, 0.9);
     }
     .bg-gold-light {
-        background-color: hsl(43, 80%, 92%);
+        background-color: #ede9fe;
     }
     .bg-blue-light {
         background-color: hsl(199, 70%, 94%);
@@ -88,7 +88,7 @@
         background-color: hsl(222, 47%, 11%);
     }
     .border-gold {
-        border-color: hsl(36, 85%, 48%);
+        border-color: #7c3aed;
     }
     
     /* Section backgrounds - soft alternating tones */
