@@ -124,19 +124,91 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* SELECT YOUR STATE */}
-      <section className="bg-[hsl(40,15%,95%)] py-16">
+      {/* SELECT YOUR STATE - Interactive Map */}
+      <section className="bg-[hsl(40,15%,95%)] py-16" data-testid="state-selection-section">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-8">
             <h2 className="text-xl sm:text-2xl font-serif font-semibold text-navy mb-3">
               Select Your State
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              All 50 states are available. States with full guidance have complete step-by-step instructions.
-              All states have access to universal roadmap, documents, and planning tools.
+              Click on any state to view its peer support agency requirements.
+              States with full guidance have complete step-by-step instructions.
             </p>
           </div>
-          <StateSelector />
+
+          {/* Search + Map Container */}
+          <div className="bg-[hsl(40,15%,99%)] rounded-2xl p-6 md:p-8 border border-[hsl(40,15%,90%)] shadow-sm">
+            {/* Search Bar */}
+            <div className="relative max-w-md mx-auto mb-6">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <Input
+                type="text"
+                placeholder="Search for your state..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 h-12 text-base border-2 border-[hsl(40,15%,88%)] focus:border-gold rounded-xl bg-white"
+                data-testid="state-search-input"
+              />
+            </div>
+
+            {/* Conditional: Show Map or Search Results */}
+            {searchQuery ? (
+              /* Search Results */
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" data-testid="search-results">
+                {filteredStates.length > 0 ? (
+                  filteredStates.map((state) => (
+                    <button
+                      key={state.code}
+                      onClick={() => handleStateClick(state.code)}
+                      className={`
+                        p-4 rounded-xl border-2 text-left transition-all duration-200 hover:shadow-md
+                        ${state.tier === "full_guidance" 
+                          ? "border-gold bg-[hsl(43,80%,94%)]" 
+                          : state.tier === "core_setup"
+                          ? "border-amber-300 bg-amber-50"
+                          : "border-[hsl(40,15%,88%)] bg-[hsl(40,15%,99%)]"
+                        }
+                      `}
+                      data-testid={`search-result-${state.code}`}
+                    >
+                      <span className="block font-bold text-navy text-lg">{state.code}</span>
+                      <span className="block text-sm text-slate-600 mt-1">{state.name}</span>
+                      {state.tier === "full_guidance" && (
+                        <span className="inline-block mt-2 text-xs bg-gold text-white px-2 py-0.5 rounded">Full Guide</span>
+                      )}
+                    </button>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-8">
+                    <MapPin className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                    <p className="text-slate-500">No states found matching "{searchQuery}"</p>
+                    <Button
+                      variant="link"
+                      onClick={() => setSearchQuery("")}
+                      className="text-gold mt-2"
+                    >
+                      Clear search
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Interactive Map */
+              <>
+                {loading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="animate-pulse text-slate-400">Loading map...</div>
+                  </div>
+                ) : (
+                  <USMap 
+                    onStateClick={handleStateClick} 
+                    stateTiers={stateTiers}
+                  />
+                )}
+              </>
+            )}
+          </div>
         </div>
       </section>
 
