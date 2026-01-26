@@ -277,20 +277,21 @@ DOCUMENT_SHOP_PRODUCTS = {
 }
 
 # Business location status for peer support services by state
+# Statuses: allowed, allowed_conditions, verify, not_recommended
 LOCATION_STATUS = {
-    "NC": {"status": "allowed", "label": "Allowed", "note": "North Carolina allows peer support services from home offices, community locations, and traditional office settings. Verify local zoning for home-based operations."},
-    "TX": {"status": "allowed", "label": "Allowed", "note": "Texas permits peer support services in various settings including home offices. Check local zoning ordinances for home-based business requirements."},
-    "CA": {"status": "allowed_conditions", "label": "Allowed with conditions", "note": "California allows peer support services but requirements vary by county. Contact your county Mental Health Plan for specific location requirements."},
-    "FL": {"status": "allowed", "label": "Allowed", "note": "Florida permits peer support services from multiple locations. Ensure compliance with AHCA guidelines and local business licensing."},
-    "NY": {"status": "allowed_conditions", "label": "Allowed with conditions", "note": "New York allows peer support services but OMH has specific site requirements. Verify with your regional office before finalizing location."},
-    "OH": {"status": "allowed", "label": "Allowed", "note": "Ohio permits peer support services from various locations. Check with your local ADAMHS board for any additional requirements."},
-    "PA": {"status": "allowed", "label": "Allowed", "note": "Pennsylvania allows peer support services from approved locations. Verify with your managed care organization for site requirements."},
-    "IL": {"status": "allowed", "label": "Allowed", "note": "Illinois permits peer support services. Contact HFS for specific location guidance and licensing requirements."},
-    "GA": {"status": "allowed", "label": "Allowed", "note": "Georgia allows peer support services from various settings. Check with your CMO for any specific site requirements."},
+    "NC": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "North Carolina allows peer support services from home offices, community locations, and traditional office settings. Your administrative address is used for enrollment but services can be delivered in community settings."},
+    "TX": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Texas permits peer support services in various settings including home offices. Your business address serves as administrative headquarters while services are typically delivered in community locations."},
+    "CA": {"status": "allowed_conditions", "label": "Allowed with conditions", "note": "California allows peer support services but requirements vary by county. Contact your county Mental Health Plan for specific location requirements before submitting enrollment."},
+    "FL": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Florida permits peer support services from multiple locations. Your enrolled address is primarily administrative; services are delivered where clients are located."},
+    "NY": {"status": "allowed_conditions", "label": "Allowed with conditions", "note": "New York allows peer support services but OMH has specific site requirements. Verify with your regional office before finalizing your service location."},
+    "OH": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Ohio permits peer support services from various locations. Your administrative address is used for enrollment while services can be community-based."},
+    "PA": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Pennsylvania allows peer support services from approved locations. Verify with your managed care organization for specific site requirements during credentialing."},
+    "IL": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Illinois permits peer support services. Contact HFS for specific location guidance. Services are typically delivered in community settings."},
+    "GA": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Georgia allows peer support services from various settings. Your administrative address is listed on enrollment while services are community-based."},
     "NJ": {"status": "allowed_conditions", "label": "Allowed with conditions", "note": "New Jersey has specific requirements for service locations. Verify with the Division of Mental Health Services before establishing your site."},
-    "VA": {"status": "allowed", "label": "Allowed", "note": "Virginia permits peer support services from community and office settings. Check DBHDS requirements for your service area."},
-    "WA": {"status": "allowed", "label": "Allowed", "note": "Washington allows peer support services. Verify with HCA for specific Medicaid billing location requirements."},
-    "AZ": {"status": "allowed", "label": "Allowed", "note": "Arizona permits peer support services from various locations. Confirm with AHCCCS for billing-eligible service sites."}
+    "VA": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Virginia permits peer support services from community and office settings. Your enrollment address is administrative; services are delivered where needed."},
+    "WA": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Washington allows peer support services. Verify with HCA for specific Medicaid billing location requirements."},
+    "AZ": {"status": "allowed", "label": "Allowed (Administrative address only)", "note": "Arizona permits peer support services from various locations. Confirm with AHCCCS for billing-eligible service sites."}
 }
 
 # Default location status for states without specific data
