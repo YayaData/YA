@@ -1087,6 +1087,75 @@ async def get_products():
         "fully_populated_states": FULLY_POPULATED_STATES
     }
 
+# ============== DOCUMENT SHOP ==============
+@api_router.get("/document-shop")
+async def get_document_shop():
+    """Get all available Document Shop products."""
+    return {
+        "products": list(DOCUMENT_SHOP_PRODUCTS.values()),
+        "categories": {
+            "core": [p for p in DOCUMENT_SHOP_PRODUCTS.values() if p["scope"] == "core"],
+            "addendum": [p for p in DOCUMENT_SHOP_PRODUCTS.values() if p["scope"] == "addendum"]
+        }
+    }
+
+@api_router.post("/checkout/document")
+async def create_document_checkout(product_id: str, origin_url: str, http_request: Request):
+    """Create a checkout session for a Document Shop purchase."""
+    if product_id not in DOCUMENT_SHOP_PRODUCTS:
+        raise HTTPException(status_code=400, detail="Invalid document product")
+    
+    product = DOCUMENT_SHOP_PRODUCTS[product_id]
+    api_key = os.environ.get('STRIPE_API_KEY')
+    webhook_url = f"{str(http_request.base_url).rstrip('/')}/api/webhook/stripe"
+    stripe_checkout = StripeCheckout(api_key=api_key, webhook_url=webhook_url)
+    
+    session = await stripe_checkout.create_checkout_session(
+        CheckoutSessionRequest(
+            amount=product["price"],
+            currency="usd",
+            success_url=f"{origin_url.rstrip('/')}/payment-success?session_id={{CHECKOUT_SESSION_ID}}&type=document&product={product_id}",
+            cancel_url=f"{origin_url.rstrip('/')}/document-shop",
+            metadata={
+                "type": "document_purchase",
+                "product_id": product_id,
+                "product_name": product["name"]
+            }
+        )
+    )
+    
+    await db.payment_transactions.insert_one({
+        "id": str(uuid.uuid4()),
+        "session_id": session.session_id,
+        "product_id": product_id,
+        "product_name": product["name"],
+        "type": "document_purchase",
+        "amount": product["price"],
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"url": session.url, "session_id": session.session_id, "product": product}
+
+@api_router.get("/location-status/{state_code}")
+async def get_location_status(state_code: str):
+    """Get business location/service status for a state."""
+    state_code = state_code.upper()
+    
+    # Check if state exists
+    state_info = next((s for s in ALL_STATES if s["code"] == state_code), None)
+    if not state_info:
+        raise HTTPException(status_code=404, detail="State not found")
+    
+    # Get state-specific or default location status
+    location_info = LOCATION_STATUS.get(state_code, DEFAULT_LOCATION_STATUS)
+    
+    return {
+        "state_code": state_code,
+        "state_name": state_info["name"],
+        **location_info
+    }
+
 @api_router.post("/checkout/create-session")
 async def create_checkout_session(request: CheckoutRequest, http_request: Request):
     if request.product_id not in PRODUCTS: raise HTTPException(status_code=400, detail="Invalid product")
