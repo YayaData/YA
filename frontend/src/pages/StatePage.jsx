@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import axios from "axios";
+import EstimatedCosts from "@/components/EstimatedCosts";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
