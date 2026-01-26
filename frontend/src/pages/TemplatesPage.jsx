@@ -156,7 +156,7 @@ const TemplatesPage = () => {
             </div>
             <Link to="/document-shop">
               <Button className="bg-violet-600 hover:bg-violet-700 text-white" data-testid="templates-document-shop-btn">
-                Browse Document Shop
+                Documents & Templates Only
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
