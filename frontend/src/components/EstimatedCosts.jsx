@@ -64,20 +64,6 @@ const EstimatedCosts = () => {
           </div>
         </div>
       </CardHeader>
-          </CardTitle>
-          <button 
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-            aria-label={isExpanded ? "Collapse" : "Expand"}
-          >
-            {isExpanded ? (
-              <ChevronUp className="w-5 h-5 text-slate-500" />
-            ) : (
-              <ChevronDown className="w-5 h-5 text-slate-500" />
-            )}
-          </button>
-        </div>
-      </CardHeader>
 
       {isExpanded && (
         <CardContent className="p-4 space-y-6">
