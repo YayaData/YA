@@ -357,6 +357,29 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
 
 ---
 
+### Phase 17: Interactive U.S. Map (January 2025)
+
+**Interactive U.S. Map - COMPLETED:**
+- ✅ **SVG-based clickable U.S. map** on homepage replacing the dropdown state selector
+- ✅ **All 50 states rendered** as clickable SVG paths with accurate boundaries
+- ✅ **Tier-based color coding:**
+  - Darker lavender (#c4b5fd) - Full Guidance states (13 states)
+  - Medium lavender (#ddd6fe) - Core Setup states
+  - Light pink (#e9d5ff) - Planning Tools Only states
+  - Deep purple (#5b21b6) - Selected state
+- ✅ **Interactive features:**
+  - Hover effects with color change
+  - State name tooltip on hover
+  - Click to navigate to `/state/{code}`
+- ✅ **Search functionality:**
+  - Search bar above the map
+  - When searching, map is replaced with filtered state cards
+  - Clear search button to return to map view
+- ✅ **Legend:** Color-coded legend below map explaining tiers
+- ✅ **Responsive design:** Map scales appropriately on all screen sizes
+
+---
+
 ## Fully Populated States (13)
 NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 
