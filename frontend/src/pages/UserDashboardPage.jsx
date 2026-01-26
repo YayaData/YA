@@ -294,9 +294,16 @@ const UserDashboardPage = () => {
       {/* Header */}
       <header className="bg-[hsla(40,20%,98%,0.95)] backdrop-blur-md border-b border-[hsl(40,15%,88%)] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="font-serif text-lg text-navy font-bold">
-            Peer Support Launch
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link to="/" className="text-slate-600 hover:text-navy flex items-center gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Back</span>
+            </Link>
+            <div className="h-5 w-px bg-slate-200" />
+            <span className="font-serif text-lg text-navy font-bold">
+              Peer Support Launch
+            </span>
+          </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-slate-600 hidden sm:block">
               {user?.email}
