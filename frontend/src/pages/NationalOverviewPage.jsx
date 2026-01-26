@@ -131,16 +131,26 @@ const NationalOverviewPage = () => {
                   <div className="flex items-center gap-3 mb-4">
                     <DollarSign className="w-8 h-8 text-gold" />
                     <h3 className="font-serif font-bold text-navy text-xl">
-                      Medicaid Billing Basics
+                      Key Requirements
                     </h3>
                   </div>
                   <div className="space-y-3 text-slate-600">
-                    {data?.what_is_medicaid_billable.split('\n').filter(line => line.startsWith('•')).map((line, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span>{line.replace('• ', '')}</span>
-                      </div>
-                    ))}
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Agency enrolled as Medicaid provider</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Employ certified specialists</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Meet documentation requirements</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>Proper supervision structure</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -155,7 +165,7 @@ const NationalOverviewPage = () => {
                 </h2>
               </div>
               <p className="text-slate-600 leading-relaxed">
-                {data?.what_is_medicaid_billable.split('\n\n')[0]}
+                {data?.what_is_medicaid_billable}
               </p>
             </div>
           </div>
