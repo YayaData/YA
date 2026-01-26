@@ -421,6 +421,7 @@ NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 - [x] Onboarding wizard
 - [x] User dashboard with progress tracking
 - [x] **Paywall system ($49/state, free steps 1-3)**
+- [x] **Interactive U.S. Map for state selection**
 
 ### P1 (Important) - COMPLETED
 - [x] Add "Last updated date" to state data (shows "Last updated: January 2025")
