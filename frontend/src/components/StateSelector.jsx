@@ -43,13 +43,13 @@ const StateSelector = () => {
   const getTierStyles = (state) => {
     if (state.tier === "full_guidance") {
       return {
-        borderClass: "border-gold bg-[hsl(43,80%,94%)]",
+        borderClass: "border-gold bg-[hsl(262,50%,96%)]",
         badge: <Badge className="bg-gold text-white text-xs px-2 py-0.5"><Check className="w-3 h-3 mr-1" />Full Guide</Badge>
       };
     } else if (state.tier === "core_setup") {
       return {
-        borderClass: "border-amber-300 bg-amber-50",
-        badge: <Badge className="bg-amber-100 text-amber-700 border border-amber-200 text-xs px-2 py-0.5"><Clock className="w-3 h-3 mr-1" />Coming Soon</Badge>
+        borderClass: "border-violet-300 bg-violet-50",
+        badge: <Badge className="bg-violet-100 text-violet-700 border border-violet-200 text-xs px-2 py-0.5"><Clock className="w-3 h-3 mr-1" />Coming Soon</Badge>
       };
     } else {
       return {
