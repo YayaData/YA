@@ -164,6 +164,16 @@ const StartPage = () => {
     return (
       <div className="min-h-screen bg-[hsl(40,20%,98%)] flex items-center justify-center p-4">
         <div className="w-full max-w-md">
+          {/* Back button */}
+          <Button
+            variant="ghost"
+            className="mb-4 text-slate-600 hover:text-navy"
+            onClick={() => navigate("/")}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </Button>
+
           <div className="text-center mb-8">
             <h1 className="font-serif text-3xl text-navy mb-3">
               Let's get started
