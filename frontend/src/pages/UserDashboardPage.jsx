@@ -500,7 +500,10 @@ const UserDashboardPage = () => {
 
         {/* Roadmap Steps */}
         <div className="mb-8">
-          <h2 className="font-serif text-xl text-navy mb-4">Your Roadmap</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-serif text-xl text-navy">Your Roadmap</h2>
+            <FAQAssistant context={`User Dashboard for ${userData?.selected_state || 'state'}`} buttonStyle="text" />
+          </div>
           
           <div className="space-y-3">
             {visibleSteps?.map((step, index) => {
