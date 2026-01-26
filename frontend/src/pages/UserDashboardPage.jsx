@@ -630,6 +630,29 @@ const UserDashboardPage = () => {
           />
         )}
 
+        {/* Document Shop CTA - For experienced users */}
+        <Card className="border border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100 mb-8" data-testid="document-shop-cta">
+          <CardContent className="p-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-violet-100 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-violet-600" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-navy">I only need documents</h3>
+                  <p className="text-sm text-slate-500">Already familiar with the process? Buy only what you need.</p>
+                </div>
+              </div>
+              <Link to="/document-shop">
+                <Button variant="outline" className="border-violet-200 text-violet-700 hover:bg-violet-50" data-testid="document-shop-btn">
+                  Browse Document Shop
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Quick Actions */}
         <div className="grid sm:grid-cols-3 gap-4 mb-8">
           <Link to="/templates">
