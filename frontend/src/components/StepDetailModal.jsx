@@ -187,14 +187,22 @@ const STEP_DETAILS = {
     }
   },
   8: {
-    title: "Develop Policies & Procedures",
-    intro: "This step creates your agency's rulebook.\nYou don't need to write everything from scratch.\nStart with templates and customize them.",
+    title: "Prepare Policies & Procedures",
+    intro: "At some point before approval or a site visit, agencies are expected to have written Policies & Procedures.\n\nThese documents show reviewers that your agency understands the rules and has a plan to follow them.\n\nYou do not need to complete this step right away. Most agencies work on this closer to the end.",
     instructions: [
-      "Download our P&P template",
-      "Customize for your agency",
-      "Review and update regularly"
+      "Review what policies your state requires",
+      "Gather or create your P&P manual",
+      "Organize documents for site visit readiness"
     ],
-    whyItMatters: "Policies and procedures are required for Medicaid compliance and MCO audits.\nThey also protect you and your staff.",
+    keyAreas: [
+      "How Peer Support services are provided",
+      "Staff roles and supervision",
+      "Training and onboarding",
+      "Documentation and record keeping",
+      "Confidentiality and incident reporting",
+      "Site visit readiness"
+    ],
+    whyItMatters: "Policies & Procedures explain how your agency operates and are required for approval and site visits.",
     commonMistakes: [
       "Using generic templates without customization",
       "Missing required policies",
@@ -204,6 +212,12 @@ const STEP_DETAILS = {
     actionLabel: "Start Step 8",
     progressMessage: "Policies don't have to be perfect on day one.\nStart with the essentials.\nYou can refine them over time.",
     completionMessage: "Step 8 complete.\nYour policies and procedures are documented.",
+    reassurance: "There is no deadline for this step. You can come back to it when you feel ready.",
+    hasOptions: true,
+    options: [
+      { id: "upload", label: "Upload My Policies", icon: "upload" },
+      { id: "purchase", label: "Get Policies & Procedures Toolkit", icon: "purchase", price: 47 }
+    ],
     resource: {
       label: "Download P&P Template",
       url: "/templates",
