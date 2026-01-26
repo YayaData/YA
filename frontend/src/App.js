@@ -1,5 +1,5 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
@@ -31,6 +31,11 @@ function App() {
             <Route path="/auth/verify" element={<AuthVerifyPage />} />
             <Route path="/dashboard" element={<UserDashboardPage />} />
             <Route path="/document-shop" element={<DocumentShopPage />} />
+            
+            {/* Redirects for common alternate URLs */}
+            <Route path="/home" element={<Navigate to="/" replace />} />
+            <Route path="/landing" element={<Navigate to="/" replace />} />
+            <Route path="/launch" element={<Navigate to="/" replace />} />
             
             {/* Main pages with navbar/footer */}
             <Route path="/*" element={
