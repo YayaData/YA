@@ -52,6 +52,29 @@ const NationalOverviewPage = () => {
     );
   }
 
+  // Error state - show page with default content
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-[hsl(40,20%,98%)]" data-testid="national-overview-error">
+        <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+          <Globe className="w-16 h-16 text-slate-300 mx-auto mb-6" />
+          <h1 className="text-3xl font-serif font-bold text-navy mb-4">
+            National Overview
+          </h1>
+          <p className="text-slate-600 mb-8">
+            Unable to load content at this time. Please try again later.
+          </p>
+          <Link to="/">
+            <Button className="bg-gold hover:bg-gold/90 text-white">
+              <MapPin className="mr-2 w-4 h-4" />
+              Browse State Guides
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen" data-testid="national-overview-page">
       {/* Hero */}
