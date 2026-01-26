@@ -234,6 +234,16 @@ const StartPage = () => {
     return (
       <div className="min-h-screen bg-[hsl(40,20%,98%)] py-12 px-4">
         <div className="max-w-2xl mx-auto">
+          {/* Back button */}
+          <Button
+            variant="ghost"
+            className="mb-4 text-slate-600 hover:text-navy"
+            onClick={() => isAuthenticated ? navigate("/") : setStep(0)}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </Button>
+
           {/* Progress indicator */}
           <div className="flex items-center justify-center gap-2 mb-8">
             <div className="w-3 h-3 rounded-full bg-gold"></div>
