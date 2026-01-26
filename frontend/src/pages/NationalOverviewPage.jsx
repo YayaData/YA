@@ -94,11 +94,9 @@ const NationalOverviewPage = () => {
                 </h2>
               </div>
               <div className="prose prose-slate">
-                {data?.what_is_peer_support.split('\n\n').map((paragraph, idx) => (
-                  <p key={idx} className="text-slate-600 mb-4 leading-relaxed">
-                    {paragraph}
-                  </p>
-                ))}
+                <p className="text-slate-600 mb-4 leading-relaxed">
+                  {data?.what_is_peer_support}
+                </p>
               </div>
             </div>
             <div className="relative">
