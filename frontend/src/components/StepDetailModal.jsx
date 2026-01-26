@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { 
   X, 
   CheckCircle2, 
@@ -10,7 +10,10 @@ import {
   FileText,
   Download,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  Upload,
+  ShoppingCart,
+  Info
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
