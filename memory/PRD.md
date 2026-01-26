@@ -133,6 +133,26 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Helpful tip about keeping physical copies
   - Completion celebration message at 100%
 
+### Phase 8: Compliance Reference (January 2025)
+
+**Peer Support Rules & Compliance Section - COMPLETED:**
+- ✅ **Plain language summary of Medicaid peer support requirements**
+- ✅ **State-specific data for:** NC, TX, CA, FL, NY (other states show generic guidance)
+- ✅ **5 Requirement Categories:**
+  1. **Eligibility:** Who can be a peer support specialist
+  2. **Staffing:** Supervision & staffing requirements
+  3. **Documentation:** Documentation requirements
+  4. **Training:** Training & certification requirements
+  5. **Non-Billable:** Services that cannot be billed
+- ✅ **Features:**
+  - Educational disclaimer ("Rules change frequently - always verify")
+  - Primary Policy Reference with link to official document (e.g., NC Medicaid Clinical Coverage Policy 8G)
+  - Expandable/collapsible requirement sections
+  - Plain language bullet points (not raw policy text)
+  - Connection to Site Visit checklist items (e.g., "Related checklist item: Staff Credentials on File")
+  - Quick Compliance Tips section
+  - Default data for states without specific info
+
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
 - Magic link tokens: 15-minute expiry, single-use
