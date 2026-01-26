@@ -422,6 +422,9 @@ const StatePage = () => {
                 <p className="text-xs text-slate-400 mt-2">{stateData.reimbursement_notes}</p>
               </CardContent>
             </Card>
+
+            {/* Estimated Costs Section */}
+            <EstimatedCosts />
           </TabsContent>
 
           {/* TAB 2: Checklist */}
