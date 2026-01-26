@@ -126,9 +126,10 @@ const DocumentShopPage = () => {
           <h2 className="text-3xl sm:text-4xl font-serif font-bold text-navy mb-3">
             Documents & Templates Only
           </h2>
-          <p className="text-lg text-slate-600 mb-6">
+          <p className="text-lg text-slate-600 mb-4">
             For providers who already understand the process and only need required documentation.
           </p>
+          <FAQAssistant context="Document Shop page" buttonStyle="pill" />
         </div>
 
         {/* Intro Text Card */}
