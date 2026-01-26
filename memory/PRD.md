@@ -179,7 +179,6 @@ NC, TX, CA, FL, NY, OH, PA, IL, GA, NJ, VA, WA, AZ
 ### P1 (Important) - PENDING
 - [ ] Connect real SendGrid for magic link emails
 - [ ] Populate remaining 37 states
-- [ ] Site Visit Readiness Section (calm checklist for later steps)
 
 ### P2 (Nice to Have)
 - [ ] Compare states feature
