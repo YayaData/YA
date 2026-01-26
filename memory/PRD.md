@@ -215,6 +215,67 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
 - ✅ **Standard explanation text:** "This refers to your business or administrative address and how your service location is listed during enrollment. Rules vary by state, payer, and enrollment type. Always confirm with official Medicaid or MCO guidance before submitting enrollment."
 - ✅ **Informational only** - Does not block progress or purchases
 
+### Phase 12: Estimated Costs, Document Shop & Two Paths (January 2025)
+
+**Estimated Cost to Start & Operate Section - COMPLETED:**
+- ✅ **New collapsible section** on state pages in Snapshot tab
+- ✅ **Intro text:** "Starting a Peer Support agency does not require large upfront capital. Costs vary by state, staffing model, and payer requirements."
+- ✅ **One-time setup costs (10 items):**
+  - Business registration: $0–$300
+  - EIN (IRS): $0 (Free)
+  - NPI registration: $0 (Free)
+  - Policies & Procedures: $0–$300
+  - Hiring & onboarding documents: $0–$150
+  - Background checks: $25–$75 each
+  - Computer/laptop: $300–$1,000
+  - Printer/scanner: $100–$300
+  - Office supplies: $50–$150
+  - Insurance: $0–$500
+- ✅ **One-time total: $300–$2,000** with note about existing equipment
+- ✅ **Monthly operating costs (4 items):**
+  - QP supervision: $500–$2,000
+  - Billing service/software: $0–$300
+  - Phone, internet, admin tools: $50–$200
+  - EMR (optional): $0–$150
+- ✅ **Monthly total: $550–$2,500**
+- ✅ **Reassurance text** about one-time purchases and home addresses
+- ✅ **Disclaimer** that all costs are estimates
+- ✅ **Informational only** - Does not block progress or purchases
+
+**Documents & Templates Only Page - COMPLETED:**
+- ✅ **Page title:** "Documents & Templates Only"
+- ✅ **Subtitle:** "For providers who already understand the process and only need required documentation."
+- ✅ **Intro text** explaining individual purchases without step-by-step guidance
+- ✅ **Important Notice** about state-specific addendums
+- ✅ **6 Individual purchasable documents (all labeled "Core – Works in All States"):**
+  1. Policies & Procedures Manual (Peer Support) - $47
+  2. Hiring & Onboarding Packet - $37
+  3. Staff Rules & Employee Handbook - $37
+  4. Supervision Packet - $29
+  5. Documentation Pack - $29
+  6. Site Visit Readiness Binder - $24
+- ✅ **Bundle option:** All documents for $97 (Save $106)
+- ✅ **No onboarding or checklist completion required** to access page
+
+**Choose Your Path Section (Homepage) - COMPLETED:**
+- ✅ **New section on homepage** after state selector
+- ✅ **Title:** "Choose Your Path"
+- ✅ **Two paths presented side by side:**
+  - **Path 1 - Guided Setup** (Recommended for most users)
+    - Step-by-step guidance
+    - State-specific details
+    - Templates and readiness tools
+    - Optional paid access for deeper guidance
+    - "Start Guided Setup →" button → `/start`
+  - **Path 2 - Documents Only** (For experienced providers)
+    - Purchase individual documents
+    - No required guidance
+    - No checklist enforcement
+    - Intended for experienced providers
+    - "Browse Documents" button → `/document-shop`
+- ✅ **Calm, non-judgmental language** - neither path implied as better
+- ✅ **Reassurance text:** "Both paths provide professional, high-quality resources."
+
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
 - Magic link tokens: 15-minute expiry, single-use
