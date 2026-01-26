@@ -248,21 +248,7 @@ const NationalOverviewPage = () => {
                 </h2>
               </div>
               <div className="prose prose-slate">
-                {data?.multi_state_strategy.split('\n\n').map((section, idx) => {
-                  if (section.startsWith('**')) {
-                    const title = section.match(/\*\*(.*?)\*\*/)?.[1];
-                    const content = section.replace(/\*\*.*?\*\*:?\s*/, '');
-                    return (
-                      <div key={idx} className="mb-6">
-                        <h3 className="font-serif font-bold text-navy text-lg mb-2">{title}</h3>
-                        <p className="text-slate-600">{content}</p>
-                      </div>
-                    );
-                  }
-                  return (
-                    <p key={idx} className="text-slate-600 mb-4">{section}</p>
-                  );
-                })}
+                <p className="text-slate-600 mb-4">{data?.multi_state_strategy}</p>
               </div>
             </div>
             <div className="sticky top-24">
