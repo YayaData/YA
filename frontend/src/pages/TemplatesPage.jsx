@@ -141,6 +141,29 @@ const TemplatesPage = () => {
         </div>
       </section>
 
+      {/* Document Shop CTA - For experienced users */}
+      <section className="bg-gradient-to-r from-violet-50 to-purple-50 border-b border-violet-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center">
+                <FileText className="w-6 h-6 text-violet-600" />
+              </div>
+              <div>
+                <h3 className="font-medium text-navy text-lg">I only need documents</h3>
+                <p className="text-sm text-slate-600">Already familiar with the process? Buy only what you need.</p>
+              </div>
+            </div>
+            <Link to="/document-shop">
+              <Button className="bg-violet-600 hover:bg-violet-700 text-white" data-testid="templates-document-shop-btn">
+                Browse Document Shop
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Filters */}
       <section className="bg-white border-b border-slate-200 sticky top-16 z-40 glass-nav">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
