@@ -30,6 +30,7 @@ import { useAuth } from "@/context/AuthContext";
 import StepDetailModal from "@/components/StepDetailModal";
 import SiteVisitReadiness from "@/components/SiteVisitReadiness";
 import ComplianceReference from "@/components/ComplianceReference";
+import PoliciesProceduresSection from "@/components/PoliciesProceduresSection";
 import axios from "axios";
 import { toast } from "sonner";
 
