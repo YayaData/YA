@@ -431,8 +431,13 @@ const StatePage = () => {
           {/* TAB 2: Checklist */}
           <TabsContent value="checklist" className="space-y-4" data-testid="tab-checklist">
             <div className="bg-blue-light rounded-xl p-4 mb-4">
-              <h3 className="font-serif font-bold text-navy mb-2">Step-by-Step Launch Checklist</h3>
-              <p className="text-slate-600 text-sm">Click each step to mark complete as you progress.</p>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-serif font-bold text-navy mb-2">Step-by-Step Launch Checklist</h3>
+                  <p className="text-slate-600 text-sm">Click each step to mark complete as you progress.</p>
+                </div>
+                <FAQAssistant context={`Checklist tab for ${stateData?.state_name || stateCode}`} buttonStyle="text" />
+              </div>
             </div>
             {checklist.map((item, index) => (
               <Card key={item.step} className={`border-2 transition-all ${item.completed ? "border-green-500 bg-green-50/50" : "border-slate-200"}`}>
