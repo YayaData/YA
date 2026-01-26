@@ -1271,12 +1271,22 @@ async def create_state_checkout(request: StateCheckoutRequest, http_request: Req
     if not state_info:
         raise HTTPException(status_code=404, detail="State not found")
     
-    # Check if state is fully populated - can't purchase unpopulated states
-    if state_code not in FULLY_POPULATED_STATES:
-        raise HTTPException(
-            status_code=400, 
-            detail="This state's guide is not yet available for purchase. It's currently free to view."
-        )
+    # Get tier information
+    tier_info = get_state_tier(state_code)
+    
+    # Only allow purchases for Full Guidance states
+    if not tier_info["purchasable"]:
+        tier_label = tier_info["label"]
+        if tier_info["tier"] == "core_setup":
+            raise HTTPException(
+                status_code=400, 
+                detail=f"This state ({tier_label}) is not available for purchase yet. State addendum coming soon. Universal tools are free."
+            )
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"This state ({tier_label}) is not available for purchase. Universal roadmap and planning tools are free."
+            )
     
     # Check if user already has access
     user_doc = await db.users.find_one({"id": user["sub"]}, {"_id": 0})
