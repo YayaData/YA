@@ -97,9 +97,9 @@ const DocumentShopPage = () => {
   const savings = totalIndividual - bundlePrice;
 
   return (
-    <div className="min-h-screen bg-slate-50" data-testid="document-shop-page">
+    <div className="min-h-screen bg-[hsl(40,20%,98%)]" data-testid="document-shop-page">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
+      <header className="bg-[hsl(40,15%,99%)] border-b border-[hsl(40,15%,88%)] sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -133,7 +133,7 @@ const DocumentShopPage = () => {
         </div>
 
         {/* Intro Text Card */}
-        <Card className="border border-slate-200 bg-white mb-8">
+        <Card className="border border-[hsl(40,15%,90%)] bg-[hsl(40,15%,99%)] mb-8">
           <CardContent className="p-6">
             <div className="prose prose-slate max-w-none">
               <p className="text-slate-600 mb-4">
