@@ -6,34 +6,41 @@
 
 @layer base {
     :root {
-        --background: 210 40% 98%;
+        /* Soft off-white backgrounds instead of pure white */
+        --background: 40 20% 98%;
         --foreground: 222 47% 11%;
-        --card: 0 0% 100%;
+        --card: 40 15% 99%;
         --card-foreground: 222 47% 11%;
-        --popover: 0 0% 100%;
+        --popover: 40 15% 99%;
         --popover-foreground: 222 47% 11%;
         --primary: 222 47% 11%;
-        --primary-foreground: 210 40% 98%;
-        --secondary: 32 95% 44%;
+        --primary-foreground: 40 20% 98%;
+        --secondary: 36 85% 48%;
         --secondary-foreground: 0 0% 100%;
-        --muted: 210 40% 96%;
+        --muted: 40 15% 95%;
         --muted-foreground: 215 16% 47%;
-        --accent: 199 89% 94%;
+        --accent: 40 30% 96%;
         --accent-foreground: 222 47% 11%;
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 98%;
-        --border: 214 32% 91%;
-        --input: 214 32% 91%;
-        --ring: 222 47% 11%;
-        --radius: 0.5rem;
+        --border: 40 15% 88%;
+        --input: 40 15% 90%;
+        --ring: 36 85% 48%;
+        --radius: 0.75rem;
         
-        /* Custom colors */
-        --gold-light: 48 96% 89%;
-        --gold: 32 95% 44%;
-        --blue-light: 199 89% 94%;
+        /* Warm accent colors - soft gold/amber */
+        --gold-light: 43 80% 92%;
+        --gold: 36 85% 48%;
+        --gold-dark: 32 80% 40%;
+        --blue-light: 199 70% 94%;
         --navy: 222 47% 11%;
         --slate-muted: 215 20% 65%;
-        --success: 160 84% 39%;
+        --success: 160 70% 40%;
+        
+        /* Section backgrounds */
+        --section-primary: 40 20% 98%;
+        --section-secondary: 40 15% 95%;
+        --section-tertiary: 40 25% 97%;
     }
 }
 
@@ -44,6 +51,7 @@
     body {
         @apply bg-background text-foreground;
         font-family: 'DM Sans', sans-serif;
+        background-color: hsl(40, 20%, 98%);
     }
     h1, h2, h3 {
         font-family: 'Libre Baskerville', serif;
@@ -59,16 +67,19 @@
         font-family: 'DM Sans', sans-serif;
     }
     .text-gold {
-        color: hsl(32, 95%, 44%);
+        color: hsl(36, 85%, 48%);
     }
     .bg-gold {
-        background-color: hsl(32, 95%, 44%);
+        background-color: hsl(36, 85%, 48%);
+    }
+    .bg-gold\/90 {
+        background-color: hsla(36, 85%, 48%, 0.9);
     }
     .bg-gold-light {
-        background-color: hsl(48, 96%, 89%);
+        background-color: hsl(43, 80%, 92%);
     }
     .bg-blue-light {
-        background-color: hsl(199, 89%, 94%);
+        background-color: hsl(199, 70%, 94%);
     }
     .text-navy {
         color: hsl(222, 47%, 11%);
@@ -77,7 +88,33 @@
         background-color: hsl(222, 47%, 11%);
     }
     .border-gold {
-        border-color: hsl(32, 95%, 44%);
+        border-color: hsl(36, 85%, 48%);
+    }
+    
+    /* Section backgrounds - soft alternating tones */
+    .bg-section-primary {
+        background-color: hsl(40, 20%, 98%);
+    }
+    .bg-section-secondary {
+        background-color: hsl(40, 15%, 95%);
+    }
+    .bg-section-tertiary {
+        background-color: hsl(40, 25%, 97%);
+    }
+    
+    /* Polished card styles */
+    .polished-card {
+        background-color: hsl(40, 15%, 99%);
+        border: 1px solid hsl(40, 15%, 90%);
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+    }
+    
+    .polished-card-elevated {
+        background-color: hsl(40, 15%, 99%);
+        border: 1px solid hsl(40, 15%, 88%);
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
     }
 }
 
@@ -86,23 +123,23 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - warmer tones */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: hsl(210, 40%, 96%);
+    background: hsl(40, 15%, 95%);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: hsl(215, 16%, 47%);
+    background: hsl(40, 10%, 70%);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: hsl(222, 47%, 11%);
+    background: hsl(36, 85%, 48%);
 }
 
 /* Animation utilities */
@@ -141,25 +178,25 @@ html {
 .stagger-4 { animation-delay: 0.4s; }
 .stagger-5 { animation-delay: 0.5s; }
 
-/* Card hover effects */
+/* Card hover effects - refined */
 .card-hover {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px -8px rgba(15, 23, 42, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.08);
 }
 
-/* Focus states */
+/* Focus states - warm gold */
 .focus-ring:focus-visible {
-    outline: 2px solid hsl(32, 95%, 44%);
+    outline: 2px solid hsl(36, 85%, 48%);
     outline-offset: 2px;
 }
 
-/* Glass effect for sticky nav */
+/* Glass effect for sticky nav - warmer tint */
 .glass-nav {
-    background: rgba(255, 255, 255, 0.85);
+    background: hsla(40, 20%, 98%, 0.9);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
