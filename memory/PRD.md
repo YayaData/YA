@@ -153,12 +153,37 @@ Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Ste
   - Quick Compliance Tips section
   - Default data for states without specific info
 
+### Phase 9: Policies & Procedures Section (January 2025)
+
+**Policies & Procedures Section - COMPLETED:**
+- ✅ **Calm, non-blocking preparation tool for P&P manual**
+- ✅ **Visibility:** Appears when user has completed 5+ steps (later steps)
+- ✅ **Two Paths (user's choice):**
+  1. **"Use Your Own Policies"** — Track existing policies, mark categories complete
+  2. **"P&P Toolkit" ($97)** — Purchase professionally crafted editable templates
+- ✅ **6 Policy Categories:**
+  1. Operations & Administration
+  2. Clinical & Service Delivery
+  3. HIPAA & Privacy
+  4. Client Rights & Grievances
+  5. Emergency & Safety
+  6. Compliance & Quality
+- ✅ **Features:**
+  - Reassuring message: "No rush — work on this when you're ready"
+  - Progress bar (0/6 to 6/6 sections)
+  - "Upload file" option for each category
+  - "Mark as ready" checkbox for each category
+  - Does NOT block earlier steps
+  - Connection to Site Visit Readiness checklist
+  - Link to free templates page
+
 **Technical Implementation:**
 - Auth tokens: 72-hour expiry for users, 24-hour for admin
 - Magic link tokens: 15-minute expiry, single-use
 - **Email is MOCKED** - Logs to console, returns `dev_token` in API response for testing
 - Progress saved per-state in MongoDB
 - Site Visit checklist saved in localStorage: `siteVisitChecklist_{stateCode}`
+- P&P progress saved in localStorage: `pp_uploads_{stateCode}`
 - Paywall constants: `FREE_STEPS=[1,2,3]`, `PREMIUM_STEPS=[4-11]`, `STATE_ACCESS_PRICE=$49`
 - Grandfathering cutoff: `PAYWALL_LAUNCH_DATE="2025-01-15T00:00:00+00:00"`
 
