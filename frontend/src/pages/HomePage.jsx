@@ -1,9 +1,53 @@
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, Search, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import StateSelector from "@/components/StateSelector";
+import { Input } from "@/components/ui/input";
+import USMap from "@/components/USMap";
+import axios from "axios";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const HomePage = () => {
+  const [states, setStates] = useState([]);
+  const [stateTiers, setStateTiers] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchStates();
+  }, []);
+
+  const fetchStates = async () => {
+    try {
+      const response = await axios.get(`${API}/states`);
+      const statesData = response.data.states;
+      setStates(statesData);
+      
+      // Build tier map for the USMap component
+      const tiers = {};
+      statesData.forEach(state => {
+        tiers[state.code] = state.tier;
+      });
+      setStateTiers(tiers);
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredStates = states.filter(
+    (state) =>
+      state.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      state.code.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleStateClick = (stateCode) => {
+    navigate(`/state/${stateCode}`);
+  };
+
   return (
     <div className="min-h-screen bg-[hsl(40,20%,98%)] text-slate-900" data-testid="home-page">
       {/* HERO */}
