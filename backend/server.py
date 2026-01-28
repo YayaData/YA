@@ -49,10 +49,13 @@ supervision_logs_collection = db["supervision_logs"]
 incidents_collection = db["incident_reports"]
 emergency_logs_collection = db["emergency_logs"]
 oncall_collection = db["oncall_assignments"]
+audit_logs_collection = db["audit_logs"]
 
 # Create indexes
 users_collection.create_index("email", unique=True)
 policies_collection.create_index("category")
+audit_logs_collection.create_index([("timestamp", -1)])
+audit_logs_collection.create_index([("entityType", 1), ("entityId", 1)])
 # Note: Staff email is optional and doesn't need unique constraint
 
 # ============== FastAPI App ==============
