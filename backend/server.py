@@ -1971,6 +1971,114 @@ def export_emergency_pdf(
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
 
+# ============== Audit Trail Endpoints ==============
+
+@app.get("/api/audit-logs")
+def get_audit_logs(
+    entityType: Optional[str] = None,
+    entityId: Optional[str] = None,
+    action: Optional[str] = None,
+    userId: Optional[str] = None,
+    startDate: Optional[str] = None,
+    endDate: Optional[str] = None,
+    limit: int = 100,
+    skip: int = 0,
+    current_user: dict = Depends(require_role(["admin"]))
+):
+    """Get audit logs with optional filters"""
+    query = {}
+    
+    if entityType:
+        query["entityType"] = entityType
+    if entityId:
+        query["entityId"] = entityId
+    if action:
+        query["action"] = action
+    if userId:
+        query["userId"] = userId
+    
+    if startDate or endDate:
+        query["timestamp"] = {}
+        if startDate:
+            query["timestamp"]["$gte"] = datetime.fromisoformat(startDate.replace('Z', '+00:00'))
+        if endDate:
+            query["timestamp"]["$lte"] = datetime.fromisoformat(endDate.replace('Z', '+00:00'))
+    
+    total = audit_logs_collection.count_documents(query)
+    logs = list(audit_logs_collection.find(query).sort("timestamp", -1).skip(skip).limit(limit))
+    
+    return {
+        "logs": [serialize_doc(log) for log in logs],
+        "total": total,
+        "limit": limit,
+        "skip": skip
+    }
+
+@app.get("/api/audit-logs/entity/{entity_type}/{entity_id}")
+def get_entity_audit_history(
+    entity_type: str,
+    entity_id: str,
+    current_user: dict = Depends(require_role(["admin", "qp"]))
+):
+    """Get complete audit history for a specific entity"""
+    logs = list(audit_logs_collection.find({
+        "entityType": entity_type,
+        "entityId": entity_id
+    }).sort("timestamp", -1))
+    
+    return [serialize_doc(log) for log in logs]
+
+@app.get("/api/audit-logs/recent")
+def get_recent_activity(
+    limit: int = 20,
+    current_user: dict = Depends(require_role(["admin"]))
+):
+    """Get recent audit activity across all entities"""
+    logs = list(audit_logs_collection.find().sort("timestamp", -1).limit(limit))
+    return [serialize_doc(log) for log in logs]
+
+@app.get("/api/audit-logs/summary")
+def get_audit_summary(
+    days: int = 7,
+    current_user: dict = Depends(require_role(["admin"]))
+):
+    """Get summary of audit activity for the past N days"""
+    start_date = datetime.now(timezone.utc) - timedelta(days=days)
+    
+    # Get counts by action type
+    pipeline = [
+        {"$match": {"timestamp": {"$gte": start_date}}},
+        {"$group": {"_id": "$action", "count": {"$sum": 1}}}
+    ]
+    action_counts = {doc["_id"]: doc["count"] for doc in audit_logs_collection.aggregate(pipeline)}
+    
+    # Get counts by entity type
+    pipeline = [
+        {"$match": {"timestamp": {"$gte": start_date}}},
+        {"$group": {"_id": "$entityType", "count": {"$sum": 1}}}
+    ]
+    entity_counts = {doc["_id"]: doc["count"] for doc in audit_logs_collection.aggregate(pipeline)}
+    
+    # Get most active users
+    pipeline = [
+        {"$match": {"timestamp": {"$gte": start_date}}},
+        {"$group": {"_id": {"userId": "$userId", "userName": "$userName"}, "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 5}
+    ]
+    top_users = [{"userId": doc["_id"]["userId"], "userName": doc["_id"]["userName"], "count": doc["count"]} 
+                 for doc in audit_logs_collection.aggregate(pipeline)]
+    
+    total_events = audit_logs_collection.count_documents({"timestamp": {"$gte": start_date}})
+    
+    return {
+        "period": f"Last {days} days",
+        "totalEvents": total_events,
+        "byAction": action_counts,
+        "byEntityType": entity_counts,
+        "topUsers": top_users
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
