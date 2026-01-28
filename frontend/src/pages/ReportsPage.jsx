@@ -9,21 +9,23 @@ import {
   ClipboardList,
   Calendar,
   Phone,
-  FileDown
+  FileDown,
+  Package,
+  Shield
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Badge } from '../components/ui/badge';
+import { Alert, AlertDescription } from '../components/ui/alert';
 import { toast } from 'sonner';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const ReportsPage = () => {
-  const { token } = useAuth();
+  const { token, hasRole } = useAuth();
   const [loading, setLoading] = useState({});
   const [dateRange, setDateRange] = useState({
     startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().split('T')[0],
@@ -103,23 +105,23 @@ const ReportsPage = () => {
     {
       id: 'incidents',
       title: 'Incident Reports',
-      description: 'Export all incident reports with filters for date range and status',
+      description: 'Export all incident reports with date, type, location, and status',
       icon: AlertTriangle,
       color: 'bg-amber-100 text-amber-600',
       hasPdf: true
     },
     {
       id: 'supervision',
-      title: 'Supervision Logs',
-      description: 'Export QP supervision session records',
+      title: 'QP Supervision Logs',
+      description: 'Export supervision session records with staff, topics, and notes',
       icon: ClipboardList,
       color: 'bg-purple-100 text-purple-600',
       hasPdf: true
     },
     {
       id: 'staff-compliance',
-      title: 'Staff Compliance',
-      description: 'Export staff compliance status and training completion',
+      title: 'Training & Compliance',
+      description: 'Export staff training records and compliance status',
       icon: Users,
       color: 'bg-blue-100 text-blue-600',
       hasPdf: true,
@@ -127,12 +129,12 @@ const ReportsPage = () => {
     },
     {
       id: 'emergency',
-      title: 'Emergency Logs',
-      description: 'Export emergency response and coverage logs',
+      title: 'Emergency Coverage',
+      description: 'Export emergency response logs with outcomes',
       icon: Phone,
       color: 'bg-red-100 text-red-600',
       hasPdf: true,
-      dataEndpoint: false // No JSON/CSV endpoint, PDF only for now
+      dataEndpoint: false
     }
   ];
 
@@ -141,14 +143,60 @@ const ReportsPage = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Reports & Exports</h1>
-        <p className="text-slate-500">Generate and download compliance reports in PDF, CSV, or JSON format</p>
+        <p className="text-slate-500">Generate audit-ready compliance reports in PDF format</p>
       </div>
 
-      {/* Filters */}
+      {/* Audit Packet Banner */}
+      {hasRole(['admin']) && (
+        <Card className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white border-0">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-white/20 rounded-lg">
+                  <Package className="h-8 w-8" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold">Compliance Audit Packet</h2>
+                  <p className="text-blue-100 mt-1">
+                    Download a complete audit-ready PDF containing all compliance reports in one document
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <Badge className="bg-white/20 text-white border-0">Staff Compliance</Badge>
+                    <Badge className="bg-white/20 text-white border-0">Incidents</Badge>
+                    <Badge className="bg-white/20 text-white border-0">Supervision</Badge>
+                    <Badge className="bg-white/20 text-white border-0">Emergency</Badge>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                size="lg"
+                className="bg-white text-blue-700 hover:bg-blue-50"
+                onClick={() => downloadReport('audit-packet', true)}
+                disabled={loading['audit-packet-pdf']}
+                data-testid="download-audit-packet-btn"
+              >
+                {loading['audit-packet-pdf'] ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <FileDown className="h-5 w-5 mr-2" />
+                    Download Audit Packet
+                  </>
+                )}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Date Range Settings */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Report Settings</CardTitle>
-          <CardDescription>Configure date range and export format for data exports</CardDescription>
+          <CardTitle className="text-lg">Report Date Range</CardTitle>
+          <CardDescription>Select the period for your reports</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -188,7 +236,7 @@ const ReportsPage = () => {
         </CardContent>
       </Card>
 
-      {/* Report Cards */}
+      {/* Individual Report Cards */}
       <div className="grid gap-6 md:grid-cols-2">
         {reports.map((report) => (
           <Card key={report.id} className="hover:shadow-md transition-shadow" data-testid={`report-card-${report.id}`}>
@@ -197,38 +245,34 @@ const ReportsPage = () => {
                 <div className={`p-3 rounded-lg ${report.color}`}>
                   <report.icon className="h-6 w-6" />
                 </div>
-                {report.hasPdf && (
-                  <Badge variant="outline" className="text-blue-600 border-blue-200">
-                    <FileDown className="h-3 w-3 mr-1" />
-                    PDF Available
-                  </Badge>
-                )}
+                <Badge variant="outline" className="text-blue-600 border-blue-200">
+                  <FileDown className="h-3 w-3 mr-1" />
+                  PDF
+                </Badge>
               </div>
               <CardTitle className="mt-4">{report.title}</CardTitle>
               <CardDescription>{report.description}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {/* PDF Download */}
-              {report.hasPdf && (
-                <Button 
-                  className="w-full bg-blue-600 hover:bg-blue-700" 
-                  onClick={() => downloadReport(report.pdfEndpoint || report.id, true)}
-                  disabled={loading[`${report.pdfEndpoint || report.id}-pdf`]}
-                  data-testid={`download-${report.id}-pdf-btn`}
-                >
-                  {loading[`${report.pdfEndpoint || report.id}-pdf`] ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Generating PDF...
-                    </>
-                  ) : (
-                    <>
-                      <FileText className="h-4 w-4 mr-2" />
-                      Download PDF Report
-                    </>
-                  )}
-                </Button>
-              )}
+              <Button 
+                className="w-full bg-blue-600 hover:bg-blue-700" 
+                onClick={() => downloadReport(report.pdfEndpoint || report.id, true)}
+                disabled={loading[`${report.pdfEndpoint || report.id}-pdf`]}
+                data-testid={`download-${report.id}-pdf-btn`}
+              >
+                {loading[`${report.pdfEndpoint || report.id}-pdf`] ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Generating PDF...
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-4 w-4 mr-2" />
+                    Download PDF Report
+                  </>
+                )}
+              </Button>
               
               {/* Data Export (JSON/CSV) */}
               {report.dataEndpoint !== false && (
@@ -257,91 +301,13 @@ const ReportsPage = () => {
         ))}
       </div>
 
-      {/* PDF Report Features */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-600" />
-            PDF Report Features
-          </CardTitle>
-          <CardDescription>Professional, audit-ready PDF reports include:</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 bg-slate-50 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-1.5 bg-amber-100 rounded">
-                  <AlertTriangle className="h-4 w-4 text-amber-600" />
-                </div>
-                <span className="font-medium text-sm">NON-PHI Banner</span>
-              </div>
-              <p className="text-xs text-slate-500">Clear compliance indicator on every page</p>
-            </div>
-            <div className="p-4 bg-slate-50 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-1.5 bg-blue-100 rounded">
-                  <BarChart3 className="h-4 w-4 text-blue-600" />
-                </div>
-                <span className="font-medium text-sm">Summary Stats</span>
-              </div>
-              <p className="text-xs text-slate-500">Quick overview of key metrics</p>
-            </div>
-            <div className="p-4 bg-slate-50 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-1.5 bg-green-100 rounded">
-                  <FileText className="h-4 w-4 text-green-600" />
-                </div>
-                <span className="font-medium text-sm">Detailed Records</span>
-              </div>
-              <p className="text-xs text-slate-500">Full documentation of each entry</p>
-            </div>
-            <div className="p-4 bg-slate-50 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-1.5 bg-purple-100 rounded">
-                  <Calendar className="h-4 w-4 text-purple-600" />
-                </div>
-                <span className="font-medium text-sm">Date Filtering</span>
-              </div>
-              <p className="text-xs text-slate-500">Reports filtered by date range</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Quick Stats */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-600" />
-            Available Report Types
-          </CardTitle>
-          <CardDescription>Summary of available data for reporting</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 bg-amber-50 rounded-lg text-center border border-amber-100">
-              <AlertTriangle className="h-6 w-6 mx-auto text-amber-500 mb-2" />
-              <p className="text-sm font-medium text-slate-700">Incidents</p>
-              <p className="text-xs text-slate-500">PDF, CSV, JSON</p>
-            </div>
-            <div className="p-4 bg-purple-50 rounded-lg text-center border border-purple-100">
-              <ClipboardList className="h-6 w-6 mx-auto text-purple-500 mb-2" />
-              <p className="text-sm font-medium text-slate-700">Supervision</p>
-              <p className="text-xs text-slate-500">PDF, CSV, JSON</p>
-            </div>
-            <div className="p-4 bg-blue-50 rounded-lg text-center border border-blue-100">
-              <Users className="h-6 w-6 mx-auto text-blue-500 mb-2" />
-              <p className="text-sm font-medium text-slate-700">Compliance</p>
-              <p className="text-xs text-slate-500">PDF, CSV, JSON</p>
-            </div>
-            <div className="p-4 bg-red-50 rounded-lg text-center border border-red-100">
-              <Phone className="h-6 w-6 mx-auto text-red-500 mb-2" />
-              <p className="text-sm font-medium text-slate-700">Emergency</p>
-              <p className="text-xs text-slate-500">PDF</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* PDF Report Info */}
+      <Alert className="bg-blue-50 border-blue-200">
+        <Shield className="h-4 w-4 text-blue-600" />
+        <AlertDescription className="text-blue-800">
+          <strong>Audit-Ready PDF Reports Include:</strong> Agency name, report period, generation timestamp, page numbers, NON-PHI compliance disclaimer, summary statistics, and detailed records.
+        </AlertDescription>
+      </Alert>
     </div>
   );
 };
