@@ -1,57 +1,109 @@
-import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/context/AuthContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import HomePage from "@/pages/HomePage";
-import StatePage from "@/pages/StatePage";
-import NationalOverviewPage from "@/pages/NationalOverviewPage";
-import TemplatesPage from "@/pages/TemplatesPage";
-import FederalLinksPage from "@/pages/FederalLinksPage";
-import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
-import PaymentCancelPage from "@/pages/PaymentCancelPage";
-import AdminPage from "@/pages/AdminPage";
-import StartPage from "@/pages/StartPage";
-import AuthVerifyPage from "@/pages/AuthVerifyPage";
-import UserDashboardPage from "@/pages/UserDashboardPage";
-import DocumentShopPage from "@/pages/DocumentShopPage";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { Toaster } from './components/ui/sonner';
+
+// Pages
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import PoliciesPage from './pages/PoliciesPage';
+import StaffPage from './pages/StaffPage';
+import TrainingPage from './pages/TrainingPage';
+import SupervisionPage from './pages/SupervisionPage';
+import IncidentsPage from './pages/IncidentsPage';
+import EmergencyPage from './pages/EmergencyPage';
+import OnCallPage from './pages/OnCallPage';
+import ReportsPage from './pages/ReportsPage';
+import UsersPage from './pages/UsersPage';
+
+// Layout
+import Layout from './components/Layout';
+
+// Protected Route Component
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+};
+
+function AppRoutes() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  return (
+    <Routes>
+      <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
+      
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      
+      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/policies" element={<PoliciesPage />} />
+        <Route path="/staff" element={
+          <ProtectedRoute allowedRoles={['admin', 'qp']}>
+            <StaffPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/training" element={
+          <ProtectedRoute allowedRoles={['admin', 'qp']}>
+            <TrainingPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/supervision" element={
+          <ProtectedRoute allowedRoles={['admin', 'qp']}>
+            <SupervisionPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/incidents" element={<IncidentsPage />} />
+        <Route path="/emergency" element={<EmergencyPage />} />
+        <Route path="/oncall" element={<OnCallPage />} />
+        <Route path="/reports" element={
+          <ProtectedRoute allowedRoles={['admin', 'qp']}>
+            <ReportsPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/users" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <UsersPage />
+          </ProtectedRoute>
+        } />
+      </Route>
+      
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
+  );
+}
 
 function App() {
   return (
     <AuthProvider>
-      <div className="App min-h-screen flex flex-col">
-        <BrowserRouter>
-          <Routes>
-            {/* Pages without navbar/footer */}
-            <Route path="/payment-success" element={<PaymentSuccessPage />} />
-            <Route path="/payment-cancel" element={<PaymentCancelPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/start" element={<StartPage />} />
-            <Route path="/auth/verify" element={<AuthVerifyPage />} />
-            <Route path="/dashboard" element={<UserDashboardPage />} />
-            <Route path="/document-shop" element={<DocumentShopPage />} />
-            
-            {/* Main pages with navbar/footer */}
-            <Route path="/*" element={
-              <>
-                <Navbar />
-                <main className="flex-1">
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/state/:stateCode" element={<StatePage />} />
-                    <Route path="/national-overview" element={<NationalOverviewPage />} />
-                    <Route path="/templates" element={<TemplatesPage />} />
-                    <Route path="/federal-links" element={<FederalLinksPage />} />
-                  </Routes>
-                </main>
-                <Footer />
-              </>
-            } />
-          </Routes>
-          <Toaster position="top-right" />
-        </BrowserRouter>
-      </div>
+      <Router>
+        <AppRoutes />
+        <Toaster position="top-right" />
+      </Router>
     </AuthProvider>
   );
 }
