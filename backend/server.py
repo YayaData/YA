@@ -43,7 +43,7 @@ oncall_collection = db["oncall_assignments"]
 # Create indexes
 users_collection.create_index("email", unique=True)
 policies_collection.create_index("category")
-staff_collection.create_index("email", unique=True, sparse=True)
+# Note: Staff email is optional and doesn't need unique constraint
 
 # ============== FastAPI App ==============
 app = FastAPI(
