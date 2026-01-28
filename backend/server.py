@@ -418,6 +418,15 @@ def get_me(current_user: dict = Depends(get_current_user)):
 
 # ============== Policy Endpoints ==============
 
+UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads", "policies")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+ALLOWED_EXTENSIONS = {'.pdf', '.doc', '.docx', '.txt', '.rtf'}
+MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+
+def get_file_extension(filename: str) -> str:
+    return os.path.splitext(filename)[1].lower()
+
 @app.get("/api/policies")
 def get_policies(
     category: Optional[str] = None,
@@ -442,12 +451,28 @@ def create_policy(
     )
     version = (existing["version"] + 1) if existing else 1
     
-    # Handle file content
+    # Handle file content (base64 encoded)
     file_url = None
+    file_path = None
     if policy.fileContent and policy.fileName:
-        # In production, upload to cloud storage
-        # For now, store base64 reference
-        file_url = f"/uploads/policies/{uuid.uuid4()}_{policy.fileName}"
+        ext = get_file_extension(policy.fileName)
+        if ext not in ALLOWED_EXTENSIONS:
+            raise HTTPException(status_code=400, detail=f"File type {ext} not allowed")
+        
+        # Generate unique filename
+        unique_filename = f"{uuid.uuid4()}{ext}"
+        file_path = os.path.join(UPLOAD_DIR, unique_filename)
+        
+        # Decode and save file
+        try:
+            file_data = base64.b64decode(policy.fileContent)
+            if len(file_data) > MAX_FILE_SIZE:
+                raise HTTPException(status_code=400, detail="File size exceeds 10MB limit")
+            with open(file_path, "wb") as f:
+                f.write(file_data)
+            file_url = f"/api/policies/files/{unique_filename}"
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Failed to save file: {str(e)}")
     
     policy_doc = {
         "policyName": policy.policyName,
@@ -455,7 +480,8 @@ def create_policy(
         "version": version,
         "effectiveDate": policy.effectiveDate,
         "fileUrl": file_url,
-        "fileContent": policy.fileContent,
+        "fileName": policy.fileName,
+        "filePath": file_path,
         "uploadedBy": current_user["id"],
         "uploadedByName": current_user["fullName"],
         "uploadedAt": datetime.now(timezone.utc)
@@ -473,6 +499,110 @@ def create_policy(
         "uploadedAt": policy_doc["uploadedAt"].isoformat()
     }
 
+@app.post("/api/policies/upload")
+async def upload_policy_file(
+    policyName: str = Form(...),
+    category: str = Form(...),
+    effectiveDate: str = Form(...),
+    file: UploadFile = File(...),
+    current_user: dict = Depends(require_role(["admin"]))
+):
+    """Upload a policy document file directly"""
+    # Validate file extension
+    ext = get_file_extension(file.filename)
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(status_code=400, detail=f"File type {ext} not allowed. Allowed: {', '.join(ALLOWED_EXTENSIONS)}")
+    
+    # Read file content
+    content = await file.read()
+    if len(content) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=400, detail="File size exceeds 10MB limit")
+    
+    # Get latest version for this policy name
+    existing = policies_collection.find_one(
+        {"policyName": policyName},
+        sort=[("version", -1)]
+    )
+    version = (existing["version"] + 1) if existing else 1
+    
+    # Generate unique filename and save
+    unique_filename = f"{uuid.uuid4()}{ext}"
+    file_path = os.path.join(UPLOAD_DIR, unique_filename)
+    
+    with open(file_path, "wb") as f:
+        f.write(content)
+    
+    file_url = f"/api/policies/files/{unique_filename}"
+    
+    policy_doc = {
+        "policyName": policyName,
+        "category": category,
+        "version": version,
+        "effectiveDate": effectiveDate,
+        "fileUrl": file_url,
+        "fileName": file.filename,
+        "filePath": file_path,
+        "fileSize": len(content),
+        "mimeType": file.content_type,
+        "uploadedBy": current_user["id"],
+        "uploadedByName": current_user["fullName"],
+        "uploadedAt": datetime.now(timezone.utc)
+    }
+    result = policies_collection.insert_one(policy_doc)
+    
+    return {
+        "id": str(result.inserted_id),
+        "policyName": policyName,
+        "category": category,
+        "version": version,
+        "effectiveDate": effectiveDate,
+        "fileUrl": file_url,
+        "fileName": file.filename,
+        "fileSize": len(content),
+        "uploadedBy": current_user["fullName"],
+        "uploadedAt": policy_doc["uploadedAt"].isoformat()
+    }
+
+@app.get("/api/policies/files/{filename}")
+def download_policy_file(
+    filename: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Download/view a policy document file"""
+    file_path = os.path.join(UPLOAD_DIR, filename)
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    # Get policy info for mime type
+    policy = policies_collection.find_one({"fileUrl": f"/api/policies/files/{filename}"})
+    
+    # Determine content type
+    ext = get_file_extension(filename)
+    content_types = {
+        '.pdf': 'application/pdf',
+        '.doc': 'application/msword',
+        '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        '.txt': 'text/plain',
+        '.rtf': 'application/rtf'
+    }
+    content_type = policy.get('mimeType') if policy else content_types.get(ext, 'application/octet-stream')
+    
+    # Read file and return
+    with open(file_path, "rb") as f:
+        content = f.read()
+    
+    original_filename = policy.get('fileName', filename) if policy else filename
+    
+    return StreamingResponse(
+        BytesIO(content),
+        media_type=content_type,
+        headers={
+            "Content-Disposition": f'inline; filename="{original_filename}"',
+            "Content-Length": str(len(content))
+        }
+    )
+
 @app.get("/api/policies/{policy_id}")
 def get_policy(policy_id: str, current_user: dict = Depends(get_current_user)):
     policy = policies_collection.find_one({"_id": ObjectId(policy_id)})
@@ -480,11 +610,40 @@ def get_policy(policy_id: str, current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=404, detail="Policy not found")
     return serialize_doc(policy)
 
+@app.get("/api/policies/{policy_id}/versions")
+def get_policy_versions(
+    policy_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all versions of a policy by name"""
+    policy = policies_collection.find_one({"_id": ObjectId(policy_id)})
+    if not policy:
+        raise HTTPException(status_code=404, detail="Policy not found")
+    
+    # Find all versions with same name
+    versions = list(policies_collection.find(
+        {"policyName": policy["policyName"]}
+    ).sort("version", -1))
+    
+    return [serialize_doc(v) for v in versions]
+
 @app.delete("/api/policies/{policy_id}")
 def delete_policy(
     policy_id: str,
     current_user: dict = Depends(require_role(["admin"]))
 ):
+    # Get policy to find file path
+    policy = policies_collection.find_one({"_id": ObjectId(policy_id)})
+    if not policy:
+        raise HTTPException(status_code=404, detail="Policy not found")
+    
+    # Delete file if exists
+    if policy.get("filePath") and os.path.exists(policy["filePath"]):
+        try:
+            os.remove(policy["filePath"])
+        except:
+            pass  # Ignore file deletion errors
+    
     result = policies_collection.delete_one({"_id": ObjectId(policy_id)})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Policy not found")
