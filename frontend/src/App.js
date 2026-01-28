@@ -15,6 +15,7 @@ import EmergencyPage from './pages/EmergencyPage';
 import OnCallPage from './pages/OnCallPage';
 import ReportsPage from './pages/ReportsPage';
 import UsersPage from './pages/UsersPage';
+import AuditPage from './pages/AuditPage';
 
 // Layout
 import Layout from './components/Layout';
