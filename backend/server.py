@@ -1215,6 +1215,568 @@ def update_user_role(
     
     return {"message": "User role updated successfully"}
 
+# ============== PDF Generation Helpers ==============
+
+def create_pdf_styles():
+    """Create custom styles for PDF reports"""
+    styles = getSampleStyleSheet()
+    
+    # Header style
+    styles.add(ParagraphStyle(
+        name='ReportTitle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        spaceAfter=20,
+        alignment=TA_CENTER,
+        textColor=colors.HexColor('#1e3a5f')
+    ))
+    
+    # Subheader style
+    styles.add(ParagraphStyle(
+        name='ReportSubtitle',
+        parent=styles['Normal'],
+        fontSize=12,
+        spaceAfter=20,
+        alignment=TA_CENTER,
+        textColor=colors.HexColor('#64748b')
+    ))
+    
+    # Section header
+    styles.add(ParagraphStyle(
+        name='SectionHeader',
+        parent=styles['Heading2'],
+        fontSize=14,
+        spaceBefore=15,
+        spaceAfter=10,
+        textColor=colors.HexColor('#1e3a5f')
+    ))
+    
+    # Warning style
+    styles.add(ParagraphStyle(
+        name='Warning',
+        parent=styles['Normal'],
+        fontSize=10,
+        spaceBefore=10,
+        spaceAfter=10,
+        backColor=colors.HexColor('#fef3c7'),
+        borderColor=colors.HexColor('#f59e0b'),
+        borderWidth=1,
+        borderPadding=8,
+        textColor=colors.HexColor('#92400e')
+    ))
+    
+    return styles
+
+def add_pdf_header(story, styles, title, subtitle=None):
+    """Add standard header to PDF"""
+    # NON-PHI Warning Banner
+    warning_text = "NON-PHI MODE — This report does not contain Protected Health Information"
+    story.append(Paragraph(warning_text, styles['Warning']))
+    story.append(Spacer(1, 10))
+    
+    # Title
+    story.append(Paragraph(title, styles['ReportTitle']))
+    
+    # Subtitle with date
+    if subtitle:
+        story.append(Paragraph(subtitle, styles['ReportSubtitle']))
+    
+    generated_text = f"Generated: {datetime.now(timezone.utc).strftime('%B %d, %Y at %I:%M %p UTC')}"
+    story.append(Paragraph(generated_text, styles['ReportSubtitle']))
+    story.append(Spacer(1, 20))
+
+def create_table_style():
+    """Create standard table style"""
+    return TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e3a5f')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('TOPPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 1), (-1, -1), 9),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#e2e8f0')),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f8fafc')]),
+        ('TOPPADDING', (0, 1), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
+        ('LEFTPADDING', (0, 0), (-1, -1), 8),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+    ])
+
+# ============== PDF Export Endpoints ==============
+
+@app.get("/api/reports/pdf/incidents")
+def export_incidents_pdf(
+    startDate: Optional[str] = None,
+    endDate: Optional[str] = None,
+    status: Optional[str] = None,
+    current_user: dict = Depends(require_role(["admin", "qp"]))
+):
+    """Generate PDF report of incident reports"""
+    # Build query
+    query = {}
+    if status:
+        query["status"] = status
+    if startDate:
+        query["date"] = {"$gte": startDate}
+    if endDate:
+        if "date" in query:
+            query["date"]["$lte"] = endDate
+        else:
+            query["date"] = {"$lte": endDate}
+    
+    incidents = list(incidents_collection.find(query).sort("date", -1))
+    
+    # Create PDF
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
+    styles = create_pdf_styles()
+    story = []
+    
+    # Header
+    date_range = ""
+    if startDate and endDate:
+        date_range = f"{startDate} to {endDate}"
+    elif startDate:
+        date_range = f"From {startDate}"
+    elif endDate:
+        date_range = f"Through {endDate}"
+    
+    add_pdf_header(story, styles, "Incident Reports", date_range if date_range else "All Records")
+    
+    # Summary stats
+    total = len(incidents)
+    pending = sum(1 for i in incidents if i.get('status') == 'pending')
+    reviewed = sum(1 for i in incidents if i.get('status') == 'reviewed')
+    closed = sum(1 for i in incidents if i.get('status') == 'closed')
+    
+    summary_data = [
+        ['Total Incidents', 'Pending', 'Reviewed', 'Closed'],
+        [str(total), str(pending), str(reviewed), str(closed)]
+    ]
+    summary_table = Table(summary_data, colWidths=[1.5*inch, 1.5*inch, 1.5*inch, 1.5*inch])
+    summary_table.setStyle(create_table_style())
+    story.append(summary_table)
+    story.append(Spacer(1, 20))
+    
+    if incidents:
+        # Incidents table
+        story.append(Paragraph("Incident Details", styles['SectionHeader']))
+        
+        table_data = [['Date', 'Time', 'Type', 'Location', 'Client Ref', 'Status', 'Follow-up']]
+        for incident in incidents:
+            table_data.append([
+                incident.get('date', 'N/A'),
+                incident.get('time', 'N/A'),
+                incident.get('incidentType', 'N/A'),
+                incident.get('location', 'N/A')[:20],
+                incident.get('clientRef', 'N/A'),
+                incident.get('status', 'N/A').capitalize(),
+                'Yes' if incident.get('followUpRequired') else 'No'
+            ])
+        
+        table = Table(table_data, colWidths=[0.8*inch, 0.6*inch, 0.9*inch, 1.2*inch, 0.8*inch, 0.8*inch, 0.7*inch])
+        table.setStyle(create_table_style())
+        story.append(table)
+        
+        # Detailed incident descriptions
+        story.append(Spacer(1, 20))
+        story.append(Paragraph("Incident Descriptions", styles['SectionHeader']))
+        
+        for i, incident in enumerate(incidents[:20], 1):  # Limit to 20 for readability
+            story.append(Paragraph(
+                f"<b>#{i} - {incident.get('date', 'N/A')} ({incident.get('incidentType', 'N/A')})</b>",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Location:</i> {incident.get('location', 'N/A')} | <i>Client:</i> {incident.get('clientRef', 'N/A')}",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Description:</i> {incident.get('description', 'N/A')[:300]}",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Actions Taken:</i> {incident.get('actionsTaken', 'N/A')[:200]}",
+                styles['Normal']
+            ))
+            story.append(Spacer(1, 10))
+    else:
+        story.append(Paragraph("No incidents found for the selected criteria.", styles['Normal']))
+    
+    # Footer
+    story.append(Spacer(1, 30))
+    footer_text = "AnchorPoint Compliance Toolkit | NON-PHI Tier 1 Report"
+    story.append(Paragraph(footer_text, styles['ReportSubtitle']))
+    
+    doc.build(story)
+    buffer.seek(0)
+    
+    filename = f"incidents_report_{datetime.now().strftime('%Y%m%d')}.pdf"
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+@app.get("/api/reports/pdf/supervision")
+def export_supervision_pdf(
+    startDate: Optional[str] = None,
+    endDate: Optional[str] = None,
+    qpUserId: Optional[str] = None,
+    current_user: dict = Depends(require_role(["admin", "qp"]))
+):
+    """Generate PDF report of QP supervision logs"""
+    # Build query
+    query = {}
+    if current_user["role"] == "qp":
+        query["qpUserId"] = current_user["id"]
+    elif qpUserId:
+        query["qpUserId"] = qpUserId
+    
+    if startDate:
+        query["date"] = {"$gte": startDate}
+    if endDate:
+        if "date" in query:
+            query["date"]["$lte"] = endDate
+        else:
+            query["date"] = {"$lte": endDate}
+    
+    logs = list(supervision_logs_collection.find(query).sort("date", -1))
+    
+    # Create PDF
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
+    styles = create_pdf_styles()
+    story = []
+    
+    # Header
+    date_range = ""
+    if startDate and endDate:
+        date_range = f"{startDate} to {endDate}"
+    elif startDate:
+        date_range = f"From {startDate}"
+    elif endDate:
+        date_range = f"Through {endDate}"
+    
+    add_pdf_header(story, styles, "QP Supervision Logs", date_range if date_range else "All Records")
+    
+    # Summary
+    total = len(logs)
+    individual = sum(1 for l in logs if l.get('type') == 'individual')
+    group = sum(1 for l in logs if l.get('type') == 'group')
+    observation = sum(1 for l in logs if l.get('type') == 'observation')
+    
+    summary_data = [
+        ['Total Sessions', 'Individual', 'Group', 'Observation'],
+        [str(total), str(individual), str(group), str(observation)]
+    ]
+    summary_table = Table(summary_data, colWidths=[1.5*inch, 1.5*inch, 1.5*inch, 1.5*inch])
+    summary_table.setStyle(create_table_style())
+    story.append(summary_table)
+    story.append(Spacer(1, 20))
+    
+    if logs:
+        # Logs table
+        story.append(Paragraph("Supervision Session Summary", styles['SectionHeader']))
+        
+        table_data = [['Date', 'Staff Member', 'QP Supervisor', 'Type', 'Topics']]
+        for log in logs:
+            topics = ", ".join(log.get('topics', [])[:3])
+            if len(log.get('topics', [])) > 3:
+                topics += "..."
+            table_data.append([
+                log.get('date', 'N/A'),
+                log.get('staffName', 'N/A')[:15],
+                log.get('qpName', 'N/A')[:15],
+                log.get('type', 'N/A').capitalize(),
+                topics[:30]
+            ])
+        
+        table = Table(table_data, colWidths=[0.8*inch, 1.2*inch, 1.2*inch, 0.9*inch, 2*inch])
+        table.setStyle(create_table_style())
+        story.append(table)
+        
+        # Detailed session notes
+        story.append(Spacer(1, 20))
+        story.append(Paragraph("Session Details", styles['SectionHeader']))
+        
+        for i, log in enumerate(logs[:15], 1):  # Limit to 15 for readability
+            story.append(Paragraph(
+                f"<b>Session #{i} - {log.get('date', 'N/A')}</b>",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Staff:</i> {log.get('staffName', 'N/A')} | <i>QP:</i> {log.get('qpName', 'N/A')} | <i>Type:</i> {log.get('type', 'N/A').capitalize()}",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Topics:</i> {', '.join(log.get('topics', []))}",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Notes:</i> {log.get('notes', 'N/A')[:400]}",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Signed:</i> {log.get('signedName', 'N/A')}",
+                styles['Normal']
+            ))
+            story.append(Spacer(1, 10))
+    else:
+        story.append(Paragraph("No supervision logs found for the selected criteria.", styles['Normal']))
+    
+    # Footer
+    story.append(Spacer(1, 30))
+    footer_text = "AnchorPoint Compliance Toolkit | NON-PHI Tier 1 Report"
+    story.append(Paragraph(footer_text, styles['ReportSubtitle']))
+    
+    doc.build(story)
+    buffer.seek(0)
+    
+    filename = f"supervision_report_{datetime.now().strftime('%Y%m%d')}.pdf"
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+@app.get("/api/reports/pdf/compliance")
+def export_compliance_pdf(
+    current_user: dict = Depends(require_role(["admin"]))
+):
+    """Generate PDF report of staff training and compliance status"""
+    staff = list(staff_collection.find().sort("fullName", 1))
+    
+    # Create PDF
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
+    styles = create_pdf_styles()
+    story = []
+    
+    # Header
+    add_pdf_header(story, styles, "Staff Training & Compliance Report", "Complete Staff Compliance Overview")
+    
+    # Summary stats
+    total = len(staff)
+    compliant = sum(1 for s in staff if s.get('complianceStatus') == 'compliant')
+    pending = sum(1 for s in staff if s.get('complianceStatus') == 'pending')
+    active = sum(1 for s in staff if s.get('status') == 'active')
+    
+    summary_data = [
+        ['Total Staff', 'Active', 'Compliant', 'Pending Compliance'],
+        [str(total), str(active), str(compliant), str(pending)]
+    ]
+    summary_table = Table(summary_data, colWidths=[1.5*inch, 1.5*inch, 1.5*inch, 1.5*inch])
+    summary_table.setStyle(create_table_style())
+    story.append(summary_table)
+    story.append(Spacer(1, 20))
+    
+    if staff:
+        # Staff compliance table
+        story.append(Paragraph("Staff Compliance Status", styles['SectionHeader']))
+        
+        table_data = [['Name', 'Role', 'Status', 'Compliance', 'Hire Date']]
+        for member in staff:
+            table_data.append([
+                member.get('fullName', 'N/A')[:20],
+                member.get('role', 'N/A').capitalize(),
+                member.get('status', 'N/A').capitalize(),
+                member.get('complianceStatus', 'N/A').capitalize(),
+                member.get('hireDate', 'N/A')
+            ])
+        
+        table = Table(table_data, colWidths=[1.5*inch, 1*inch, 0.9*inch, 1*inch, 0.9*inch])
+        table.setStyle(create_table_style())
+        story.append(table)
+        
+        # Training details per staff
+        story.append(Spacer(1, 20))
+        story.append(Paragraph("Training Records by Staff Member", styles['SectionHeader']))
+        
+        required_training = ['orientation', 'hipaa', 'cpr']
+        training_labels = {
+            'orientation': 'New Employee Orientation',
+            'hipaa': 'HIPAA Privacy Training',
+            'cpr': 'CPR/First Aid Certification',
+            'crisis': 'Crisis Intervention',
+            'de_escalation': 'De-escalation Training',
+            'cultural_competency': 'Cultural Competency',
+            'annual_review': 'Annual Compliance Review'
+        }
+        
+        for member in staff:
+            staff_id = str(member['_id'])
+            training_records = list(training_collection.find({"staffId": staff_id}))
+            training_dict = {t['trainingType']: t for t in training_records}
+            
+            story.append(Paragraph(
+                f"<b>{member.get('fullName', 'N/A')}</b> ({member.get('role', 'N/A').capitalize()})",
+                styles['Normal']
+            ))
+            
+            training_status = []
+            for req in required_training:
+                record = training_dict.get(req)
+                if record and record.get('completed'):
+                    status = f"✓ {training_labels.get(req, req)}"
+                    if record.get('completionDate'):
+                        status += f" (Completed: {record['completionDate']})"
+                else:
+                    status = f"✗ {training_labels.get(req, req)} - PENDING"
+                training_status.append(status)
+            
+            for status in training_status:
+                story.append(Paragraph(f"    {status}", styles['Normal']))
+            
+            # Optional training
+            optional = [t for t in training_records if t['trainingType'] not in required_training and t.get('completed')]
+            if optional:
+                story.append(Paragraph("    <i>Additional Training:</i>", styles['Normal']))
+                for t in optional:
+                    story.append(Paragraph(
+                        f"        ✓ {training_labels.get(t['trainingType'], t['trainingType'])}",
+                        styles['Normal']
+                    ))
+            
+            story.append(Spacer(1, 10))
+    else:
+        story.append(Paragraph("No staff members found.", styles['Normal']))
+    
+    # Footer
+    story.append(Spacer(1, 30))
+    footer_text = "AnchorPoint Compliance Toolkit | NON-PHI Tier 1 Report"
+    story.append(Paragraph(footer_text, styles['ReportSubtitle']))
+    
+    doc.build(story)
+    buffer.seek(0)
+    
+    filename = f"compliance_report_{datetime.now().strftime('%Y%m%d')}.pdf"
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+@app.get("/api/reports/pdf/emergency")
+def export_emergency_pdf(
+    startDate: Optional[str] = None,
+    endDate: Optional[str] = None,
+    current_user: dict = Depends(require_role(["admin", "qp"]))
+):
+    """Generate PDF report of emergency logs"""
+    # Build query
+    query = {}
+    if startDate:
+        query["date"] = {"$gte": startDate}
+    if endDate:
+        if "date" in query:
+            query["date"]["$lte"] = endDate
+        else:
+            query["date"] = {"$lte": endDate}
+    
+    logs = list(emergency_logs_collection.find(query).sort("date", -1))
+    
+    # Create PDF
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
+    styles = create_pdf_styles()
+    story = []
+    
+    # Header
+    date_range = ""
+    if startDate and endDate:
+        date_range = f"{startDate} to {endDate}"
+    elif startDate:
+        date_range = f"From {startDate}"
+    elif endDate:
+        date_range = f"Through {endDate}"
+    
+    add_pdf_header(story, styles, "Emergency Coverage Logs", date_range if date_range else "All Records")
+    
+    # Summary by type
+    total = len(logs)
+    medical = sum(1 for l in logs if l.get('emergencyType') == 'medical')
+    behavioral = sum(1 for l in logs if l.get('emergencyType') == 'behavioral')
+    environmental = sum(1 for l in logs if l.get('emergencyType') == 'environmental')
+    other = sum(1 for l in logs if l.get('emergencyType') == 'other')
+    
+    summary_data = [
+        ['Total', 'Medical', 'Behavioral', 'Environmental', 'Other'],
+        [str(total), str(medical), str(behavioral), str(environmental), str(other)]
+    ]
+    summary_table = Table(summary_data, colWidths=[1.2*inch, 1.2*inch, 1.2*inch, 1.2*inch, 1.2*inch])
+    summary_table.setStyle(create_table_style())
+    story.append(summary_table)
+    story.append(Spacer(1, 20))
+    
+    if logs:
+        # Logs table
+        story.append(Paragraph("Emergency Log Summary", styles['SectionHeader']))
+        
+        table_data = [['Date', 'Time', 'Type', 'Client Ref', 'Outcome']]
+        for log in logs:
+            table_data.append([
+                log.get('date', 'N/A'),
+                log.get('time', 'N/A'),
+                log.get('emergencyType', 'N/A').capitalize(),
+                log.get('clientRef', 'N/A'),
+                log.get('outcome', 'N/A')[:25]
+            ])
+        
+        table = Table(table_data, colWidths=[0.9*inch, 0.7*inch, 1.1*inch, 0.9*inch, 2.2*inch])
+        table.setStyle(create_table_style())
+        story.append(table)
+        
+        # Detailed logs
+        story.append(Spacer(1, 20))
+        story.append(Paragraph("Emergency Response Details", styles['SectionHeader']))
+        
+        for i, log in enumerate(logs[:15], 1):
+            story.append(Paragraph(
+                f"<b>Emergency #{i} - {log.get('date', 'N/A')} at {log.get('time', 'N/A')}</b>",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Type:</i> {log.get('emergencyType', 'N/A').capitalize()} | <i>Client:</i> {log.get('clientRef', 'N/A')}",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Response:</i> {log.get('responseTaken', 'N/A')[:300]}",
+                styles['Normal']
+            ))
+            story.append(Paragraph(
+                f"<i>Outcome:</i> {log.get('outcome', 'N/A')[:200]}",
+                styles['Normal']
+            ))
+            if log.get('followUp'):
+                story.append(Paragraph(
+                    f"<i>Follow-up:</i> {log.get('followUp', '')[:150]}",
+                    styles['Normal']
+                ))
+            story.append(Spacer(1, 10))
+    else:
+        story.append(Paragraph("No emergency logs found for the selected criteria.", styles['Normal']))
+    
+    # Footer
+    story.append(Spacer(1, 30))
+    footer_text = "AnchorPoint Compliance Toolkit | NON-PHI Tier 1 Report"
+    story.append(Paragraph(footer_text, styles['ReportSubtitle']))
+    
+    doc.build(story)
+    buffer.seek(0)
+    
+    filename = f"emergency_report_{datetime.now().strftime('%Y%m%d')}.pdf"
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
