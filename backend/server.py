@@ -2056,14 +2056,205 @@ def export_emergency_pdf(
         story.append(Paragraph("No emergency logs found for the selected criteria.", styles['Normal']))
     
     # Footer
-    story.append(Spacer(1, 30))
-    footer_text = "AnchorPoint Compliance Toolkit | NON-PHI Tier 1 Report"
-    story.append(Paragraph(footer_text, styles['ReportSubtitle']))
+    add_pdf_footer(story, styles)
     
-    doc.build(story)
+    doc.build(story, onFirstPage=add_page_number, onLaterPages=add_page_number)
     buffer.seek(0)
     
     filename = f"emergency_report_{datetime.now().strftime('%Y%m%d')}.pdf"
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+@app.get("/api/reports/pdf/audit-packet")
+def export_audit_packet(
+    startDate: Optional[str] = None,
+    endDate: Optional[str] = None,
+    current_user: dict = Depends(require_role(["admin"]))
+):
+    """Generate a complete audit-ready PDF packet with all reports combined"""
+    
+    # Default date range: last 30 days
+    if not endDate:
+        endDate = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    if not startDate:
+        startDate = (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%d")
+    
+    date_range = f"{startDate} to {endDate}"
+    
+    # Create PDF
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=60, bottomMargin=60)
+    styles = create_pdf_styles()
+    story = []
+    
+    # =============== COVER PAGE ===============
+    story.append(Spacer(1, 100))
+    story.append(Paragraph(AGENCY_NAME, styles['ReportTitle']))
+    story.append(Spacer(1, 20))
+    story.append(Paragraph("COMPLIANCE AUDIT PACKET", ParagraphStyle(
+        name='CoverTitle',
+        parent=styles['ReportTitle'],
+        fontSize=24,
+        textColor=colors.HexColor('#1e3a5f')
+    )))
+    story.append(Spacer(1, 30))
+    story.append(Paragraph(f"Report Period: {date_range}", styles['ReportSubtitle']))
+    story.append(Paragraph(f"Generated: {datetime.now(timezone.utc).strftime('%B %d, %Y at %I:%M %p UTC')}", styles['ReportSubtitle']))
+    story.append(Spacer(1, 50))
+    
+    # NON-PHI Warning
+    story.append(Paragraph(
+        "⚠ NON-PHI COMPLIANCE DOCUMENT",
+        ParagraphStyle(name='BigWarning', parent=styles['Warning'], fontSize=14, alignment=TA_CENTER)
+    ))
+    story.append(Spacer(1, 20))
+    story.append(Paragraph(
+        "This audit packet contains operational compliance documentation only. No Protected Health Information (PHI) is included. All client references are limited to initials or non-identifying codes.",
+        styles['Normal']
+    ))
+    
+    story.append(Spacer(1, 80))
+    story.append(Paragraph("Table of Contents", styles['SectionHeader']))
+    story.append(Paragraph("1. Executive Summary", styles['Normal']))
+    story.append(Paragraph("2. Staff Compliance & Training Records", styles['Normal']))
+    story.append(Paragraph("3. Incident Reports", styles['Normal']))
+    story.append(Paragraph("4. QP Supervision Logs", styles['Normal']))
+    story.append(Paragraph("5. Emergency Coverage Logs", styles['Normal']))
+    
+    story.append(PageBreak())
+    
+    # =============== EXECUTIVE SUMMARY ===============
+    add_pdf_header(story, styles, "1. Executive Summary", date_range)
+    
+    # Gather stats
+    staff = list(staff_collection.find())
+    incidents = list(incidents_collection.find({"date": {"$gte": startDate, "$lte": endDate}}))
+    supervision = list(supervision_logs_collection.find({"date": {"$gte": startDate, "$lte": endDate}}))
+    emergency = list(emergency_logs_collection.find({"date": {"$gte": startDate, "$lte": endDate}}))
+    policies = list(policies_collection.find())
+    
+    summary_stats = [
+        ['Metric', 'Count', 'Status'],
+        ['Total Staff', str(len(staff)), f"{sum(1 for s in staff if s.get('complianceStatus') == 'compliant')}/{len(staff)} Compliant"],
+        ['Active Policies', str(len(policies)), 'Active'],
+        ['Incidents Reported', str(len(incidents)), f"{sum(1 for i in incidents if i.get('status') == 'closed')}/{len(incidents)} Closed"],
+        ['Supervision Sessions', str(len(supervision)), 'Documented'],
+        ['Emergency Responses', str(len(emergency)), 'Logged']
+    ]
+    
+    summary_table = Table(summary_stats, colWidths=[2.5*inch, 1.5*inch, 2*inch])
+    summary_table.setStyle(create_table_style())
+    story.append(summary_table)
+    story.append(Spacer(1, 20))
+    
+    story.append(Paragraph("Compliance Overview", styles['SectionHeader']))
+    compliant_count = sum(1 for s in staff if s.get('complianceStatus') == 'compliant')
+    compliance_rate = (compliant_count / len(staff) * 100) if staff else 0
+    story.append(Paragraph(f"Overall Staff Compliance Rate: <b>{compliance_rate:.1f}%</b>", styles['Normal']))
+    story.append(Paragraph(f"Incident Resolution Rate: <b>{(sum(1 for i in incidents if i.get('status') == 'closed') / len(incidents) * 100) if incidents else 100:.1f}%</b>", styles['Normal']))
+    
+    story.append(PageBreak())
+    
+    # =============== STAFF COMPLIANCE ===============
+    add_pdf_header(story, styles, "2. Staff Compliance & Training Records", date_range)
+    
+    staff_data = [['Name', 'Role', 'Status', 'Compliance', 'Hire Date']]
+    for member in staff:
+        staff_data.append([
+            member.get('fullName', 'N/A')[:25],
+            member.get('role', 'N/A').capitalize(),
+            member.get('status', 'N/A').capitalize(),
+            member.get('complianceStatus', 'N/A').capitalize(),
+            member.get('hireDate', 'N/A')
+        ])
+    
+    if len(staff_data) > 1:
+        staff_table = Table(staff_data, colWidths=[1.8*inch, 1.2*inch, 1*inch, 1.2*inch, 1*inch])
+        staff_table.setStyle(create_table_style())
+        story.append(staff_table)
+    else:
+        story.append(Paragraph("No staff records found.", styles['Normal']))
+    
+    story.append(PageBreak())
+    
+    # =============== INCIDENTS ===============
+    add_pdf_header(story, styles, "3. Incident Reports", date_range)
+    
+    if incidents:
+        incident_data = [['Date', 'Type', 'Location', 'Client Ref', 'Status']]
+        for inc in incidents[:25]:
+            incident_data.append([
+                inc.get('date', 'N/A'),
+                inc.get('incidentType', 'N/A'),
+                inc.get('location', 'N/A')[:20],
+                inc.get('clientRef', 'N/A'),
+                inc.get('status', 'N/A').capitalize()
+            ])
+        incident_table = Table(incident_data, colWidths=[1*inch, 1.2*inch, 1.5*inch, 1*inch, 1*inch])
+        incident_table.setStyle(create_table_style())
+        story.append(incident_table)
+    else:
+        story.append(Paragraph("No incidents reported during this period.", styles['Normal']))
+    
+    story.append(PageBreak())
+    
+    # =============== SUPERVISION ===============
+    add_pdf_header(story, styles, "4. QP Supervision Logs", date_range)
+    
+    if supervision:
+        sup_data = [['Date', 'Staff', 'QP', 'Type', 'Topics']]
+        for log in supervision[:25]:
+            topics = ", ".join(log.get('topics', [])[:2])
+            if len(log.get('topics', [])) > 2:
+                topics += "..."
+            sup_data.append([
+                log.get('date', 'N/A'),
+                log.get('staffName', 'N/A')[:15],
+                log.get('qpName', 'N/A')[:15],
+                log.get('type', 'N/A').capitalize(),
+                topics[:25]
+            ])
+        sup_table = Table(sup_data, colWidths=[0.9*inch, 1.2*inch, 1.2*inch, 1*inch, 1.8*inch])
+        sup_table.setStyle(create_table_style())
+        story.append(sup_table)
+    else:
+        story.append(Paragraph("No supervision sessions logged during this period.", styles['Normal']))
+    
+    story.append(PageBreak())
+    
+    # =============== EMERGENCY ===============
+    add_pdf_header(story, styles, "5. Emergency Coverage Logs", date_range)
+    
+    if emergency:
+        emerg_data = [['Date', 'Time', 'Type', 'Client Ref', 'Outcome']]
+        for log in emergency[:25]:
+            emerg_data.append([
+                log.get('date', 'N/A'),
+                log.get('time', 'N/A'),
+                log.get('emergencyType', 'N/A').capitalize(),
+                log.get('clientRef', 'N/A'),
+                log.get('outcome', 'N/A')[:30]
+            ])
+        emerg_table = Table(emerg_data, colWidths=[0.9*inch, 0.7*inch, 1.2*inch, 0.9*inch, 2.2*inch])
+        emerg_table.setStyle(create_table_style())
+        story.append(emerg_table)
+    else:
+        story.append(Paragraph("No emergency responses logged during this period.", styles['Normal']))
+    
+    # Final footer
+    add_pdf_footer(story, styles)
+    story.append(Spacer(1, 20))
+    story.append(Paragraph("— End of Audit Packet —", ParagraphStyle(
+        name='EndNote', parent=styles['ReportSubtitle'], alignment=TA_CENTER
+    )))
+    
+    doc.build(story, onFirstPage=add_page_number, onLaterPages=add_page_number)
+    buffer.seek(0)
+    
+    filename = f"audit_packet_{startDate}_to_{endDate}.pdf"
     return StreamingResponse(
         buffer,
         media_type="application/pdf",
