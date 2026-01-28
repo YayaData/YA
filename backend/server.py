@@ -1097,6 +1097,11 @@ def update_incident(
     update: IncidentUpdate,
     current_user: dict = Depends(require_role(["admin", "qp"]))
 ):
+    # Get previous values for audit
+    incident = incidents_collection.find_one({"_id": ObjectId(incident_id)})
+    if not incident:
+        raise HTTPException(status_code=404, detail="Incident not found")
+    
     update_dict = {k: v for k, v in update.dict().items() if v is not None}
     if "reviewedBy" in update_dict:
         update_dict["reviewedBy"] = current_user["fullName"]
@@ -1104,12 +1109,25 @@ def update_incident(
     if not update_dict:
         raise HTTPException(status_code=400, detail="No fields to update")
     
+    # Store previous values
+    previous_values = {k: incident.get(k) for k in update_dict.keys()}
+    
     result = incidents_collection.update_one(
         {"_id": ObjectId(incident_id)},
         {"$set": update_dict}
     )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Incident not found")
+    
+    # Create audit log
+    create_audit_log(
+        action="UPDATE",
+        entity_type="incident",
+        entity_id=incident_id,
+        user_id=current_user["id"],
+        user_name=current_user["fullName"],
+        changes=update_dict,
+        previous_values=previous_values,
+        details=f"Updated incident from {incident.get('date', 'Unknown')} - Status: {update_dict.get('status', 'unchanged')}"
+    )
     
     return {"message": "Incident updated successfully"}
 
