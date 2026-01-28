@@ -1828,11 +1828,9 @@ def export_supervision_pdf(
         story.append(Paragraph("No supervision logs found for the selected criteria.", styles['Normal']))
     
     # Footer
-    story.append(Spacer(1, 30))
-    footer_text = "AnchorPoint Compliance Toolkit | NON-PHI Tier 1 Report"
-    story.append(Paragraph(footer_text, styles['ReportSubtitle']))
+    add_pdf_footer(story, styles)
     
-    doc.build(story)
+    doc.build(story, onFirstPage=add_page_number, onLaterPages=add_page_number)
     buffer.seek(0)
     
     filename = f"supervision_report_{datetime.now().strftime('%Y%m%d')}.pdf"
