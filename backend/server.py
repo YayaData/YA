@@ -1513,20 +1513,67 @@ def create_pdf_styles():
     
     return styles
 
-def add_pdf_header(story, styles, title, subtitle=None):
-    """Add standard header to PDF"""
+# Agency settings (could be stored in DB in future)
+AGENCY_NAME = "AnchorPoint Peer Support Agency"
+AGENCY_TAGLINE = "Non-PHI Compliance Toolkit"
+
+class NumberedCanvas:
+    """Canvas class to add page numbers and headers/footers"""
+    def __init__(self, doc, agency_name=AGENCY_NAME):
+        self.doc = doc
+        self.agency_name = agency_name
+        self.pages = []
+        
+    def afterPage(self):
+        self.pages.append(dict(self.doc.page.__dict__))
+        
+    def beforePage(self):
+        pass
+
+def add_page_number(canvas, doc):
+    """Add page number and footer to each page"""
+    canvas.saveState()
+    
+    # Footer line
+    canvas.setStrokeColor(colors.HexColor('#e2e8f0'))
+    canvas.line(40, 35, letter[0] - 40, 35)
+    
+    # Page number
+    page_num = canvas.getPageNumber()
+    text = f"Page {page_num}"
+    canvas.setFont('Helvetica', 9)
+    canvas.setFillColor(colors.HexColor('#64748b'))
+    canvas.drawRightString(letter[0] - 40, 20, text)
+    
+    # Footer left - Agency name
+    canvas.drawString(40, 20, AGENCY_NAME)
+    
+    # Footer center - NON-PHI notice
+    canvas.setFont('Helvetica-Bold', 8)
+    canvas.setFillColor(colors.HexColor('#92400e'))
+    canvas.drawCentredString(letter[0]/2, 20, "NON-PHI DOCUMENT")
+    
+    canvas.restoreState()
+
+def add_pdf_header(story, styles, title, subtitle=None, date_range=None):
+    """Add standard header to PDF with agency branding"""
+    # Agency Name
+    story.append(Paragraph(AGENCY_NAME, styles['ReportTitle']))
+    story.append(Spacer(1, 5))
+    
     # NON-PHI Warning Banner
-    warning_text = "NON-PHI MODE — This report does not contain Protected Health Information"
+    warning_text = "⚠ NON-PHI MODE — This report does not contain Protected Health Information. Client references are limited to initials or non-identifying codes only."
     story.append(Paragraph(warning_text, styles['Warning']))
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 15))
     
-    # Title
-    story.append(Paragraph(title, styles['ReportTitle']))
+    # Report Title
+    story.append(Paragraph(title, styles['SectionHeader']))
     
-    # Subtitle with date
-    if subtitle:
-        story.append(Paragraph(subtitle, styles['ReportSubtitle']))
+    # Date range if provided
+    if date_range:
+        story.append(Paragraph(f"Report Period: {date_range}", styles['ReportSubtitle']))
     
+    # Generated timestamp
     generated_text = f"Generated: {datetime.now(timezone.utc).strftime('%B %d, %Y at %I:%M %p UTC')}"
     story.append(Paragraph(generated_text, styles['ReportSubtitle']))
     story.append(Spacer(1, 20))
@@ -1552,6 +1599,12 @@ def create_table_style():
         ('LEFTPADDING', (0, 0), (-1, -1), 8),
         ('RIGHTPADDING', (0, 0), (-1, -1), 8),
     ])
+
+def add_pdf_footer(story, styles):
+    """Add standard footer to report"""
+    story.append(Spacer(1, 30))
+    footer_text = f"{AGENCY_NAME} | {AGENCY_TAGLINE} | Confidential - For Internal Use Only"
+    story.append(Paragraph(footer_text, styles['ReportSubtitle']))
 
 # ============== PDF Export Endpoints ==============
 
