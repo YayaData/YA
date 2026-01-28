@@ -7,7 +7,7 @@ import requests
 import os
 import time
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://agencylaunch-1.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://anchor-compliance.preview.emergentagent.com').rstrip('/')
 
 # Admin credentials from the review request
 ADMIN_USERNAME = "admin"

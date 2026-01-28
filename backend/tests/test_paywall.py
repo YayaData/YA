@@ -7,7 +7,7 @@ import requests
 import os
 import time
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://agencylaunch-1.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://anchor-compliance.preview.emergentagent.com').rstrip('/')
 
 # Paywall constants (should match backend)
 FREE_STEPS = [1, 2, 3]
@@ -184,7 +184,7 @@ class TestStateCheckoutEndpoint:
         
         response = requests.post(f"{BASE_URL}/api/checkout/state", json={
             "state_code": "FL",
-            "origin_url": "https://agencylaunch-1.preview.emergentagent.com"
+            "origin_url": "https://anchor-compliance.preview.emergentagent.com"
         }, headers=headers)
         
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
@@ -210,7 +210,7 @@ class TestStateCheckoutEndpoint:
         
         response = requests.post(f"{BASE_URL}/api/checkout/state", json={
             "state_code": "MT",
-            "origin_url": "https://agencylaunch-1.preview.emergentagent.com"
+            "origin_url": "https://anchor-compliance.preview.emergentagent.com"
         }, headers=headers)
         
         assert response.status_code == 400, f"Expected 400, got {response.status_code}: {response.text}"
@@ -229,7 +229,7 @@ class TestStateCheckoutEndpoint:
         
         response = requests.post(f"{BASE_URL}/api/checkout/state", json={
             "state_code": "XX",  # Invalid state
-            "origin_url": "https://agencylaunch-1.preview.emergentagent.com"
+            "origin_url": "https://anchor-compliance.preview.emergentagent.com"
         }, headers=headers)
         
         assert response.status_code == 404, f"Expected 404, got {response.status_code}"
