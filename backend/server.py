@@ -337,6 +337,38 @@ def serialize_doc(doc: dict) -> dict:
             result[key] = value
     return result
 
+# ============== Audit Log Helper ==============
+
+def create_audit_log(
+    action: str,
+    entity_type: str,
+    entity_id: str,
+    user_id: str,
+    user_name: str,
+    changes: dict = None,
+    previous_values: dict = None,
+    details: str = None
+):
+    """
+    Create an audit log entry for tracking changes
+    
+    Actions: CREATE, UPDATE, DELETE, VIEW, ACKNOWLEDGE, EXPORT
+    Entity Types: policy, staff, training, supervision, incident, emergency, oncall, user
+    """
+    audit_entry = {
+        "action": action,
+        "entityType": entity_type,
+        "entityId": entity_id,
+        "userId": user_id,
+        "userName": user_name,
+        "changes": changes,
+        "previousValues": previous_values,
+        "details": details,
+        "timestamp": datetime.now(timezone.utc),
+        "ipAddress": None  # Could be captured from request in production
+    }
+    audit_logs_collection.insert_one(audit_entry)
+
 # ============== Health Check ==============
 
 @app.get("/api/health")
