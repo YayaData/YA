@@ -786,16 +786,34 @@ def update_staff(
     update: StaffUpdate,
     current_user: dict = Depends(require_role(["admin"]))
 ):
+    # Get previous values for audit log
+    staff = staff_collection.find_one({"_id": ObjectId(staff_id)})
+    if not staff:
+        raise HTTPException(status_code=404, detail="Staff member not found")
+    
     update_dict = {k: v for k, v in update.dict().items() if v is not None}
     if not update_dict:
         raise HTTPException(status_code=400, detail="No fields to update")
+    
+    # Store previous values for audit
+    previous_values = {k: staff.get(k) for k in update_dict.keys()}
     
     result = staff_collection.update_one(
         {"_id": ObjectId(staff_id)},
         {"$set": update_dict}
     )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Staff member not found")
+    
+    # Create audit log
+    create_audit_log(
+        action="UPDATE",
+        entity_type="staff",
+        entity_id=staff_id,
+        user_id=current_user["id"],
+        user_name=current_user["fullName"],
+        changes=update_dict,
+        previous_values=previous_values,
+        details=f"Updated staff member: {staff.get('fullName', 'Unknown')}"
+    )
     
     return {"message": "Staff member updated successfully"}
 
@@ -804,9 +822,25 @@ def delete_staff(
     staff_id: str,
     current_user: dict = Depends(require_role(["admin"]))
 ):
+    # Get staff info for audit log
+    staff = staff_collection.find_one({"_id": ObjectId(staff_id)})
+    if not staff:
+        raise HTTPException(status_code=404, detail="Staff member not found")
+    
     result = staff_collection.delete_one({"_id": ObjectId(staff_id)})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Staff member not found")
+    
+    # Create audit log
+    create_audit_log(
+        action="DELETE",
+        entity_type="staff",
+        entity_id=staff_id,
+        user_id=current_user["id"],
+        user_name=current_user["fullName"],
+        details=f"Deleted staff member: {staff.get('fullName', 'Unknown')}"
+    )
+    
     return {"message": "Staff member deleted successfully"}
 
 # ============== Training Endpoints ==============
