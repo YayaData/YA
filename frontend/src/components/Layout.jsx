@@ -16,7 +16,8 @@ import {
   Menu,
   X,
   Shield,
-  AlertCircle
+  AlertCircle,
+  History
 } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -40,6 +41,7 @@ const Layout = () => {
     { path: '/emergency', label: 'Emergency Logs', icon: Phone, roles: ['admin', 'qp', 'staff'] },
     { path: '/oncall', label: 'On-Call', icon: Calendar, roles: ['admin', 'qp', 'staff'] },
     { path: '/reports', label: 'Reports', icon: BarChart3, roles: ['admin', 'qp'] },
+    { path: '/audit', label: 'Audit Trail', icon: History, roles: ['admin'] },
     { path: '/users', label: 'User Management', icon: UserCog, roles: ['admin'] },
   ];
 
