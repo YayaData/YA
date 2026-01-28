@@ -91,6 +91,11 @@ function AppRoutes() {
             <UsersPage />
           </ProtectedRoute>
         } />
+        <Route path="/audit" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AuditPage />
+          </ProtectedRoute>
+        } />
       </Route>
       
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
