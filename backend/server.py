@@ -6,6 +6,7 @@ Tier 1: Non-PHI Operational Compliance Management
 from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional, List
 from datetime import datetime, timezone, timedelta
@@ -16,6 +17,15 @@ import jwt
 import os
 import uuid
 import base64
+from io import BytesIO
+
+# PDF Generation imports
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 
 # ============== Configuration ==============
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
