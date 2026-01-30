@@ -494,6 +494,157 @@ async def update_housing_interest(interest_id: str, status: str = None, admin_no
     
     return {"message": "Updated successfully"}
 
+# Placement Board Models (Public Request Board)
+class PlacementBoardRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    display_name: str
+    county: str
+    state: str = "NC"
+    income_type: str
+    can_contribute: bool = False
+    contribution_amount: Optional[str] = None
+    housing_type: Optional[str] = None
+    general_notes: str = ""
+    contact_phone: str = ""
+    contact_email: str = ""
+    preferred_contact: str = "phone"
+
+class ConnectionRequest(BaseModel):
+    organization_name: str
+    contact_name: str
+    contact_email: str
+    org_type: str
+
+# Placement Board Endpoints
+@api_router.post("/placement-board")
+async def submit_placement_board_request(request: PlacementBoardRequest):
+    """Public endpoint for individuals to submit placement requests"""
+    doc = request.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["status"] = "pending"  # pending, approved, connected, closed
+    doc["connection_requests"] = []
+    doc["approved_connector"] = None
+    doc["admin_notes"] = ""
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    doc["approved_at"] = None
+    
+    await db.placement_board.insert_one(doc)
+    return {"message": "Request submitted for review", "id": doc["id"]}
+
+@api_router.get("/placement-board")
+async def get_all_placement_board_requests():
+    """Admin endpoint to get all placement board requests"""
+    requests = await db.placement_board.find({}, {"_id": 0}).to_list(100)
+    return [serialize_doc(r) for r in requests]
+
+@api_router.get("/placement-board/approved")
+async def get_approved_placement_requests():
+    """Public endpoint to get approved requests (without contact info)"""
+    requests = await db.placement_board.find(
+        {"status": {"$in": ["approved", "connected"]}},
+        {"_id": 0, "contact_phone": 0, "contact_email": 0, "preferred_contact": 0}
+    ).to_list(100)
+    
+    # Add flags for UI
+    for req in requests:
+        req["has_pending_connection"] = len(req.get("connection_requests", [])) > 0
+        req["is_connected"] = req.get("status") == "connected"
+    
+    return [serialize_doc(r) for r in requests]
+
+@api_router.post("/placement-board/{request_id}/request-connection")
+async def request_connection(request_id: str, connection: ConnectionRequest):
+    """Agency endpoint to request connection with an individual"""
+    # Find the request
+    request = await db.placement_board.find_one({"id": request_id})
+    if not request:
+        raise HTTPException(status_code=404, detail="Request not found")
+    
+    if request.get("status") not in ["approved"]:
+        raise HTTPException(status_code=400, detail="Request is not available for connection")
+    
+    # Check if already requested
+    existing_requests = request.get("connection_requests", [])
+    for cr in existing_requests:
+        if cr.get("organization_name") == connection.organization_name:
+            raise HTTPException(status_code=400, detail="Connection already requested")
+    
+    # Add connection request
+    conn_doc = connection.model_dump()
+    conn_doc["requested_at"] = datetime.now(timezone.utc).isoformat()
+    conn_doc["status"] = "pending"
+    
+    await db.placement_board.update_one(
+        {"id": request_id},
+        {"$push": {"connection_requests": conn_doc}}
+    )
+    
+    return {"message": "Connection request submitted for admin approval"}
+
+@api_router.patch("/placement-board/{request_id}")
+async def update_placement_board_request(request_id: str, status: str = None, admin_notes: str = None):
+    """Admin endpoint to update request status"""
+    update_data = {}
+    if status:
+        update_data["status"] = status
+        if status == "approved":
+            update_data["approved_at"] = datetime.now(timezone.utc).isoformat()
+    if admin_notes is not None:
+        update_data["admin_notes"] = admin_notes
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No update data provided")
+    
+    result = await db.placement_board.update_one(
+        {"id": request_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Request not found")
+    
+    return {"message": "Updated successfully"}
+
+@api_router.post("/placement-board/{request_id}/approve-connection")
+async def approve_connection(request_id: str, organization_name: str):
+    """Admin endpoint to approve a connection request"""
+    request = await db.placement_board.find_one({"id": request_id})
+    if not request:
+        raise HTTPException(status_code=404, detail="Request not found")
+    
+    # Find the connection request
+    connection_requests = request.get("connection_requests", [])
+    approved_conn = None
+    for cr in connection_requests:
+        if cr.get("organization_name") == organization_name:
+            approved_conn = cr
+            break
+    
+    if not approved_conn:
+        raise HTTPException(status_code=404, detail="Connection request not found")
+    
+    # Update the request
+    await db.placement_board.update_one(
+        {"id": request_id},
+        {
+            "$set": {
+                "status": "connected",
+                "approved_connector": approved_conn,
+                "connected_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    return {
+        "message": "Connection approved",
+        "contact_info": {
+            "phone": request.get("contact_phone"),
+            "email": request.get("contact_email"),
+            "preferred": request.get("preferred_contact")
+        }
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
