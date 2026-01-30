@@ -27,6 +27,14 @@ db = client[os.environ['DB_NAME']]
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', '')
 SMTP_CONFIGURED = bool(os.environ.get('SMTP_HOST', ''))
 
+# File uploads directory
+UPLOADS_DIR = ROOT_DIR / 'uploads' / 'credentials'
+UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+
+# Allowed file types for document uploads
+ALLOWED_EXTENSIONS = {'.pdf', '.jpg', '.jpeg', '.png'}
+MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+
 # Create the main app
 app = FastAPI(title="Anchor Placement - Client Placement API")
 
