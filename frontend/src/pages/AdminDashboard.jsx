@@ -661,10 +661,12 @@ export default function AdminDashboard() {
                           <Button 
                             size="sm"
                             variant="outline"
-                            onClick={() => handleUpdateHousingStatus(interest.id, 'closed')}
+                            onClick={() => handleCloseWithScript(interest)}
                             className="text-xs"
                             disabled={isReadOnly}
+                            data-testid={`close-interest-btn-${index}`}
                           >
+                            <X className="h-3 w-3 mr-1" />
                             Close
                           </Button>
                         )}
