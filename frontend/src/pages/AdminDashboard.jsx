@@ -355,9 +355,14 @@ export default function AdminDashboard() {
             <CardHeader className="pb-2">
               <CardTitle className="text-lg font-bold flex items-center gap-2" style={{ color: colors.dark }}>
                 <Building2 className="h-5 w-5" style={{ color: colors.gold }} />
-                Agency Approvals
+                Agency Management
+                {pendingAgencies.length > 0 && (
+                  <Badge className="bg-amber-100 text-amber-700 ml-1">
+                    {pendingAgencies.length} pending
+                  </Badge>
+                )}
               </CardTitle>
-              <p className="text-sm text-gray-500">Review and approve new organizations</p>
+              <p className="text-sm text-gray-500">Review, approve, and manage organizations</p>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -365,39 +370,114 @@ export default function AdminDashboard() {
               ) : providerInquiries.length === 0 ? (
                 <div className="py-6 text-center">
                   <CheckCircle2 className="h-10 w-10 text-green-500 mx-auto mb-2" />
-                  <p className="text-gray-500 text-sm">No pending approvals</p>
+                  <p className="text-gray-500 text-sm">No agency inquiries yet</p>
                 </div>
               ) : (
-                <div className="space-y-4 max-h-80 overflow-y-auto">
-                  {providerInquiries.map((inquiry, i) => (
-                    <div key={i} className="p-4 bg-gray-50 rounded-xl">
-                      <p className="font-semibold text-sm" style={{ color: colors.dark }}>
-                        {inquiry.organization_name}
-                      </p>
-                      <p className="text-xs text-gray-500 mb-1">{inquiry.contact_name}</p>
-                      <p className="text-xs text-gray-400">{inquiry.inquiry_type}</p>
-                      <div className="flex gap-2 mt-3">
-                        <Button 
-                          size="sm"
-                          className="bg-green-600 hover:bg-green-700 text-white text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                          onClick={() => handleApproveAgency(inquiry)}
-                          disabled={isReadOnly}
-                          data-testid={`approve-btn-${i}`}
-                        >
-                          Approve
-                        </Button>
-                        <Button 
-                          size="sm"
-                          className="bg-red-600 hover:bg-red-700 text-white text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                          onClick={() => handleSuspendAgency(inquiry)}
-                          disabled={isReadOnly}
-                          data-testid={`suspend-btn-${i}`}
-                        >
-                          Suspend
-                        </Button>
-                      </div>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {/* Pending Agencies */}
+                  {pendingAgencies.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2">Pending Approval</p>
+                      {pendingAgencies.map((inquiry, i) => (
+                        <div key={inquiry.id || i} className="p-4 bg-amber-50 rounded-xl mb-2 border border-amber-100">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <p className="font-semibold text-sm" style={{ color: colors.dark }}>
+                                {inquiry.organization_name}
+                              </p>
+                              <p className="text-xs text-gray-500">{inquiry.contact_name}</p>
+                              <p className="text-xs text-gray-400">{inquiry.inquiry_type}</p>
+                            </div>
+                            <Badge className="bg-amber-100 text-amber-700 text-xs">Pending</Badge>
+                          </div>
+                          <div className="flex gap-2 mt-3">
+                            <Button 
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 text-white text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => handleApproveAgency(inquiry)}
+                              disabled={isReadOnly}
+                              data-testid={`approve-btn-${i}`}
+                            >
+                              <CheckCircle2 className="h-3 w-3 mr-1" />
+                              Approve
+                            </Button>
+                            <Button 
+                              size="sm"
+                              variant="outline"
+                              className="text-red-600 border-red-200 hover:bg-red-50 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => handleSuspendAgency(inquiry)}
+                              disabled={isReadOnly}
+                              data-testid={`suspend-btn-${i}`}
+                            >
+                              Suspend
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  )}
+                  
+                  {/* Approved Agencies */}
+                  {approvedAgencies.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-green-600 uppercase tracking-wider mb-2">Approved ({approvedAgencies.length})</p>
+                      {approvedAgencies.map((inquiry, i) => (
+                        <div key={inquiry.id || i} className="p-3 bg-green-50 rounded-xl mb-2 border border-green-100">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-semibold text-sm" style={{ color: colors.dark }}>
+                                {inquiry.organization_name}
+                              </p>
+                              <p className="text-xs text-gray-500">{inquiry.contact_name}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge className="bg-green-100 text-green-700 text-xs">Approved</Badge>
+                              <Button 
+                                size="sm"
+                                variant="ghost"
+                                className="text-red-500 hover:text-red-700 text-xs h-7 px-2"
+                                onClick={() => handleSuspendAgency(inquiry)}
+                                disabled={isReadOnly}
+                              >
+                                Suspend
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Suspended Agencies */}
+                  {suspendedAgencies.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-red-600 uppercase tracking-wider mb-2">Suspended ({suspendedAgencies.length})</p>
+                      {suspendedAgencies.map((inquiry, i) => (
+                        <div key={inquiry.id || i} className="p-3 bg-red-50 rounded-xl mb-2 border border-red-100">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-semibold text-sm" style={{ color: colors.dark }}>
+                                {inquiry.organization_name}
+                              </p>
+                              <p className="text-xs text-gray-500">{inquiry.contact_name}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge className="bg-red-100 text-red-700 text-xs">Suspended</Badge>
+                              <Button 
+                                size="sm"
+                                variant="ghost"
+                                className="text-green-500 hover:text-green-700 text-xs h-7 px-2"
+                                onClick={() => handleApproveAgency(inquiry)}
+                                disabled={isReadOnly}
+                              >
+                                Reinstate
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </CardContent>
