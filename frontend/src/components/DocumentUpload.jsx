@@ -1,7 +1,11 @@
 import { useState, useRef } from "react";
-import { Upload, FileText, Trash2, CheckCircle2, Clock, AlertCircle } from "lucide-react";
+import { Upload, FileText, Trash2, CheckCircle2, Clock, AlertCircle, Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { getRequiredDocuments } from "../constants/stateCredentials";
+import axios from "axios";
+import { toast } from "sonner";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const colors = {
   blue: "#1F4FD8",
@@ -10,8 +14,9 @@ const colors = {
   dark: "#1F2937"
 };
 
-export default function DocumentUpload({ stateCode, orgType, uploadedDocuments = [], onUpload, onRemove }) {
+export default function DocumentUpload({ stateCode, orgType, uploadedDocuments = [], onUpload, onRemove, organizationName = '' }) {
   const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState({});
   const fileInputRef = useRef(null);
   
   const requiredDocuments = getRequiredDocuments(stateCode, orgType);
