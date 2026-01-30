@@ -41,28 +41,56 @@ export default function DocumentUpload({ stateCode, orgType, uploadedDocuments =
     }
   };
 
-  const handleFile = (file, docId) => {
+  const handleFile = async (file, docId) => {
     // Validate file type
     const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'];
     if (!allowedTypes.includes(file.type)) {
-      alert('Please upload a PDF or image file (JPEG, PNG)');
+      toast.error('Please upload a PDF or image file (JPEG, PNG)');
       return;
     }
 
     // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB');
+      toast.error('File size must be less than 10MB');
       return;
     }
 
-    onUpload?.(docId, {
-      id: docId,
-      fileName: file.name,
-      fileType: file.type,
-      fileSize: file.size,
-      uploadedAt: new Date().toISOString(),
-      status: 'uploaded'
-    });
+    // Set uploading state
+    setUploading(prev => ({ ...prev, [docId]: true }));
+
+    try {
+      // Create form data for file upload
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('organization_name', organizationName || 'Unknown Organization');
+      formData.append('document_type', requiredDocuments.find(d => d.id === docId)?.name || docId);
+      formData.append('document_id', docId);
+
+      // Upload to backend
+      const response = await axios.post(`${API}/credentials/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      // Call onUpload with the response data
+      onUpload?.(docId, {
+        id: docId,
+        fileId: response.data.file_id,
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        uploadedAt: new Date().toISOString(),
+        status: 'uploaded'
+      });
+
+      toast.success(`Document uploaded: ${file.name}`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error(error.response?.data?.detail || 'Failed to upload document');
+    } finally {
+      setUploading(prev => ({ ...prev, [docId]: false }));
+    }
   };
 
   const handleFileSelect = (e, docId) => {
