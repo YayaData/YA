@@ -74,6 +74,31 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 
 ---
 
+## Key Features Completed
+
+### Housing Interest Feature (Complete)
+- Public `/housing-interest` page for individuals
+- Admin review workflow with status tracking (pending → reviewed → contacted → closed)
+- CSV export functionality
+- Script A response for contacted individuals
+- **Script B closure response modal** with standardized unavailability message
+
+### Credentialing System V1 (UI Complete - Backend MOCKED)
+- North Carolina state-specific requirements
+- Self-attestation checklist
+- Document upload UI (backend file storage not implemented)
+
+### Placement Request Board V1 (Complete)
+- Public `/submit-request` page for individuals
+- Admin moderation workflow
+- Agency connection request system
+
+### Feature Flags (Complete)
+- `READ_ONLY_AUDIT` mode for compliance reviews
+- `EXPORT_REPORTS` toggle for CSV/PDF exports
+
+---
+
 ## Prioritized Backlog
 
 ### P0 (Critical) - DONE
