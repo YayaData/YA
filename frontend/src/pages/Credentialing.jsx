@@ -60,7 +60,7 @@ export default function Credentialing() {
       const existing = prev.filter(d => d.id !== docId);
       return [...existing, fileData];
     });
-    toast.success(`Document uploaded: ${fileData.fileName}`);
+    // Toast is now handled in DocumentUpload component
   };
 
   const handleDocumentRemove = (docId) => {
