@@ -6,15 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { 
-  ArrowLeft, Users, Building2, Clock, Mail, MapPin, 
+  ArrowLeft, Users, Building2, Clock, Mail, MapPin, Phone,
   RefreshCw, AlertTriangle, CheckCircle2, Shield, Link2, Copy, UserPlus,
-  Download, FileText, Lock
+  Download, FileText, Lock, Home, Eye, MessageSquare
 } from "lucide-react";
 import { toast } from "sonner";
 import { FEATURE_FLAGS } from "@/constants/featureFlags";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_anchor-place/artifacts/a2v0mwtd_image.png";
+const LOGO_URL = "https://customer-assets.emergentagent.com/job_anchor-placement/artifacts/a2v0mwtd_image.png";
 
 const colors = {
   blue: "#1F4FD8",
@@ -28,6 +28,7 @@ export default function AdminDashboard() {
   const [placementRequests, setPlacementRequests] = useState([]);
   const [providerInquiries, setProviderInquiries] = useState([]);
   const [placements, setPlacements] = useState([]);
+  const [housingInterests, setHousingInterests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [inviteLink, setInviteLink] = useState("");
 
@@ -40,18 +41,32 @@ export default function AdminDashboard() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const [requestsRes, inquiriesRes, placementsRes] = await Promise.all([
+      const [requestsRes, inquiriesRes, placementsRes, housingRes] = await Promise.all([
         axios.get(`${API}/placement-requests`),
         axios.get(`${API}/provider-inquiries`),
-        axios.get(`${API}/placements`)
+        axios.get(`${API}/placements`),
+        axios.get(`${API}/housing-interest`).catch(() => ({ data: [] }))
       ]);
       setPlacementRequests(requestsRes.data);
       setProviderInquiries(inquiriesRes.data);
       setPlacements(placementsRes.data);
+      setHousingInterests(housingRes.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleUpdateHousingStatus = async (id, status) => {
+    try {
+      await axios.patch(`${API}/housing-interest/${id}?status=${status}`);
+      setHousingInterests(prev => 
+        prev.map(h => h.id === id ? { ...h, status } : h)
+      );
+      toast.success(`Status updated to ${status}`);
+    } catch (error) {
+      toast.error("Failed to update status");
     }
   };
 
