@@ -133,7 +133,10 @@ class ProviderInquiry(BaseModel):
     inquiry_type: str  # "Start New Placement", "Expand Services", "Partnership"
     description: str
     services_interested: List[str] = []
+    status: str = "pending"  # pending, approved, suspended
+    admin_notes: str = ""
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: Optional[datetime] = None
 
 class ProviderInquiryCreate(BaseModel):
     organization_name: str
