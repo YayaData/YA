@@ -633,6 +633,163 @@ export default function AdminDashboard() {
             )}
           </CardContent>
         </Card>
+
+        {/* Placement Board Moderation */}
+        <Card className="rounded-2xl border-0 shadow-lg mt-8" data-testid="placement-board-section">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold flex items-center gap-2" style={{ color: colors.dark }}>
+              <Users className="h-5 w-5" style={{ color: colors.blue }} />
+              Placement Request Board Moderation
+              {boardRequests.filter(r => r.status === 'pending').length > 0 && (
+                <Badge className="bg-blue-100 text-blue-700 ml-2">
+                  {boardRequests.filter(r => r.status === 'pending').length} pending approval
+                </Badge>
+              )}
+              {boardRequests.filter(r => r.connection_requests?.length > 0 && r.status === 'approved').length > 0 && (
+                <Badge className="bg-amber-100 text-amber-700 ml-2">
+                  {boardRequests.filter(r => r.connection_requests?.length > 0 && r.status === 'approved').length} connection requests
+                </Badge>
+              )}
+            </CardTitle>
+            <p className="text-sm text-gray-500">Approve requests and manage agency connections</p>
+          </CardHeader>
+          <CardContent>
+            {boardRequests.length === 0 ? (
+              <div className="text-center py-12">
+                <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">No placement board requests yet</p>
+                <p className="text-sm text-gray-400 mt-2">
+                  Share <strong>/submit-request</strong> for individuals to submit requests
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {boardRequests.map((request, index) => (
+                  <div key={index} className="p-4 border rounded-xl hover:bg-gray-50 transition-colors">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-semibold" style={{ color: colors.dark }}>{request.display_name}</p>
+                          <Badge className={
+                            request.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                            request.status === 'approved' ? 'bg-green-100 text-green-700' :
+                            request.status === 'connected' ? 'bg-blue-100 text-blue-700' :
+                            'bg-gray-100 text-gray-700'
+                          }>
+                            {request.status}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {request.county}, {request.state}
+                          </span>
+                          <span>Income: {request.income_type}</span>
+                          <span>Can Pay: {request.can_contribute ? 'Yes' : 'No'}</span>
+                        </div>
+                        {request.general_notes && (
+                          <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">
+                            "{request.general_notes}"
+                          </p>
+                        )}
+                        
+                        {/* Contact Info (Admin Only) */}
+                        <div className="mt-2 text-xs text-gray-400 bg-blue-50 p-2 rounded">
+                          <strong>Contact (Private):</strong> {request.contact_phone || request.contact_email} ({request.preferred_contact})
+                        </div>
+
+                        {/* Connection Requests */}
+                        {request.connection_requests && request.connection_requests.length > 0 && request.status === 'approved' && (
+                          <div className="mt-3 p-3 bg-amber-50 rounded-lg">
+                            <p className="text-sm font-medium text-amber-800 mb-2">
+                              Connection Requests ({request.connection_requests.length}):
+                            </p>
+                            <div className="space-y-2">
+                              {request.connection_requests.map((cr, i) => (
+                                <div key={i} className="flex items-center justify-between bg-white p-2 rounded">
+                                  <div>
+                                    <p className="text-sm font-medium">{cr.organization_name}</p>
+                                    <p className="text-xs text-gray-500">{cr.contact_name} • {cr.org_type}</p>
+                                  </div>
+                                  <Button
+                                    size="sm"
+                                    onClick={() => handleApproveConnection(request.id, cr.organization_name)}
+                                    className="text-xs"
+                                    style={{ background: colors.teal }}
+                                    disabled={isReadOnly}
+                                  >
+                                    Approve Connection
+                                  </Button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Connected Agency */}
+                        {request.approved_connector && (
+                          <div className="mt-3 p-3 bg-green-50 rounded-lg">
+                            <p className="text-sm text-green-800">
+                              <strong>Connected to:</strong> {request.approved_connector.organization_name}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-col gap-2 ml-4">
+                        {request.status === 'pending' && (
+                          <>
+                            <Button 
+                              size="sm"
+                              onClick={() => handleUpdateBoardStatus(request.id, 'approved')}
+                              className="text-xs"
+                              style={{ background: colors.teal }}
+                              disabled={isReadOnly}
+                            >
+                              <CheckCircle2 className="h-3 w-3 mr-1" />
+                              Approve for Board
+                            </Button>
+                            <Button 
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleUpdateBoardStatus(request.id, 'closed')}
+                              className="text-xs text-red-600"
+                              disabled={isReadOnly}
+                            >
+                              Reject
+                            </Button>
+                          </>
+                        )}
+                        {request.status === 'approved' && !request.approved_connector && (
+                          <Button 
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleUpdateBoardStatus(request.id, 'closed')}
+                            className="text-xs"
+                            disabled={isReadOnly}
+                          >
+                            Close Request
+                          </Button>
+                        )}
+                        {request.status === 'connected' && (
+                          <Button 
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleUpdateBoardStatus(request.id, 'closed')}
+                            className="text-xs"
+                            disabled={isReadOnly}
+                          >
+                            Mark Complete
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
