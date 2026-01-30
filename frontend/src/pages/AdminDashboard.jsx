@@ -211,7 +211,7 @@ export default function AdminDashboard() {
         )}
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <Card className="rounded-xl border-0 shadow-md">
             <CardContent className="p-4 flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: `${colors.blue}15` }}>
@@ -244,6 +244,18 @@ export default function AdminDashboard() {
               <div>
                 <p className="text-2xl font-bold" style={{ color: colors.dark }}>{pendingInquiries}</p>
                 <p className="text-xs text-gray-500">Pending Agencies</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-xl border-0 shadow-md bg-purple-50">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-purple-100">
+                <Home className="h-6 w-6 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-purple-600">{housingInterests.filter(h => h.status === 'pending').length}</p>
+                <p className="text-xs text-gray-500">Housing Interests</p>
               </div>
             </CardContent>
           </Card>
