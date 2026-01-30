@@ -1,9 +1,12 @@
 from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import io
+import csv
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
@@ -18,6 +21,10 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+# Admin email for notifications (optional)
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', '')
+SMTP_CONFIGURED = bool(os.environ.get('SMTP_HOST', ''))
 
 # Create the main app
 app = FastAPI(title="Anchor Placement - Client Placement API")
