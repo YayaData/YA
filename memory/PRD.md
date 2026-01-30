@@ -180,13 +180,11 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 ---
 
 ## Next Action Items
-1. **P0**: Implement backend persistence for admin actions (Approve/Suspend Agency, status updates)
-2. **P1**: Implement backend file upload handling for credentialing documents
-3. **P2**: Finalize Placement Request Board workflow (Request to Connect, agency notifications)
-4. Dynamic placement forms using `placementSchemas.js`
-5. Integrate MATCH_FLAGS matching logic into placement search
-6. Add user authentication system
-7. Build provider-request communication flow
+1. **P2**: Placement Request Board enhancements (Request to Connect, agency notifications)
+2. Dynamic placement forms using `placementSchemas.js`
+3. Integrate MATCH_FLAGS matching logic into placement search
+4. Add user authentication system
+5. Build provider-request communication flow
 
 ## Future/Backlog
 - "Become a Provider" guide
@@ -194,3 +192,4 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 - Multi-state credentialing support
 - Match scoring for ranking placements
 - Admin email digest configuration
+- Automatic email notifications for Script B closures (Phase 2)
