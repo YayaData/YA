@@ -67,7 +67,7 @@ export default function HousingInterest() {
     }
   };
 
-  // Success screen
+  // Success screen - SCRIPT A RESPONSE
   if (isSubmitted) {
     return (
       <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #F7FBFF 0%, #EAF4FF 100%)' }}>
@@ -80,31 +80,46 @@ export default function HousingInterest() {
 
         <main className="px-6 py-12 max-w-2xl mx-auto">
           <Card className="rounded-2xl shadow-lg border-0">
-            <CardContent className="p-8 text-center">
-              <div className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ background: `${colors.teal}15` }}>
-                <CheckCircle2 className="h-10 w-10" style={{ color: colors.teal }} />
-              </div>
-              <h1 className="text-2xl font-bold mb-4" style={{ color: colors.dark }}>
-                Request Submitted
-              </h1>
-              <p className="text-gray-600 mb-6">
-                Thank you for reaching out. Your information has been submitted for review.
-                A coordinator may contact you if a suitable housing option becomes available.
-              </p>
-              
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-left">
-                <div className="flex items-start gap-2">
-                  <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-amber-800">
-                    <strong>Please Note:</strong> Submitting this form does not guarantee placement or create any agreement. 
-                    Housing availability varies and is subject to provider capacity and eligibility requirements.
-                  </p>
+            <CardContent className="p-8">
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ background: `${colors.teal}15` }}>
+                  <CheckCircle2 className="h-10 w-10" style={{ color: colors.teal }} />
                 </div>
+                <h1 className="text-2xl font-bold" style={{ color: colors.dark }}>
+                  Request Received
+                </h1>
+              </div>
+              
+              {/* SCRIPT A - Response to Individual */}
+              <div className="bg-gray-50 rounded-xl p-6 mb-6 text-left space-y-4">
+                <p className="text-gray-700">Hello,</p>
+                
+                <p className="text-gray-700">
+                  Thank you for submitting a housing/placement interest request. We've received 
+                  your information and will review it based on availability and partner agency capacity.
+                </p>
+                
+                <p className="text-gray-700">
+                  Please note that submitting a request <strong>does not guarantee placement</strong>. 
+                  If additional information is needed, someone from our team will reach out.
+                </p>
+                
+                <p className="text-gray-700">Thank you.</p>
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 text-left">
+                <p className="text-sm text-blue-800">
+                  <strong>What happens next?</strong> Your request will be reviewed by our team. 
+                  We review submissions on a regular basis and will contact you if we identify 
+                  a potential match with our partner agencies.
+                </p>
               </div>
 
-              <Button onClick={() => navigate("/")} style={{ background: colors.blue }}>
-                Return to Home
-              </Button>
+              <div className="text-center">
+                <Button onClick={() => navigate("/")} style={{ background: colors.blue }}>
+                  Return to Home
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </main>
