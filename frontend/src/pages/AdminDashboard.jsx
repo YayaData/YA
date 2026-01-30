@@ -123,14 +123,30 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleApproveAgency = (inquiry) => {
-    toast.success(`Approved: ${inquiry.organization_name}`);
-    setProviderInquiries(prev => prev.filter(i => i !== inquiry));
+  const handleApproveAgency = async (inquiry) => {
+    try {
+      await axios.patch(`${API}/provider-inquiries/${inquiry.id}?status=approved`);
+      toast.success(`Approved: ${inquiry.organization_name}`);
+      setProviderInquiries(prev => 
+        prev.map(i => i.id === inquiry.id ? { ...i, status: 'approved' } : i)
+      );
+    } catch (error) {
+      console.error("Error approving agency:", error);
+      toast.error("Failed to approve agency");
+    }
   };
 
-  const handleSuspendAgency = (inquiry) => {
-    toast.error(`Suspended: ${inquiry.organization_name}`);
-    setProviderInquiries(prev => prev.filter(i => i !== inquiry));
+  const handleSuspendAgency = async (inquiry) => {
+    try {
+      await axios.patch(`${API}/provider-inquiries/${inquiry.id}?status=suspended`);
+      toast.error(`Suspended: ${inquiry.organization_name}`);
+      setProviderInquiries(prev => 
+        prev.map(i => i.id === inquiry.id ? { ...i, status: 'suspended' } : i)
+      );
+    } catch (error) {
+      console.error("Error suspending agency:", error);
+      toast.error("Failed to suspend agency");
+    }
   };
 
   const copyInviteLink = () => {
