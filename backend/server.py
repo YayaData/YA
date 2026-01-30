@@ -430,6 +430,70 @@ async def save_provider_credentials(credentials: ProviderCredentialsCreate):
         await db.provider_credentials.insert_one(doc)
         return {"message": "Credentials created", "organization": credentials.organization_name}
 
+# Housing Interest Model (Public Form - No PHI)
+class HousingInterest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str  # Can be initials
+    phone: str
+    location: str
+    has_disability_income: Optional[bool] = None
+    can_pay: Optional[bool] = None
+    description: str = ""
+    status: str = "pending"  # pending, reviewed, contacted, closed
+    admin_notes: str = ""
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class HousingInterestCreate(BaseModel):
+    name: str
+    phone: str
+    location: str
+    has_disability_income: Optional[bool] = None
+    can_pay: Optional[bool] = None
+    description: str = ""
+
+# Housing Interest Endpoints (Public submission, Admin review)
+@api_router.post("/housing-interest")
+async def submit_housing_interest(interest: HousingInterestCreate):
+    """Public endpoint for individuals to submit housing interest"""
+    doc = interest.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    doc["status"] = "pending"
+    doc["admin_notes"] = ""
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.housing_interest.insert_one(doc)
+    return {"message": "Housing interest submitted", "id": doc["id"]}
+
+@api_router.get("/housing-interest")
+async def get_housing_interest_list():
+    """Admin endpoint to list all housing interest submissions"""
+    interests = await db.housing_interest.find({}, {"_id": 0}).to_list(100)
+    return [serialize_doc(i) for i in interests]
+
+@api_router.patch("/housing-interest/{interest_id}")
+async def update_housing_interest(interest_id: str, status: str = None, admin_notes: str = None):
+    """Admin endpoint to update housing interest status"""
+    update_data = {}
+    if status:
+        update_data["status"] = status
+    if admin_notes is not None:
+        update_data["admin_notes"] = admin_notes
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No update data provided")
+    
+    result = await db.housing_interest.update_one(
+        {"id": interest_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Housing interest not found")
+    
+    return {"message": "Updated successfully"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
