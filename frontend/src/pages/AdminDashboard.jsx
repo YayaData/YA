@@ -515,17 +515,33 @@ export default function AdminDashboard() {
 
         {/* Housing Interest Submissions */}
         <Card className="rounded-2xl border-0 shadow-lg mt-8" data-testid="housing-interest-section">
-          <CardHeader>
-            <CardTitle className="text-lg font-bold flex items-center gap-2" style={{ color: colors.dark }}>
-              <Home className="h-5 w-5 text-purple-600" />
-              Housing Interest Submissions
-              {housingInterests.filter(h => h.status === 'pending').length > 0 && (
-                <Badge className="bg-purple-100 text-purple-700 ml-2">
-                  {housingInterests.filter(h => h.status === 'pending').length} pending
-                </Badge>
-              )}
-            </CardTitle>
-            <p className="text-sm text-gray-500">Review requests from individuals seeking housing</p>
+          <CardHeader className="flex flex-row items-start justify-between">
+            <div>
+              <CardTitle className="text-lg font-bold flex items-center gap-2" style={{ color: colors.dark }}>
+                <Home className="h-5 w-5 text-purple-600" />
+                Housing Interest Submissions
+                {housingInterests.filter(h => h.status === 'pending').length > 0 && (
+                  <Badge className="bg-purple-100 text-purple-700 ml-2">
+                    {housingInterests.filter(h => h.status === 'pending').length} pending
+                  </Badge>
+                )}
+              </CardTitle>
+              <p className="text-sm text-gray-500">Review requests from individuals seeking housing</p>
+            </div>
+            {housingInterests.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  window.open(`${API}/housing-interest/export`, '_blank');
+                }}
+                className="gap-2"
+                data-testid="export-housing-interest-btn"
+              >
+                <Download className="h-4 w-4" />
+                Export CSV
+              </Button>
+            )}
           </CardHeader>
           <CardContent>
             {housingInterests.length === 0 ? (
