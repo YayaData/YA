@@ -185,6 +185,11 @@ export default function DocumentUpload({ stateCode, orgType, uploadedDocuments =
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
+                ) : uploading[doc.id] ? (
+                  <div className="mt-4 border-2 border-dashed border-blue-300 rounded-lg p-6 text-center bg-blue-50">
+                    <Loader2 className="h-8 w-8 mx-auto text-blue-500 mb-2 animate-spin" />
+                    <p className="text-sm text-blue-600">Uploading document...</p>
+                  </div>
                 ) : (
                   <div
                     className={`mt-4 border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
