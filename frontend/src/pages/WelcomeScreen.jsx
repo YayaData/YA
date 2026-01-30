@@ -311,6 +311,43 @@ export default function WelcomeScreen() {
         </div>
       </section>
 
+      {/* NEED HOUSING SUPPORT - For Individuals */}
+      <section className="px-6 md:px-12 py-12 bg-gradient-to-r from-purple-50 to-blue-50">
+        <div className="max-w-4xl mx-auto">
+          <Card className="rounded-2xl shadow-lg border-0 overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-6 md:p-8 text-white">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                  <Heart className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-center md:text-left flex-1">
+                  <h3 className="text-2xl md:text-3xl font-bold font-['Poppins'] mb-2">
+                    Need Housing or Placement Support?
+                  </h3>
+                  <p className="text-white/90 text-lg">
+                    If you or someone you know is looking for housing assistance, we can help connect you with available options in your area.
+                  </p>
+                </div>
+                <Button 
+                  onClick={() => navigate("/housing-interest")}
+                  className="h-14 px-8 text-lg font-semibold rounded-xl bg-white hover:bg-gray-100 flex-shrink-0"
+                  style={{ color: colors.blue }}
+                  data-testid="housing-interest-btn"
+                >
+                  Submit Your Information
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+            <div className="p-4 bg-white border-t">
+              <p className="text-center text-sm text-gray-500">
+                Your information will be reviewed by a coordinator. Submitting does not guarantee placement.
+              </p>
+            </div>
+          </Card>
+        </div>
+      </section>
+
       {/* WHY ANCHOR PLACEMENT EXISTS - WITH IMAGE */}
       <section className="relative py-20 overflow-hidden">
         <div 
