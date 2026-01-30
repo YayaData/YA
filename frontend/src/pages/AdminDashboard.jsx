@@ -188,16 +188,27 @@ export default function AdminDashboard() {
               </Badge>
             </div>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={fetchData}
-            className="gap-2"
-            data-testid="refresh-button"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Refresh
-          </Button>
+          <div className="flex items-center gap-3">
+            {/* Notification Indicator */}
+            {notifications.length > 0 && (
+              <div className="relative">
+                <Bell className="h-5 w-5 text-gray-500" />
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                  {notifications.length}
+                </span>
+              </div>
+            )}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={fetchData}
+              className="gap-2"
+              data-testid="refresh-button"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </Button>
+          </div>
         </div>
       </header>
 
