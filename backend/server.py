@@ -472,19 +472,9 @@ async def submit_housing_interest(interest: HousingInterestCreate):
     
     await db.housing_interest.insert_one(doc)
     
-    # Store notification for admin (no client details in notification)
-    notification = {
-        "id": str(uuid.uuid4()),
-        "type": "housing_interest",
-        "message": "New housing interest submission received",
-        "location": interest.location,  # Only location, no personal info
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "read": False
-    }
-    await db.admin_notifications.insert_one(notification)
-    
-    # Log for email (actual email sending requires SMTP configuration)
-    logging.info(f"New housing interest submission from {interest.location} - Admin notification created")
+    # Store for digest notification (twice per week, not real-time)
+    # Admin will see pending count in dashboard - no real-time alerts
+    logging.info(f"New housing interest submission from {interest.location} - Added to digest queue")
     
     return {"message": "Housing interest submitted", "id": doc["id"]}
 
@@ -493,6 +483,27 @@ async def get_housing_interest_list():
     """Admin endpoint to list all housing interest submissions"""
     interests = await db.housing_interest.find({}, {"_id": 0}).to_list(100)
     return [serialize_doc(i) for i in interests]
+
+@api_router.get("/housing-interest/digest-summary")
+async def get_housing_interest_digest():
+    """Admin endpoint to get digest summary for notifications (twice per week)"""
+    # Get submissions from the last 3-4 days for bi-weekly digest
+    from datetime import timedelta
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=4)).isoformat()
+    
+    recent = await db.housing_interest.find(
+        {"created_at": {"$gte": cutoff}, "status": "pending"},
+        {"_id": 0, "name": 0, "phone": 0, "description": 0}  # No personal info in digest
+    ).to_list(100)
+    
+    summary = {
+        "period": "Last 4 days",
+        "total_new_submissions": len(recent),
+        "locations": list(set(r.get("location", "Unknown") for r in recent)),
+        "generated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    return summary
 
 @api_router.get("/housing-interest/export")
 async def export_housing_interest_csv():
