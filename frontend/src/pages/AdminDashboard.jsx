@@ -73,15 +73,30 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleUpdateHousingStatus = async (id, status) => {
+  const handleUpdateHousingStatus = async (id, status, closureMessage = null) => {
     try {
-      await axios.patch(`${API}/housing-interest/${id}?status=${status}`);
+      let url = `${API}/housing-interest/${id}?status=${status}`;
+      if (closureMessage) {
+        url += `&admin_notes=${encodeURIComponent(closureMessage)}`;
+      }
+      await axios.patch(url);
       setHousingInterests(prev => 
-        prev.map(h => h.id === id ? { ...h, status } : h)
+        prev.map(h => h.id === id ? { ...h, status, admin_notes: closureMessage || h.admin_notes } : h)
       );
       toast.success(`Status updated to ${status}`);
+      setShowCloseModal(null);
     } catch (error) {
       toast.error("Failed to update status");
+    }
+  };
+
+  const handleCloseWithScript = (interest) => {
+    setShowCloseModal(interest);
+  };
+
+  const confirmCloseWithScript = () => {
+    if (showCloseModal) {
+      handleUpdateHousingStatus(showCloseModal.id, 'closed', SCRIPTS.CLOSURE_NO_PLACEMENT);
     }
   };
 
