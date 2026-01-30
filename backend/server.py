@@ -371,6 +371,65 @@ async def seed_demo_data():
     await db.placements.insert_many(demo_placements)
     return {"message": "Demo data seeded successfully", "count": len(demo_placements)}
 
+# Provider Credentials Model
+class ProviderCredentials(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    organization_name: str
+    state: str
+    org_type: str
+    checklist_completed: List[str] = []
+    documents_uploaded: List[dict] = []
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ProviderCredentialsCreate(BaseModel):
+    organization_name: str
+    state: str
+    org_type: str
+    checklist_completed: List[str] = []
+    documents_uploaded: List[dict] = []
+    updated_at: Optional[str] = None
+
+# Provider Credentials Endpoints
+@api_router.get("/provider-credentials")
+async def get_provider_credentials():
+    credentials = await db.provider_credentials.find({}, {"_id": 0}).to_list(100)
+    return [serialize_doc(c) for c in credentials]
+
+@api_router.get("/provider-credentials/{org_name}")
+async def get_provider_credentials_by_org(org_name: str):
+    credential = await db.provider_credentials.find_one(
+        {"organization_name": org_name}, 
+        {"_id": 0}
+    )
+    if not credential:
+        raise HTTPException(status_code=404, detail="Credentials not found")
+    return serialize_doc(credential)
+
+@api_router.post("/provider-credentials")
+async def save_provider_credentials(credentials: ProviderCredentialsCreate):
+    # Upsert - update if exists, insert if not
+    existing = await db.provider_credentials.find_one(
+        {"organization_name": credentials.organization_name}
+    )
+    
+    doc = credentials.model_dump()
+    doc["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    if existing:
+        await db.provider_credentials.update_one(
+            {"organization_name": credentials.organization_name},
+            {"$set": doc}
+        )
+        return {"message": "Credentials updated", "organization": credentials.organization_name}
+    else:
+        doc["id"] = str(uuid.uuid4())
+        doc["created_at"] = datetime.now(timezone.utc).isoformat()
+        await db.provider_credentials.insert_one(doc)
+        return {"message": "Credentials created", "organization": credentials.organization_name}
+
 # Include the router in the main app
 app.include_router(api_router)
 
