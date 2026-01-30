@@ -29,6 +29,7 @@ export default function AdminDashboard() {
   const [providerInquiries, setProviderInquiries] = useState([]);
   const [placements, setPlacements] = useState([]);
   const [housingInterests, setHousingInterests] = useState([]);
+  const [boardRequests, setBoardRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [inviteLink, setInviteLink] = useState("");
 
@@ -41,16 +42,18 @@ export default function AdminDashboard() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const [requestsRes, inquiriesRes, placementsRes, housingRes] = await Promise.all([
+      const [requestsRes, inquiriesRes, placementsRes, housingRes, boardRes] = await Promise.all([
         axios.get(`${API}/placement-requests`),
         axios.get(`${API}/provider-inquiries`),
         axios.get(`${API}/placements`),
-        axios.get(`${API}/housing-interest`).catch(() => ({ data: [] }))
+        axios.get(`${API}/housing-interest`).catch(() => ({ data: [] })),
+        axios.get(`${API}/placement-board`).catch(() => ({ data: [] }))
       ]);
       setPlacementRequests(requestsRes.data);
       setProviderInquiries(inquiriesRes.data);
       setPlacements(placementsRes.data);
       setHousingInterests(housingRes.data);
+      setBoardRequests(boardRes.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -67,6 +70,29 @@ export default function AdminDashboard() {
       toast.success(`Status updated to ${status}`);
     } catch (error) {
       toast.error("Failed to update status");
+    }
+  };
+
+  const handleUpdateBoardStatus = async (id, status) => {
+    try {
+      await axios.patch(`${API}/placement-board/${id}?status=${status}`);
+      setBoardRequests(prev => 
+        prev.map(r => r.id === id ? { ...r, status } : r)
+      );
+      toast.success(`Request ${status}`);
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to update status");
+    }
+  };
+
+  const handleApproveConnection = async (requestId, orgName) => {
+    try {
+      const res = await axios.post(`${API}/placement-board/${requestId}/approve-connection?organization_name=${encodeURIComponent(orgName)}`);
+      toast.success(`Connection approved! Contact: ${res.data.contact_info.phone || res.data.contact_info.email}`);
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to approve connection");
     }
   };
 
