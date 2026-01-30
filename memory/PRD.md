@@ -90,6 +90,19 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 
 ## Key Features Completed
 
+### Admin Agency Management (P0 - Complete)
+- Approve/Suspend agencies with backend persistence
+- Status badges: Pending (amber), Approved (green), Suspended (red)
+- Reinstate suspended agencies
+- Grouped view in Agency Management section
+
+### Credentialing Document Upload (P1 - Complete)
+- Backend file upload endpoint with multipart form data
+- Disk storage + MongoDB metadata
+- File validation (PDF, JPEG, PNG, max 10MB)
+- Upload, list, download, delete endpoints
+- Loading state during upload
+
 ### Housing Interest Feature (Complete)
 - Public `/housing-interest` page for individuals
 - Admin review workflow with status tracking (pending → reviewed → contacted → closed)
@@ -97,10 +110,10 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 - Script A response for contacted individuals
 - **Script B closure response modal** with standardized unavailability message
 
-### Credentialing System V1 (UI Complete - Backend MOCKED)
+### Credentialing System V1 (Complete)
 - North Carolina state-specific requirements
 - Self-attestation checklist
-- Document upload UI (backend file storage not implemented)
+- Document upload with backend storage
 
 ### Placement Request Board V1 (Complete)
 - Public `/submit-request` page for individuals
