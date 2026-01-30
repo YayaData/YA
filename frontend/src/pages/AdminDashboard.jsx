@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { 
   ArrowLeft, Users, Building2, Clock, Mail, MapPin, Phone,
   RefreshCw, AlertTriangle, CheckCircle2, Shield, Link2, Copy, UserPlus,
-  Download, FileText, Lock, Home, Eye, MessageSquare
+  Download, FileText, Lock, Home, Eye, MessageSquare, X
 } from "lucide-react";
 import { toast } from "sonner";
 import { FEATURE_FLAGS } from "@/constants/featureFlags";
