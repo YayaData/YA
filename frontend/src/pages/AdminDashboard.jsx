@@ -835,6 +835,63 @@ export default function AdminDashboard() {
             )}
           </CardContent>
         </Card>
+
+        {/* Close Request Modal with Script B */}
+        {showCloseModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" data-testid="close-modal-overlay">
+            <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full mx-4 overflow-hidden" data-testid="close-modal">
+              <div className="p-6 border-b border-gray-100">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold flex items-center gap-2" style={{ color: colors.dark }}>
+                    <MessageSquare className="h-5 w-5 text-purple-600" />
+                    Close Housing Interest Request
+                  </h3>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => setShowCloseModal(null)}
+                    data-testid="close-modal-dismiss"
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                  Closing request for <strong>{showCloseModal.name}</strong>
+                </p>
+              </div>
+              
+              <div className="p-6">
+                <p className="text-sm font-medium text-gray-700 mb-3">
+                  The following standardized response will be recorded:
+                </p>
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-600 whitespace-pre-wrap">
+                  {SCRIPTS.CLOSURE_NO_PLACEMENT}
+                </div>
+                <p className="text-xs text-gray-400 mt-3">
+                  This message will be saved as admin notes for this request.
+                </p>
+              </div>
+              
+              <div className="p-6 bg-gray-50 border-t border-gray-100 flex gap-3 justify-end">
+                <Button 
+                  variant="outline"
+                  onClick={() => setShowCloseModal(null)}
+                  data-testid="close-modal-cancel"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={confirmCloseWithScript}
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  data-testid="close-modal-confirm"
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-2" />
+                  Confirm & Close Request
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
