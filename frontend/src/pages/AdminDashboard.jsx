@@ -23,6 +23,17 @@ const colors = {
   dark: "#1F2937"
 };
 
+// Response Scripts
+const SCRIPTS = {
+  CLOSURE_NO_PLACEMENT: `Hello,
+
+Thank you for submitting a housing interest request. At this time, we are unable to move forward due to availability limitations.
+
+We appreciate you reaching out and encourage you to seek additional local resources as well.
+
+Thank you.`
+};
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [placementRequests, setPlacementRequests] = useState([]);
@@ -32,6 +43,7 @@ export default function AdminDashboard() {
   const [boardRequests, setBoardRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [inviteLink, setInviteLink] = useState("");
+  const [showCloseModal, setShowCloseModal] = useState(null); // Holds the interest being closed
 
   useEffect(() => {
     fetchData();
