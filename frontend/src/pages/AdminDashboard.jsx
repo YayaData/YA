@@ -30,6 +30,7 @@ export default function AdminDashboard() {
   const [placements, setPlacements] = useState([]);
   const [housingInterests, setHousingInterests] = useState([]);
   const [boardRequests, setBoardRequests] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [inviteLink, setInviteLink] = useState("");
 
@@ -42,18 +43,20 @@ export default function AdminDashboard() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const [requestsRes, inquiriesRes, placementsRes, housingRes, boardRes] = await Promise.all([
+      const [requestsRes, inquiriesRes, placementsRes, housingRes, boardRes, notificationsRes] = await Promise.all([
         axios.get(`${API}/placement-requests`),
         axios.get(`${API}/provider-inquiries`),
         axios.get(`${API}/placements`),
         axios.get(`${API}/housing-interest`).catch(() => ({ data: [] })),
-        axios.get(`${API}/placement-board`).catch(() => ({ data: [] }))
+        axios.get(`${API}/placement-board`).catch(() => ({ data: [] })),
+        axios.get(`${API}/admin/notifications`).catch(() => ({ data: [] }))
       ]);
       setPlacementRequests(requestsRes.data);
       setProviderInquiries(inquiriesRes.data);
       setPlacements(placementsRes.data);
       setHousingInterests(housingRes.data);
       setBoardRequests(boardRes.data);
+      setNotifications(notificationsRes.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
