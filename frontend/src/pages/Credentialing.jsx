@@ -241,6 +241,7 @@ export default function Credentialing() {
                   uploadedDocuments={uploadedDocuments}
                   onUpload={handleDocumentUpload}
                   onRemove={handleDocumentRemove}
+                  organizationName={userData.organizationName}
                 />
               </CardContent>
             </Card>
