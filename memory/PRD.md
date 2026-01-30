@@ -31,10 +31,24 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 ## What's Been Implemented
 
 ### Latest Updates (Jan 30, 2025)
+- [x] **P0: Backend Persistence for Admin Actions**
+  - Agency Approve/Suspend now persists to MongoDB via `PATCH /api/provider-inquiries/{id}`
+  - Status updates: pending → approved, pending → suspended, suspended → approved (reinstate)
+  - Admin Dashboard displays status badges and grouped agency sections
+  - File: `server.py` - `update_provider_inquiry()`, `AdminDashboard.jsx` - `handleApproveAgency()`, `handleSuspendAgency()`
+
+- [x] **P1: Backend File Upload for Credentialing Documents**
+  - Documents uploaded via `POST /api/credentials/upload` (multipart form data)
+  - Files stored on disk in `/app/backend/uploads/credentials/{org_name}/`
+  - Metadata stored in MongoDB `credential_documents` collection
+  - Supports PDF, JPEG, PNG (max 10MB)
+  - Endpoints: upload, list, download, delete
+  - File: `server.py` - `upload_credential_document()`, `DocumentUpload.jsx` - `handleFile()`
+
 - [x] **Script B - Closure Response Modal** for Housing Interest requests
-  - Admin can now close housing interest requests with a standardized response
+  - Admin can close housing interest requests with standardized response
   - Modal displays Script B message before confirmation
-  - Admin notes are saved to the database with the closure message
+  - Admin notes saved to database with closure message
   - File: `AdminDashboard.jsx` - `handleCloseWithScript()`, `confirmCloseWithScript()`
 
 ### Previous Updates (Jan 22-29, 2025)
