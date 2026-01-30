@@ -13,6 +13,8 @@ import RequestorDashboard from "@/pages/RequestorDashboard";
 import Dashboard from "@/pages/Dashboard";
 import Credentialing from "@/pages/Credentialing";
 import HousingInterest from "@/pages/HousingInterest";
+import PlacementRequestBoard from "@/pages/PlacementRequestBoard";
+import SubmitPlacementRequest from "@/pages/SubmitPlacementRequest";
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/credentialing" element={<Credentialing />} />
           <Route path="/housing-interest" element={<HousingInterest />} />
+          <Route path="/request-board" element={<PlacementRequestBoard />} />
+          <Route path="/submit-request" element={<SubmitPlacementRequest />} />
           <Route path="/place-client" element={<PlaceClient />} />
           <Route path="/placements" element={<Placements />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
