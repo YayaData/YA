@@ -164,9 +164,14 @@ export default function AdminDashboard() {
     r.urgency === "Urgent" || r.matchFlags?.length > 2
   );
 
+  // Filter pending inquiries for approval section
+  const pendingAgencies = providerInquiries.filter(i => !i.status || i.status === 'pending');
+  const approvedAgencies = providerInquiries.filter(i => i.status === 'approved');
+  const suspendedAgencies = providerInquiries.filter(i => i.status === 'suspended');
+
   // Count urgent requests
   const urgentCount = placementRequests.filter(r => r.urgency === "Urgent").length;
-  const pendingInquiries = providerInquiries.length;
+  const pendingInquiries = pendingAgencies.length;
 
   // Check if in read-only audit mode
   const isReadOnly = FEATURE_FLAGS.READ_ONLY_AUDIT;
