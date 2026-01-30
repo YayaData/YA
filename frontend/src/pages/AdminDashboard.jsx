@@ -486,6 +486,127 @@ export default function AdminDashboard() {
             )}
           </CardContent>
         </Card>
+
+        {/* Housing Interest Submissions */}
+        <Card className="rounded-2xl border-0 shadow-lg mt-8" data-testid="housing-interest-section">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold flex items-center gap-2" style={{ color: colors.dark }}>
+              <Home className="h-5 w-5 text-purple-600" />
+              Housing Interest Submissions
+              {housingInterests.filter(h => h.status === 'pending').length > 0 && (
+                <Badge className="bg-purple-100 text-purple-700 ml-2">
+                  {housingInterests.filter(h => h.status === 'pending').length} pending
+                </Badge>
+              )}
+            </CardTitle>
+            <p className="text-sm text-gray-500">Review requests from individuals seeking housing</p>
+          </CardHeader>
+          <CardContent>
+            {housingInterests.length === 0 ? (
+              <div className="text-center py-12">
+                <Home className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">No housing interest submissions yet</p>
+                <p className="text-sm text-gray-400 mt-2">
+                  Share <strong>/housing-interest</strong> for individuals to submit requests
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {housingInterests.map((interest, index) => (
+                  <div key={index} className="p-4 border rounded-xl hover:bg-gray-50 transition-colors">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-semibold" style={{ color: colors.dark }}>{interest.name}</p>
+                          <Badge className={
+                            interest.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                            interest.status === 'reviewed' ? 'bg-blue-100 text-blue-700' :
+                            interest.status === 'contacted' ? 'bg-green-100 text-green-700' :
+                            'bg-gray-100 text-gray-700'
+                          }>
+                            {interest.status}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <span className="flex items-center gap-1">
+                            <Phone className="h-3 w-3" />
+                            {interest.phone}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {interest.location}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4 text-xs text-gray-400 mt-2">
+                          <span>
+                            Disability Income: {interest.has_disability_income === true ? 'Yes' : interest.has_disability_income === false ? 'No' : 'Unknown'}
+                          </span>
+                          <span>
+                            Can Pay: {interest.can_pay === true ? 'Yes' : interest.can_pay === false ? 'No' : 'Unknown'}
+                          </span>
+                        </div>
+                        {interest.description && (
+                          <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">
+                            "{interest.description}"
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2 ml-4">
+                        {interest.status === 'pending' && (
+                          <>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleUpdateHousingStatus(interest.id, 'reviewed')}
+                              className="text-xs"
+                              disabled={isReadOnly}
+                            >
+                              <Eye className="h-3 w-3 mr-1" />
+                              Mark Reviewed
+                            </Button>
+                            <Button 
+                              size="sm"
+                              onClick={() => handleUpdateHousingStatus(interest.id, 'contacted')}
+                              className="text-xs"
+                              style={{ background: colors.teal }}
+                              disabled={isReadOnly}
+                            >
+                              <MessageSquare className="h-3 w-3 mr-1" />
+                              Mark Contacted
+                            </Button>
+                          </>
+                        )}
+                        {interest.status === 'reviewed' && (
+                          <Button 
+                            size="sm"
+                            onClick={() => handleUpdateHousingStatus(interest.id, 'contacted')}
+                            className="text-xs"
+                            style={{ background: colors.teal }}
+                            disabled={isReadOnly}
+                          >
+                            <MessageSquare className="h-3 w-3 mr-1" />
+                            Mark Contacted
+                          </Button>
+                        )}
+                        {(interest.status === 'contacted' || interest.status === 'reviewed') && (
+                          <Button 
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleUpdateHousingStatus(interest.id, 'closed')}
+                            className="text-xs"
+                            disabled={isReadOnly}
+                          >
+                            Close
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
