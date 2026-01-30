@@ -482,6 +482,113 @@ async def save_provider_credentials(credentials: ProviderCredentialsCreate):
         await db.provider_credentials.insert_one(doc)
         return {"message": "Credentials created", "organization": credentials.organization_name}
 
+# Credential Document Upload Endpoints
+@api_router.post("/credentials/upload")
+async def upload_credential_document(
+    file: UploadFile = File(...),
+    organization_name: str = Form(...),
+    document_type: str = Form(...),
+    document_id: str = Form(...)
+):
+    """Upload a credentialing document"""
+    # Validate file extension
+    file_ext = Path(file.filename).suffix.lower()
+    if file_ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"File type not allowed. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
+        )
+    
+    # Read file to check size
+    contents = await file.read()
+    if len(contents) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"File too large. Maximum size: {MAX_FILE_SIZE // (1024*1024)}MB"
+        )
+    
+    # Create organization directory
+    org_dir = UPLOADS_DIR / organization_name.replace(' ', '_').replace('/', '_')
+    org_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Generate unique filename
+    file_id = str(uuid.uuid4())
+    safe_filename = f"{document_id}_{file_id}{file_ext}"
+    file_path = org_dir / safe_filename
+    
+    # Save file
+    with open(file_path, 'wb') as f:
+        f.write(contents)
+    
+    # Store file metadata in database
+    file_doc = {
+        "id": file_id,
+        "organization_name": organization_name,
+        "document_type": document_type,
+        "document_id": document_id,
+        "original_filename": file.filename,
+        "stored_filename": safe_filename,
+        "file_path": str(file_path),
+        "file_size": len(contents),
+        "file_type": file.content_type,
+        "uploaded_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.credential_documents.insert_one(file_doc)
+    
+    logging.info(f"Document uploaded: {file.filename} for {organization_name}")
+    
+    return {
+        "message": "File uploaded successfully",
+        "file_id": file_id,
+        "filename": file.filename,
+        "document_id": document_id,
+        "size": len(contents)
+    }
+
+@api_router.get("/credentials/documents/{organization_name}")
+async def get_organization_documents(organization_name: str):
+    """Get all uploaded documents for an organization"""
+    documents = await db.credential_documents.find(
+        {"organization_name": organization_name},
+        {"_id": 0, "file_path": 0}  # Don't expose internal path
+    ).to_list(100)
+    return documents
+
+@api_router.get("/credentials/download/{file_id}")
+async def download_credential_document(file_id: str):
+    """Download a specific document"""
+    doc = await db.credential_documents.find_one({"id": file_id})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    file_path = Path(doc["file_path"])
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File not found on server")
+    
+    return FileResponse(
+        path=str(file_path),
+        filename=doc["original_filename"],
+        media_type=doc.get("file_type", "application/octet-stream")
+    )
+
+@api_router.delete("/credentials/documents/{file_id}")
+async def delete_credential_document(file_id: str):
+    """Delete a credential document"""
+    doc = await db.credential_documents.find_one({"id": file_id})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    # Delete physical file
+    file_path = Path(doc["file_path"])
+    if file_path.exists():
+        file_path.unlink()
+    
+    # Delete from database
+    await db.credential_documents.delete_one({"id": file_id})
+    
+    return {"message": "Document deleted successfully"}
+
 # Housing Interest Model (Public Form - No PHI)
 class HousingInterest(BaseModel):
     model_config = ConfigDict(extra="ignore")
