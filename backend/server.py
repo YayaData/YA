@@ -471,6 +471,21 @@ async def submit_housing_interest(interest: HousingInterestCreate):
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
     
     await db.housing_interest.insert_one(doc)
+    
+    # Store notification for admin (no client details in notification)
+    notification = {
+        "id": str(uuid.uuid4()),
+        "type": "housing_interest",
+        "message": "New housing interest submission received",
+        "location": interest.location,  # Only location, no personal info
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "read": False
+    }
+    await db.admin_notifications.insert_one(notification)
+    
+    # Log for email (actual email sending requires SMTP configuration)
+    logging.info(f"New housing interest submission from {interest.location} - Admin notification created")
+    
     return {"message": "Housing interest submitted", "id": doc["id"]}
 
 @api_router.get("/housing-interest")
@@ -478,6 +493,63 @@ async def get_housing_interest_list():
     """Admin endpoint to list all housing interest submissions"""
     interests = await db.housing_interest.find({}, {"_id": 0}).to_list(100)
     return [serialize_doc(i) for i in interests]
+
+@api_router.get("/housing-interest/export")
+async def export_housing_interest_csv():
+    """Admin endpoint to export housing interest submissions as CSV"""
+    interests = await db.housing_interest.find({}, {"_id": 0}).to_list(1000)
+    
+    # Create CSV in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    # Header row
+    writer.writerow([
+        "ID", "Name", "Phone", "Location", "Disability Income", 
+        "Can Pay", "Description", "Status", "Admin Notes", "Created At"
+    ])
+    
+    # Data rows
+    for item in interests:
+        writer.writerow([
+            item.get("id", ""),
+            item.get("name", ""),
+            item.get("phone", ""),
+            item.get("location", ""),
+            "Yes" if item.get("has_disability_income") else "No" if item.get("has_disability_income") is False else "Unknown",
+            "Yes" if item.get("can_pay") else "No" if item.get("can_pay") is False else "Unknown",
+            item.get("description", ""),
+            item.get("status", "pending"),
+            item.get("admin_notes", ""),
+            item.get("created_at", "")
+        ])
+    
+    output.seek(0)
+    
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=housing-interest-{datetime.now().strftime('%Y%m%d')}.csv"}
+    )
+
+# Admin Notifications Endpoints
+@api_router.get("/admin/notifications")
+async def get_admin_notifications():
+    """Get unread admin notifications"""
+    notifications = await db.admin_notifications.find(
+        {"read": False}, 
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(50)
+    return [serialize_doc(n) for n in notifications]
+
+@api_router.post("/admin/notifications/{notification_id}/read")
+async def mark_notification_read(notification_id: str):
+    """Mark a notification as read"""
+    await db.admin_notifications.update_one(
+        {"id": notification_id},
+        {"$set": {"read": True}}
+    )
+    return {"message": "Notification marked as read"}
 
 @api_router.patch("/housing-interest/{interest_id}")
 async def update_housing_interest(interest_id: str, status: str = None, admin_notes: str = None):
