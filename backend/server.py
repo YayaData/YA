@@ -292,6 +292,39 @@ async def create_provider_inquiry(input_data: ProviderInquiryCreate):
     await db.provider_inquiries.insert_one(doc)
     return inquiry
 
+@api_router.patch("/provider-inquiries/{inquiry_id}")
+async def update_provider_inquiry(inquiry_id: str, status: str = None, admin_notes: str = None):
+    """Admin endpoint to update provider inquiry status (approve/suspend)"""
+    update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    
+    if status:
+        if status not in ["pending", "approved", "suspended"]:
+            raise HTTPException(status_code=400, detail="Invalid status. Must be: pending, approved, or suspended")
+        update_data["status"] = status
+    if admin_notes is not None:
+        update_data["admin_notes"] = admin_notes
+    
+    if len(update_data) == 1:  # Only updated_at
+        raise HTTPException(status_code=400, detail="No update data provided")
+    
+    result = await db.provider_inquiries.update_one(
+        {"id": inquiry_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Provider inquiry not found")
+    
+    return {"message": f"Provider inquiry {status or 'updated'} successfully", "id": inquiry_id}
+
+@api_router.get("/provider-inquiries/{inquiry_id}")
+async def get_provider_inquiry(inquiry_id: str):
+    """Get a single provider inquiry by ID"""
+    inquiry = await db.provider_inquiries.find_one({"id": inquiry_id}, {"_id": 0})
+    if not inquiry:
+        raise HTTPException(status_code=404, detail="Provider inquiry not found")
+    return serialize_doc(inquiry)
+
 # Seed data endpoint for demo
 @api_router.post("/seed-data")
 async def seed_demo_data():
