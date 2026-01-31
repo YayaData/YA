@@ -31,6 +31,14 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 ## What's Been Implemented
 
 ### Latest Updates (Jan 31, 2025)
+- [x] **Placement Choice Screen** (`/request-placement`)
+  - Clear choice between "I'm a Professional" (paid) and "I'm an Individual" (free)
+  - Professional option shows $20/placement or $49/month pricing
+  - Individual option shows FREE badge
+  - Both options list what's included
+  - Disclaimer at bottom: "Submission does not guarantee placement"
+  - File: `PlacementChoice.jsx`
+
 - [x] **Dual Payment Model Implementation**
   - Single placement fee: $20 (one-time)
   - Monthly subscription: $49 (unlimited placements for 30 days)
