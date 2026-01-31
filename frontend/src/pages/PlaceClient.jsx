@@ -98,6 +98,16 @@ export default function PlaceClient() {
     }
   }, [paymentVerified]);
 
+  // Check subscription when email is entered
+  useEffect(() => {
+    if (formData.contact_email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contact_email)) {
+      const debounceTimer = setTimeout(() => {
+        checkSubscription(formData.contact_email);
+      }, 500);
+      return () => clearTimeout(debounceTimer);
+    }
+  }, [formData.contact_email]);
+
   const updateFormData = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
