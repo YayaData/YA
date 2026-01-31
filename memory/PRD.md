@@ -31,6 +31,14 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 ## What's Been Implemented
 
 ### Latest Updates (Jan 31, 2025)
+- [x] **Dual Payment Model Implementation**
+  - Single placement fee: $20 (one-time)
+  - Monthly subscription: $49 (unlimited placements for 30 days)
+  - Backend checks for active subscription OR valid payment before accepting placement
+  - Subscription status stored in `subscriptions` collection with expiry date
+  - Auto-check subscription when user enters email
+  - Files: `server.py` - subscription endpoints, `PlaceClient.jsx` - payment options UI
+
 - [x] **Payment Disclaimer Implementation**
   - Disclaimer on placement request page (Step 3) with acknowledgment checkbox
   - Payment Policy page (`/payment-policy`) with detailed "Payment Does Not Guarantee Placement" section
