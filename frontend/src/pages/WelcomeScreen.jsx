@@ -602,6 +602,9 @@ export default function WelcomeScreen() {
           <div className="border-t border-gray-700 pt-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex gap-6">
+                <button onClick={() => navigate("/privacy")} className="text-sm text-gray-400 hover:text-white underline">
+                  Privacy Policy
+                </button>
                 <button onClick={() => navigate("/terms")} className="text-sm text-gray-400 hover:text-white underline">
                   Terms of Service
                 </button>
