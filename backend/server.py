@@ -286,36 +286,61 @@ async def get_placement_requests():
     return requests
 
 @api_router.post("/placement-requests", response_model=PlacementRequest)
-async def create_placement_request(input_data: PlacementRequestCreate, payment_session_id: str = None):
-    """Create a placement request - requires valid payment session"""
-    # Verify payment was completed
-    if not payment_session_id:
-        raise HTTPException(status_code=402, detail="Payment required to submit placement request")
+async def create_placement_request(
+    input_data: PlacementRequestCreate, 
+    payment_session_id: str = None,
+    user_email: str = None
+):
+    """Create a placement request - requires active subscription OR valid payment session"""
     
-    # Check if payment was successful
-    payment = await db.payment_transactions.find_one({"session_id": payment_session_id})
-    if not payment:
-        raise HTTPException(status_code=402, detail="Invalid payment session")
+    has_valid_access = False
+    access_type = None
     
-    if payment.get("payment_status") != "paid":
-        raise HTTPException(status_code=402, detail="Payment not completed")
+    # Check 1: Does user have an active subscription?
+    if user_email:
+        subscription = await db.subscriptions.find_one({"email": user_email.lower()})
+        if subscription:
+            expires_at = subscription.get("expires_at")
+            if expires_at:
+                try:
+                    expiry_date = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+                    if expiry_date > datetime.now(timezone.utc):
+                        has_valid_access = True
+                        access_type = "subscription"
+                except:
+                    pass
     
-    # Check if this payment was already used
-    if payment.get("used_for_request"):
-        raise HTTPException(status_code=400, detail="This payment has already been used for a request")
+    # Check 2: Does user have a valid payment session?
+    if not has_valid_access and payment_session_id:
+        payment = await db.payment_transactions.find_one({"session_id": payment_session_id})
+        if payment:
+            if payment.get("payment_status") == "paid" and not payment.get("used_for_request"):
+                has_valid_access = True
+                access_type = "placement_payment"
+    
+    # If no valid access, return 402
+    if not has_valid_access:
+        raise HTTPException(
+            status_code=402, 
+            detail="Payment required. Please purchase a subscription ($49/month) or pay per placement ($20)."
+        )
     
     # Create the placement request
     request = PlacementRequest(**input_data.model_dump())
     request_doc = request.model_dump()
     serialize_doc(request_doc)
-    request_doc["payment_session_id"] = payment_session_id
-    await db.placement_requests.insert_one(request_doc)
+    request_doc["access_type"] = access_type
+    request_doc["user_email"] = user_email
     
-    # Mark payment as used
-    await db.payment_transactions.update_one(
-        {"session_id": payment_session_id},
-        {"$set": {"used_for_request": request.id, "used_at": datetime.now(timezone.utc).isoformat()}}
-    )
+    if access_type == "placement_payment" and payment_session_id:
+        request_doc["payment_session_id"] = payment_session_id
+        # Mark payment as used (only for per-placement payments, not subscriptions)
+        await db.payment_transactions.update_one(
+            {"session_id": payment_session_id},
+            {"$set": {"used_for_request": request.id, "used_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    
+    await db.placement_requests.insert_one(request_doc)
     
     return request
 
