@@ -448,14 +448,38 @@ async def stripe_webhook(request: Request):
         
         # Update payment transaction based on webhook event
         if webhook_response.session_id:
+            transaction = await db.payment_transactions.find_one({"session_id": webhook_response.session_id})
+            
+            update_data = {
+                "payment_status": webhook_response.payment_status,
+                "event_type": webhook_response.event_type,
+                "event_id": webhook_response.event_id,
+                "webhook_received_at": datetime.now(timezone.utc).isoformat()
+            }
+            
+            # If this is a subscription payment and it's paid, create/update subscription record
+            if transaction and transaction.get("payment_type") == "subscription" and webhook_response.payment_status == "paid":
+                user_email = transaction.get("user_email")
+                if user_email:
+                    # Calculate subscription end date (30 days from now)
+                    subscription_end = datetime.now(timezone.utc) + timedelta(days=30)
+                    await db.subscriptions.update_one(
+                        {"email": user_email},
+                        {"$set": {
+                            "email": user_email,
+                            "status": "active",
+                            "started_at": datetime.now(timezone.utc).isoformat(),
+                            "expires_at": subscription_end.isoformat(),
+                            "payment_session_id": webhook_response.session_id,
+                            "updated_at": datetime.now(timezone.utc).isoformat()
+                        }},
+                        upsert=True
+                    )
+                    logging.info(f"Subscription activated for {user_email}")
+            
             await db.payment_transactions.update_one(
                 {"session_id": webhook_response.session_id},
-                {"$set": {
-                    "payment_status": webhook_response.payment_status,
-                    "event_type": webhook_response.event_type,
-                    "event_id": webhook_response.event_id,
-                    "webhook_received_at": datetime.now(timezone.utc).isoformat()
-                }}
+                {"$set": update_data}
             )
         
         logging.info(f"Webhook processed: {webhook_response.event_type} for session {webhook_response.session_id}")
@@ -465,12 +489,61 @@ async def stripe_webhook(request: Request):
         raise HTTPException(status_code=400, detail=str(e))
 
 @api_router.get("/payments/fee")
-async def get_placement_fee():
-    """Get the current placement request fee"""
+async def get_payment_options():
+    """Get current payment options"""
     return {
-        "amount": PLACEMENT_REQUEST_FEE,
+        "placement_fee": PLACEMENT_REQUEST_FEE,
+        "subscription_fee": SUBSCRIPTION_FEE,
         "currency": "usd",
-        "description": "Placement Request Fee"
+        "options": [
+            {
+                "type": "placement",
+                "amount": PLACEMENT_REQUEST_FEE,
+                "description": "Single Placement Request",
+                "details": "One-time fee for a single placement submission"
+            },
+            {
+                "type": "subscription",
+                "amount": SUBSCRIPTION_FEE,
+                "description": "Monthly Subscription",
+                "details": "Unlimited placement requests for 30 days"
+            }
+        ]
+    }
+
+@api_router.get("/payments/subscription/check")
+async def check_subscription_status(email: str):
+    """Check if user has an active subscription"""
+    if not email:
+        return {"has_active_subscription": False}
+    
+    subscription = await db.subscriptions.find_one({"email": email.lower()}, {"_id": 0})
+    
+    if not subscription:
+        return {"has_active_subscription": False, "subscription": None}
+    
+    # Check if subscription is still active
+    expires_at = subscription.get("expires_at")
+    if expires_at:
+        try:
+            expiry_date = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+            if expiry_date > datetime.now(timezone.utc):
+                return {
+                    "has_active_subscription": True,
+                    "subscription": {
+                        "status": "active",
+                        "expires_at": expires_at
+                    }
+                }
+        except:
+            pass
+    
+    return {
+        "has_active_subscription": False,
+        "subscription": {
+            "status": "expired",
+            "expires_at": expires_at
+        }
     }
 
 # Provider Inquiries
