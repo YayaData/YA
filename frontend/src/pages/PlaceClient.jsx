@@ -152,32 +152,49 @@ export default function PlaceClient() {
   };
 
   const handleSubmit = async () => {
-    // If no payment session, redirect to payment
-    if (!paymentSessionId) {
-      await initiatePayment();
+    // If user has active subscription, submit directly
+    if (hasActiveSubscription) {
+      setIsSubmitting(true);
+      try {
+        await axios.post(`${API}/placement-requests?user_email=${encodeURIComponent(formData.contact_email)}`, formData);
+        toast.success("Placement request submitted successfully!");
+        navigate("/");
+      } catch (error) {
+        console.error("Error submitting request:", error);
+        toast.error("Failed to submit request. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
       return;
     }
 
-    setIsSubmitting(true);
-    try {
-      await axios.post(`${API}/placement-requests?payment_session_id=${paymentSessionId}`, formData);
-      
-      // Clear the payment session
-      localStorage.removeItem("placement_payment_session");
-      
-      toast.success("Placement request submitted successfully!");
-      navigate("/");
-    } catch (error) {
-      console.error("Error submitting request:", error);
-      if (error.response?.status === 402) {
-        toast.error("Payment required. Please complete payment first.");
-        setPaymentSessionId(null);
-      } else {
-        toast.error("Failed to submit request. Please try again.");
+    // If has payment session, submit with it
+    if (paymentSessionId) {
+      setIsSubmitting(true);
+      try {
+        await axios.post(`${API}/placement-requests?payment_session_id=${paymentSessionId}&user_email=${encodeURIComponent(formData.contact_email)}`, formData);
+        
+        // Clear the payment session
+        localStorage.removeItem("placement_payment_session");
+        
+        toast.success("Placement request submitted successfully!");
+        navigate("/");
+      } catch (error) {
+        console.error("Error submitting request:", error);
+        if (error.response?.status === 402) {
+          toast.error("Payment required. Please complete payment first.");
+          setPaymentSessionId(null);
+        } else {
+          toast.error("Failed to submit request. Please try again.");
+        }
+      } finally {
+        setIsSubmitting(false);
       }
-    } finally {
-      setIsSubmitting(false);
+      return;
     }
+
+    // No subscription or payment - redirect to payment
+    await initiatePayment();
   };
 
   const initiatePayment = async () => {
@@ -185,8 +202,9 @@ export default function PlaceClient() {
     try {
       const response = await axios.post(`${API}/payments/checkout/create`, {
         origin_url: window.location.origin,
+        payment_type: selectedPaymentType,
+        user_email: formData.contact_email,
         metadata: {
-          type: "placement_request",
           contact_email: formData.contact_email,
           placement_type: formData.placement_type_needed
         }
