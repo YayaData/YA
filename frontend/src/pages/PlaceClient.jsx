@@ -28,11 +28,17 @@ const steps = [
 
 export default function PlaceClient() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const paymentVerified = searchParams.get("payment_verified") === "true";
+  
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [referralSources, setReferralSources] = useState([]);
   const [placementTypes, setPlacementTypes] = useState([]);
   const [servicesList, setServicesList] = useState([]);
+  const [placementFee, setPlacementFee] = useState(null);
+  const [paymentSessionId, setPaymentSessionId] = useState(null);
 
   const [formData, setFormData] = useState({
     referral_source: "",
@@ -50,21 +56,29 @@ export default function PlaceClient() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [sourcesRes, typesRes, servicesRes] = await Promise.all([
+        const [sourcesRes, typesRes, servicesRes, feeRes] = await Promise.all([
           axios.get(`${API}/referral-sources`),
           axios.get(`${API}/placement-types`),
-          axios.get(`${API}/services-list`)
+          axios.get(`${API}/services-list`),
+          axios.get(`${API}/payments/fee`)
         ]);
         setReferralSources(sourcesRes.data.sources);
         setPlacementTypes(typesRes.data.types);
         setServicesList(servicesRes.data.services);
+        setPlacementFee(feeRes.data);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Failed to load form data");
       }
     };
     fetchData();
-  }, []);
+
+    // Check for stored payment session
+    const storedSession = localStorage.getItem("placement_payment_session");
+    if (storedSession && paymentVerified) {
+      setPaymentSessionId(storedSession);
+    }
+  }, [paymentVerified]);
 
   const updateFormData = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
