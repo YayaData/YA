@@ -236,12 +236,27 @@ export default function PlaceClient() {
           <div className="p-2 bg-sky-600 rounded-xl">
             <Anchor className="h-5 w-5 text-white" />
           </div>
-          <span className="text-lg font-semibold text-slate-900 font-['Manrope']">Place a Client</span>
+          <div>
+            <span className="text-lg font-semibold text-slate-900 font-['Manrope']">Place a Client</span>
+            <span className="block text-xs text-slate-500">For Agencies, Hospitals & Social Workers</span>
+          </div>
         </div>
       </header>
 
       <main className="px-6 md:px-12 py-8 md:py-12">
         <div className="max-w-2xl mx-auto">
+          {/* Professional Service Notice */}
+          <div className="mb-4 p-4 bg-sky-50 border border-sky-200 rounded-xl flex items-start gap-3">
+            <CreditCard className="h-5 w-5 text-sky-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-sky-800">Professional Placement Service</p>
+              <p className="text-sm text-sky-700 mt-1">
+                This service is for healthcare professionals, agencies, and social workers placing clients. 
+                A fee applies: <strong>$20 per placement</strong> or <strong>$49/month</strong> for unlimited placements.
+              </p>
+            </div>
+          </div>
+
           {/* PHI Warning */}
           <div className="mb-8 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
             <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
