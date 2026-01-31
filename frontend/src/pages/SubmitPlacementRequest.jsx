@@ -431,6 +431,11 @@ export default function SubmitPlacementRequest() {
                   </>
                 )}
               </Button>
+              
+              {/* Short Disclaimer */}
+              <p className="text-center text-xs text-gray-500 mt-3">
+                Submission does not guarantee placement.
+              </p>
             </form>
           </CardContent>
         </Card>
