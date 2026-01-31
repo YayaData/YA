@@ -30,7 +30,16 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 
 ## What's Been Implemented
 
-### Latest Updates (Jan 30, 2025)
+### Latest Updates (Jan 31, 2025)
+- [x] **Stripe Payment Integration for Placement Requests**
+  - Users can view placement features for free, but submission requires payment
+  - $25.00 USD placement request fee (defined server-side, not editable by frontend)
+  - Stripe Checkout integration with success/cancel flows
+  - Payment transactions tracked in `payment_transactions` collection
+  - Backend enforces payment verification before accepting request
+  - Files: `server.py` - payment endpoints, `PlaceClient.jsx`, `PlaceClientSuccess.jsx`
+
+### Previous Updates (Jan 30, 2025)
 - [x] **P0: Backend Persistence for Admin Actions**
   - Agency Approve/Suspend now persists to MongoDB via `PATCH /api/provider-inquiries/{id}`
   - Status updates: pending → approved, pending → suspended, suspended → approved (reinstate)
