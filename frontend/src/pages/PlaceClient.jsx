@@ -533,6 +533,13 @@ export default function PlaceClient() {
                   </Button>
                 )}
               </div>
+              
+              {/* Short Disclaimer - Always visible on Step 3 */}
+              {currentStep === 3 && (
+                <p className="text-center text-xs text-slate-500 mt-4" data-testid="short-disclaimer">
+                  Payment does not guarantee placement.
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>
