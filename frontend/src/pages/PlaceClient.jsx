@@ -456,23 +456,105 @@ export default function PlaceClient() {
                     />
                   </div>
                   
-                  {/* Payment Info */}
-                  {!paymentSessionId && placementFee && (
-                    <div className="mt-4 p-4 bg-sky-50 border border-sky-200 rounded-xl" data-testid="payment-info">
+                  {/* Active Subscription Info */}
+                  {hasActiveSubscription && (
+                    <div className="mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl" data-testid="subscription-active-info">
                       <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                          <Check className="h-5 w-5 text-emerald-600" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-emerald-900">Active Subscription</p>
+                          <p className="text-sm text-emerald-700">
+                            Your subscription is active. Submit unlimited placement requests.
+                            {subscriptionExpiry && (
+                              <span className="block text-xs mt-1">
+                                Expires: {new Date(subscriptionExpiry).toLocaleDateString()}
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Payment Options - Show if no subscription and no payment session */}
+                  {!hasActiveSubscription && !paymentSessionId && paymentOptions && (
+                    <div className="mt-4 p-4 bg-sky-50 border border-sky-200 rounded-xl" data-testid="payment-info">
+                      <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
                           <CreditCard className="h-5 w-5 text-sky-600" />
                         </div>
                         <div>
-                          <p className="font-semibold text-sky-900">Placement Request Fee</p>
-                          <p className="text-sm text-sky-700">
-                            ${placementFee.amount.toFixed(2)} USD • Secure payment via Stripe
-                          </p>
+                          <p className="font-semibold text-sky-900">Choose Your Payment Option</p>
+                          <p className="text-sm text-sky-700">Select how you'd like to access the platform</p>
+                        </div>
+                      </div>
+                      
+                      {/* Payment Options */}
+                      <div className="space-y-3 mb-4">
+                        {/* Single Placement Option */}
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            selectedPaymentType === 'placement' 
+                              ? 'border-sky-500 bg-white' 
+                              : 'border-slate-200 bg-white hover:border-sky-300'
+                          }`}
+                          onClick={() => setSelectedPaymentType('placement')}
+                          data-testid="payment-option-placement"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                selectedPaymentType === 'placement' ? 'border-sky-500' : 'border-slate-300'
+                              }`}>
+                                {selectedPaymentType === 'placement' && (
+                                  <div className="w-3 h-3 rounded-full bg-sky-500" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-semibold text-slate-900">Single Placement</p>
+                                <p className="text-xs text-slate-500">One-time fee for this request</p>
+                              </div>
+                            </div>
+                            <p className="text-lg font-bold text-sky-600">${paymentOptions.placement_fee}</p>
+                          </div>
+                        </div>
+                        
+                        {/* Subscription Option */}
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all relative ${
+                            selectedPaymentType === 'subscription' 
+                              ? 'border-emerald-500 bg-white' 
+                              : 'border-slate-200 bg-white hover:border-emerald-300'
+                          }`}
+                          onClick={() => setSelectedPaymentType('subscription')}
+                          data-testid="payment-option-subscription"
+                        >
+                          <div className="absolute -top-2 right-3 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full">
+                            Best Value
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                selectedPaymentType === 'subscription' ? 'border-emerald-500' : 'border-slate-300'
+                              }`}>
+                                {selectedPaymentType === 'subscription' && (
+                                  <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-semibold text-slate-900">Monthly Subscription</p>
+                                <p className="text-xs text-slate-500">Unlimited placements for 30 days</p>
+                              </div>
+                            </div>
+                            <p className="text-lg font-bold text-emerald-600">${paymentOptions.subscription_fee}/mo</p>
+                          </div>
                         </div>
                       </div>
                       
                       {/* Payment Disclaimer */}
-                      <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg" data-testid="payment-disclaimer">
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg" data-testid="payment-disclaimer">
                         <p className="text-xs text-amber-800">
                           <strong>Important:</strong> Payment covers access to the Anchor Placement platform and placement review process only. 
                           <strong> Payment does not guarantee placement.</strong> Placement decisions are made by providers based on availability, 
