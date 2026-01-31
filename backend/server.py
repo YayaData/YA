@@ -28,7 +28,7 @@ db = client[os.environ['DB_NAME']]
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', '')
 
 # Payment Configuration (fixed amounts - DO NOT accept from frontend)
-PLACEMENT_REQUEST_FEE = 20.00  # $20.00 USD per placement
+PLACEMENT_REQUEST_FEE = 25.00  # $25.00 USD per placement
 SUBSCRIPTION_FEE = 49.00  # $49.00 USD per month
 
 # Admin email for notifications (optional)
