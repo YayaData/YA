@@ -71,26 +71,39 @@ export default function Terms() {
                 <li>You agree to use the Service only for lawful purposes related to placement coordination.</li>
               </ul>
 
-              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">5. Privacy and Data</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">5. Payments and Refunds</h2>
+              <p className="text-slate-600">
+                Payments made for placement requests or monthly access are <strong>non-refundable</strong> once a placement 
+                request has been submitted. Payment covers access to the Anchor Placement platform and placement review 
+                process only.
+              </p>
+              <p className="text-slate-600 mt-2">
+                Refunds may only be considered for: duplicate charges, technical errors that prevent submission, or charges 
+                made in error before a request is submitted. All refund requests must be submitted in writing within 7 days 
+                of the charge. See our <a href="/payment-policy" className="text-sky-600 underline hover:text-sky-800">Payment Policy</a> for 
+                complete details.
+              </p>
+
+              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">6. Privacy and Data</h2>
               <p className="text-slate-600">
                 We collect and process information as described in our Privacy Policy. By using the Service, you consent 
                 to such collection and processing. We do not collect or store Protected Health Information (PHI).
               </p>
 
-              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">6. Limitation of Liability</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">7. Limitation of Liability</h2>
               <p className="text-slate-600">
                 Anchor Placement is provided "as is" without warranties of any kind. We are not liable for any damages 
                 arising from the use of our Service, including but not limited to unsuccessful placement attempts, 
                 provider decisions, or outcomes of any placements made through the platform.
               </p>
 
-              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">7. Modifications</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">8. Modifications</h2>
               <p className="text-slate-600">
                 We reserve the right to modify these Terms at any time. Continued use of the Service after changes 
                 constitutes acceptance of the modified Terms.
               </p>
 
-              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">8. Contact</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">9. Contact</h2>
               <p className="text-slate-600">
                 For questions about these Terms, please contact us through the platform.
               </p>
