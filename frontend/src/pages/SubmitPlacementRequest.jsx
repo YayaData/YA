@@ -407,11 +407,11 @@ export default function SubmitPlacementRequest() {
                     onCheckedChange={setAcceptedTerms}
                     data-testid="accept-terms"
                   />
-                  <Label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer">
-                    I understand that submitting this request does not guarantee housing placement. 
+                  <Label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer leading-relaxed">
+                    I understand and acknowledge that <strong>submitting this request does not guarantee housing placement</strong>. 
+                    Placement outcomes depend on availability, eligibility, and provider capacity. 
                     I consent to having my general information (not contact details) displayed to 
-                    qualified agencies for the purpose of finding housing support. All placement 
-                    decisions will be made offline.
+                    qualified agencies for the purpose of finding housing support.
                   </Label>
                 </div>
               </div>
