@@ -434,6 +434,23 @@ export default function PlaceClient() {
                           compatibility, and other factors beyond our control.
                         </p>
                       </div>
+                      
+                      {/* Acknowledgment Checkbox */}
+                      <div className="mt-3 flex items-start gap-2">
+                        <Checkbox
+                          id="disclaimer-acknowledge"
+                          data-testid="disclaimer-acknowledge-checkbox"
+                          checked={disclaimerAcknowledged}
+                          onCheckedChange={(checked) => setDisclaimerAcknowledged(checked)}
+                          className="mt-0.5"
+                        />
+                        <Label htmlFor="disclaimer-acknowledge" className="text-xs text-slate-600 cursor-pointer leading-relaxed">
+                          I understand and acknowledge that payment does not guarantee placement. I agree to the{" "}
+                          <a href="/terms" target="_blank" className="text-sky-600 underline hover:text-sky-800">Terms of Service</a>{" "}
+                          and{" "}
+                          <a href="/payment-policy" target="_blank" className="text-sky-600 underline hover:text-sky-800">Payment Policy</a>.
+                        </Label>
+                      </div>
                     </div>
                   )}
                   
