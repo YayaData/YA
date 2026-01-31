@@ -322,7 +322,7 @@ async def create_placement_request(
     if not has_valid_access:
         raise HTTPException(
             status_code=402, 
-            detail="Payment required. Please purchase a subscription ($49/month) or pay per placement ($20)."
+            detail="Payment required. Please purchase a subscription ($49/month) or pay per placement ($25)."
         )
     
     # Create the placement request
