@@ -515,9 +515,9 @@ export default function PlaceClient() {
                 ) : (
                   <Button
                     onClick={handleSubmit}
-                    disabled={isProcessingPayment}
+                    disabled={isProcessingPayment || !disclaimerAcknowledged}
                     data-testid="pay-and-submit-btn"
-                    className="gap-2 bg-sky-600 hover:bg-sky-700"
+                    className="gap-2 bg-sky-600 hover:bg-sky-700 disabled:opacity-50"
                   >
                     {isProcessingPayment ? (
                       <>
