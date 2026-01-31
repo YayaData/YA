@@ -322,11 +322,13 @@ async def create_placement_request(input_data: PlacementRequestCreate, payment_s
 # Stripe Payment Endpoints
 class CreateCheckoutRequest(BaseModel):
     origin_url: str = Field(..., description="Frontend origin URL for success/cancel redirects")
+    payment_type: str = Field(default="placement", description="Type: 'placement' ($20) or 'subscription' ($49/month)")
+    user_email: Optional[str] = None
     metadata: Optional[Dict[str, str]] = None
 
 @api_router.post("/payments/checkout/create")
 async def create_payment_checkout(request: CreateCheckoutRequest, http_request: Request):
-    """Create a Stripe checkout session for placement request payment"""
+    """Create a Stripe checkout session for placement or subscription payment"""
     if not STRIPE_API_KEY:
         raise HTTPException(status_code=500, detail="Payment system not configured")
     
@@ -337,17 +339,29 @@ async def create_payment_checkout(request: CreateCheckoutRequest, http_request: 
     # Initialize Stripe checkout
     stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
     
-    # Build success and cancel URLs from frontend origin
-    success_url = f"{request.origin_url}/place-client/success?session_id={{CHECKOUT_SESSION_ID}}"
+    # Determine payment type and amount
+    if request.payment_type == "subscription":
+        amount = SUBSCRIPTION_FEE
+        success_url = f"{request.origin_url}/place-client/success?session_id={{CHECKOUT_SESSION_ID}}&type=subscription"
+        payment_metadata = {"type": "subscription", "email": request.user_email or ""}
+    else:
+        amount = PLACEMENT_REQUEST_FEE
+        success_url = f"{request.origin_url}/place-client/success?session_id={{CHECKOUT_SESSION_ID}}&type=placement"
+        payment_metadata = {"type": "placement_request", "email": request.user_email or ""}
+    
     cancel_url = f"{request.origin_url}/place-client"
+    
+    # Merge with any additional metadata
+    if request.metadata:
+        payment_metadata.update(request.metadata)
     
     # Create checkout session with fixed amount (NEVER accept amount from frontend)
     checkout_request = CheckoutSessionRequest(
-        amount=PLACEMENT_REQUEST_FEE,
+        amount=amount,
         currency="usd",
         success_url=success_url,
         cancel_url=cancel_url,
-        metadata=request.metadata or {"type": "placement_request"}
+        metadata=payment_metadata
     )
     
     try:
@@ -357,20 +371,23 @@ async def create_payment_checkout(request: CreateCheckoutRequest, http_request: 
         transaction_doc = {
             "id": str(uuid.uuid4()),
             "session_id": session.session_id,
-            "amount": PLACEMENT_REQUEST_FEE,
+            "amount": amount,
             "currency": "usd",
+            "payment_type": request.payment_type,
+            "user_email": request.user_email,
             "payment_status": "pending",
-            "metadata": request.metadata or {"type": "placement_request"},
+            "metadata": payment_metadata,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         await db.payment_transactions.insert_one(transaction_doc)
         
-        logging.info(f"Created checkout session: {session.session_id}")
+        logging.info(f"Created {request.payment_type} checkout session: {session.session_id}")
         
         return {
             "checkout_url": session.url,
             "session_id": session.session_id,
-            "amount": PLACEMENT_REQUEST_FEE
+            "amount": amount,
+            "payment_type": request.payment_type
         }
     except Exception as e:
         logging.error(f"Stripe checkout error: {str(e)}")
