@@ -579,13 +579,13 @@ export default function WelcomeScreen() {
       {/* FOOTER */}
       <footer className="py-10 px-6 md:px-12" style={{ background: colors.dark }}>
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
             <div className="flex items-center gap-3">
               <img src={LOGO_URL} alt="Anchor Placement" className="h-10 w-10 object-contain" />
               <span className="text-xl font-bold font-['Poppins'] text-white">Anchor Placement</span>
             </div>
             <p className="text-sm text-gray-400 text-center max-w-lg">
-              Anchor Placement™ coordinates referrals and availability. Medicaid billing and licensing guidance is provided in AnchorAxis.
+              Anchor Placement™ is a coordination platform that connects housing providers with placement professionals. We facilitate connections only and do not guarantee placement outcomes.
             </p>
             <div className="flex gap-4">
               <Button variant="ghost" size="sm" onClick={() => navigate("/how-it-works")} className="text-gray-400 hover:text-white">
@@ -594,6 +594,23 @@ export default function WelcomeScreen() {
               <Button variant="ghost" size="sm" onClick={() => navigate("/admin")} className="text-gray-400 hover:text-white">
                 Admin
               </Button>
+            </div>
+          </div>
+          
+          {/* Legal Links & Disclaimer */}
+          <div className="border-t border-gray-700 pt-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex gap-6">
+                <button onClick={() => navigate("/terms")} className="text-sm text-gray-400 hover:text-white underline">
+                  Terms of Service
+                </button>
+                <button onClick={() => navigate("/payment-policy")} className="text-sm text-gray-400 hover:text-white underline">
+                  Payment Policy
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 text-center">
+                © {new Date().getFullYear()} Anchor Placement. Submission does not guarantee placement.
+              </p>
             </div>
           </div>
         </div>
