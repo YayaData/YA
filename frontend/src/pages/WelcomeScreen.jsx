@@ -126,13 +126,13 @@ export default function WelcomeScreen() {
                 )}
                 {(!isOnboarded || placementTabs.showNeedPlacement) && (
                   <Button 
-                    onClick={() => isOnboarded ? navigate("/place-client") : navigate("/onboarding?path=agency")}
+                    onClick={() => isOnboarded ? navigate("/place-client") : navigate("/request-placement")}
                     data-testid="need-place-btn"
                     className="h-14 px-8 text-lg font-semibold font-['Poppins'] rounded-xl shadow-lg hover:shadow-xl transition-all bg-white hover:bg-gray-100"
                     style={{ color: colors.blue }}
                   >
                     <Search className="mr-2 h-5 w-5" />
-                    {isOnboarded ? "Place a Client" : "I Need to Place a Client"}
+                    {isOnboarded ? "Place a Client" : "Request Placement"}
                   </Button>
                 )}
               </div>
