@@ -433,15 +433,43 @@ export default function PlaceClient() {
                     Continue
                     <ArrowRight className="h-4 w-4" />
                   </Button>
-                ) : (
+                ) : paymentSessionId ? (
                   <Button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                     data-testid="submit-request-btn"
                     className="gap-2 bg-emerald-600 hover:bg-emerald-700"
                   >
-                    {isSubmitting ? "Submitting..." : "Submit Request"}
-                    <Check className="h-4 w-4" />
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Submit Request
+                        <Check className="h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={isProcessingPayment}
+                    data-testid="pay-and-submit-btn"
+                    className="gap-2 bg-sky-600 hover:bg-sky-700"
+                  >
+                    {isProcessingPayment ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="h-4 w-4" />
+                        Pay ${placementFee?.amount || '25.00'} & Submit
+                      </>
+                    )}
                   </Button>
                 )}
               </div>
