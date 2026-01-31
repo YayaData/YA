@@ -19,6 +19,7 @@ import PlacementRequestBoard from "@/pages/PlacementRequestBoard";
 import SubmitPlacementRequest from "@/pages/SubmitPlacementRequest";
 import Terms from "@/pages/Terms";
 import PaymentPolicy from "@/pages/PaymentPolicy";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/requestor-dashboard" element={<RequestorDashboard />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/payment-policy" element={<PaymentPolicy />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-right" richColors />
