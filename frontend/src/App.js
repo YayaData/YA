@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import WelcomeScreen from "@/pages/WelcomeScreen";
 import PlaceClient from "@/pages/PlaceClient";
+import PlaceClientSuccess from "@/pages/PlaceClientSuccess";
 import Placements from "@/pages/Placements";
 import HowItWorks from "@/pages/HowItWorks";
 import StartIdea from "@/pages/StartIdea";
@@ -29,6 +30,7 @@ function App() {
           <Route path="/request-board" element={<PlacementRequestBoard />} />
           <Route path="/submit-request" element={<SubmitPlacementRequest />} />
           <Route path="/place-client" element={<PlaceClient />} />
+          <Route path="/place-client/success" element={<PlaceClientSuccess />} />
           <Route path="/placements" element={<Placements />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/start-idea" element={<StartIdea />} />
