@@ -67,15 +67,24 @@ export default function PaymentPolicy() {
                 <li><strong>Third-Party Services:</strong> Any fees charged by providers, facilities, or other organizations</li>
               </ul>
 
-              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">Placement Request Fee</h2>
-              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 my-4">
-                <p className="text-slate-700 m-0">
-                  <strong>Current Fee:</strong> $25.00 USD per placement request
-                </p>
-                <p className="text-slate-500 text-sm mt-2 mb-0">
-                  This fee is non-refundable once the request has been submitted and processed.
-                </p>
+              <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">Payment Options</h2>
+              <div className="space-y-3">
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                  <p className="text-slate-700 font-semibold">Single Placement Request: $20.00 USD</p>
+                  <p className="text-slate-500 text-sm mt-1">
+                    One-time fee for a single placement submission.
+                  </p>
+                </div>
+                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+                  <p className="text-emerald-800 font-semibold">Monthly Subscription: $49.00 USD/month</p>
+                  <p className="text-emerald-700 text-sm mt-1">
+                    Unlimited placement requests for 30 days. Best value for agencies with multiple clients.
+                  </p>
+                </div>
               </div>
+              <p className="text-slate-500 text-sm mt-3">
+                All fees are non-refundable once a placement request has been submitted.
+              </p>
 
               <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">Refund Policy</h2>
               <p className="text-slate-600">
