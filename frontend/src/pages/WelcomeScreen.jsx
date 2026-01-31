@@ -170,7 +170,8 @@ export default function WelcomeScreen() {
                 ) : (
                   <p className="text-white/90 text-sm">
                     <strong className="text-yellow-300">You don't need experience. You're not alone.</strong><br />
-                    We guide you through requirements, safety checks, and next steps.
+                    We guide you through requirements, safety checks, and next steps.<br />
+                    <span className="text-white/70 text-xs mt-1 block">Submission does not guarantee placement.</span>
                   </p>
                 )}
               </div>
