@@ -79,20 +79,27 @@ export default function PaymentPolicy() {
 
               <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">Refund Policy</h2>
               <p className="text-slate-600">
-                Due to the nature of our service (immediate processing and distribution of requests), 
-                <strong> placement request fees are generally non-refundable</strong> once a request has been submitted.
+                Payments made for placement requests or monthly access are <strong>non-refundable</strong> once a placement request has been submitted.
               </p>
               <p className="text-slate-600">
-                Exceptions may be considered in cases of:
+                Payment provides access to the Anchor Placement platform and the placement review process only. Placement outcomes depend on availability, eligibility, and provider capacity and are not guaranteed.
+              </p>
+              <p className="text-slate-600 mt-4">
+                Refunds may be considered only in the following limited circumstances:
               </p>
               <ul className="text-slate-600 space-y-2">
-                <li>Technical errors that prevented your request from being processed</li>
-                <li>Duplicate charges due to system errors</li>
-                <li>Requests submitted in error before completion (prior to provider distribution)</li>
+                <li>Duplicate charges</li>
+                <li>Technical errors that prevent submission of a placement request</li>
+                <li>Charges made in error before a request is submitted</li>
               </ul>
-              <p className="text-slate-600">
-                To request a refund review, please contact us within 48 hours of payment.
-              </p>
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 my-4">
+                <p className="text-slate-700 m-0">
+                  All refund requests must be submitted in writing <strong>within 7 days</strong> of the charge.
+                </p>
+                <p className="text-slate-600 text-sm mt-2 mb-0">
+                  Anchor Placement reserves the right to review each request on a case-by-case basis.
+                </p>
+              </div>
 
               <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">Payment Security</h2>
               <p className="text-slate-600">
