@@ -620,6 +620,25 @@ export default function PlaceClient() {
                     Continue
                     <ArrowRight className="h-4 w-4" />
                   </Button>
+                ) : hasActiveSubscription ? (
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    data-testid="submit-request-btn"
+                    className="gap-2 bg-emerald-600 hover:bg-emerald-700"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Submit Request
+                        <Check className="h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
                 ) : paymentSessionId ? (
                   <Button
                     onClick={handleSubmit}
@@ -644,17 +663,26 @@ export default function PlaceClient() {
                     onClick={handleSubmit}
                     disabled={isProcessingPayment || !disclaimerAcknowledged}
                     data-testid="pay-and-submit-btn"
-                    className="gap-2 bg-sky-600 hover:bg-sky-700 disabled:opacity-50"
+                    className={`gap-2 disabled:opacity-50 ${
+                      selectedPaymentType === 'subscription' 
+                        ? 'bg-emerald-600 hover:bg-emerald-700' 
+                        : 'bg-sky-600 hover:bg-sky-700'
+                    }`}
                   >
                     {isProcessingPayment ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
                         Processing...
                       </>
+                    ) : selectedPaymentType === 'subscription' ? (
+                      <>
+                        <CreditCard className="h-4 w-4" />
+                        Subscribe ${paymentOptions?.subscription_fee || '49'}/mo
+                      </>
                     ) : (
                       <>
                         <CreditCard className="h-4 w-4" />
-                        Pay ${placementFee?.amount || '25.00'} & Submit
+                        Pay ${paymentOptions?.placement_fee || '20'} & Submit
                       </>
                     )}
                   </Button>
