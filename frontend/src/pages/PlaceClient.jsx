@@ -697,7 +697,7 @@ export default function PlaceClient() {
                     ) : (
                       <>
                         <CreditCard className="h-4 w-4" />
-                        Pay ${paymentOptions?.placement_fee || '20'} & Submit
+                        Pay ${paymentOptions?.placement_fee || '25'} & Submit
                       </>
                     )}
                   </Button>
