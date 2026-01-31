@@ -347,7 +347,7 @@ async def create_placement_request(
 # Stripe Payment Endpoints
 class CreateCheckoutRequest(BaseModel):
     origin_url: str = Field(..., description="Frontend origin URL for success/cancel redirects")
-    payment_type: str = Field(default="placement", description="Type: 'placement' ($20) or 'subscription' ($49/month)")
+    payment_type: str = Field(default="placement", description="Type: 'placement' ($25) or 'subscription' ($49/month)")
     user_email: Optional[str] = None
     metadata: Optional[Dict[str, str]] = None
 
