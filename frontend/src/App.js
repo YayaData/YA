@@ -16,6 +16,8 @@ import Credentialing from "@/pages/Credentialing";
 import HousingInterest from "@/pages/HousingInterest";
 import PlacementRequestBoard from "@/pages/PlacementRequestBoard";
 import SubmitPlacementRequest from "@/pages/SubmitPlacementRequest";
+import Terms from "@/pages/Terms";
+import PaymentPolicy from "@/pages/PaymentPolicy";
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/provider-dashboard" element={<ProviderDashboard />} />
           <Route path="/requestor-dashboard" element={<RequestorDashboard />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/payment-policy" element={<PaymentPolicy />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-right" richColors />
