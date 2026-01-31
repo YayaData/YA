@@ -193,7 +193,7 @@ export default function WelcomeScreen() {
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: `${colors.teal}15` }}>
                 <Heart className="h-7 w-7" style={{ color: colors.teal }} />
               </div>
-              <span className="font-semibold text-gray-700">IDD, Mental Health, Aging & Transitional Care</span>
+              <span className="font-semibold text-gray-700">Supportive & Care-Based Housing</span>
             </div>
             <div className="flex flex-col items-center gap-3">
               <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: `${colors.gold}20` }}>
