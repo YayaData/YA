@@ -178,13 +178,22 @@ export default function SubmitPlacementRequest() {
 
       <main className="px-6 py-8 max-w-2xl mx-auto">
         {/* Disclaimer Banner */}
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-4">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0" />
+            <p className="text-sm text-emerald-800 font-medium">
+              This form is FREE for individuals seeking housing assistance.
+            </p>
+          </div>
+        </div>
+
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
           <div className="flex items-start gap-2">
             <AlertTriangle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-amber-800">
               <strong>Important Notice:</strong> This form allows you to submit a request for housing placement support. 
-              Submitting this request does not guarantee placement or create any agreement. 
-              All placement decisions are made offline by qualified agencies after review.
+              <strong> Submitting this request does not guarantee placement.</strong> Placement outcomes depend on 
+              provider availability, eligibility, and capacity. All placement decisions are made offline by qualified agencies.
               <strong> Do not include sensitive medical or health information.</strong>
             </div>
           </div>
