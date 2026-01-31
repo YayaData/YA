@@ -70,7 +70,7 @@ export default function PlacementChoice() {
                   </p>
                   <p className="mb-2">You may choose:</p>
                   <ul className="list-disc list-inside mb-2 ml-1">
-                    <li>$20 per placement, or</li>
+                    <li>$25 per placement, or</li>
                     <li>$49/month for unlimited placements.</li>
                   </ul>
                   <p>
