@@ -70,7 +70,7 @@ export default function PaymentPolicy() {
               <h2 className="text-lg font-semibold text-slate-900 mt-6 mb-3">Payment Options</h2>
               <div className="space-y-3">
                 <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                  <p className="text-slate-700 font-semibold">Single Placement Request: $20.00 USD</p>
+                  <p className="text-slate-700 font-semibold">Single Placement Request: $25.00 USD</p>
                   <p className="text-slate-500 text-sm mt-1">
                     One-time fee for a single placement submission.
                   </p>
