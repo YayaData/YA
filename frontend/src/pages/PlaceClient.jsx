@@ -39,6 +39,7 @@ export default function PlaceClient() {
   const [servicesList, setServicesList] = useState([]);
   const [placementFee, setPlacementFee] = useState(null);
   const [paymentSessionId, setPaymentSessionId] = useState(null);
+  const [disclaimerAcknowledged, setDisclaimerAcknowledged] = useState(false);
 
   const [formData, setFormData] = useState({
     referral_source: "",
