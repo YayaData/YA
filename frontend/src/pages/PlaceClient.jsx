@@ -252,7 +252,7 @@ export default function PlaceClient() {
               <p className="text-sm font-medium text-sky-800">Professional Placement Service</p>
               <p className="text-sm text-sky-700 mt-1">
                 This service is for healthcare professionals, agencies, and social workers placing clients. 
-                A fee applies: <strong>$20 per placement</strong> or <strong>$49/month</strong> for unlimited placements.
+                A fee applies: <strong>$25 per placement</strong> or <strong>$49/month</strong> for unlimited placements.
               </p>
             </div>
           </div>
