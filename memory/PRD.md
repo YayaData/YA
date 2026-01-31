@@ -31,6 +31,13 @@ Build a professional web app called "Anchor Placement – Client Placement" that
 ## What's Been Implemented
 
 ### Latest Updates (Jan 31, 2025)
+- [x] **Payment Disclaimer Implementation**
+  - Disclaimer on placement request page (Step 3) with acknowledgment checkbox
+  - Payment Policy page (`/payment-policy`) with detailed "Payment Does Not Guarantee Placement" section
+  - Terms of Service page (`/terms`) with "No Guarantee of Placement" section
+  - Payment button disabled until user acknowledges disclaimer
+  - Files: `PlaceClient.jsx`, `Terms.jsx`, `PaymentPolicy.jsx`
+
 - [x] **Stripe Payment Integration for Placement Requests**
   - Users can view placement features for free, but submission requires payment
   - $25.00 USD placement request fee (defined server-side, not editable by frontend)
