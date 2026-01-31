@@ -424,6 +424,15 @@ export default function PlaceClient() {
                           </p>
                         </div>
                       </div>
+                      
+                      {/* Payment Disclaimer */}
+                      <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg" data-testid="payment-disclaimer">
+                        <p className="text-xs text-amber-800">
+                          <strong>Important:</strong> Payment covers access to the Anchor Placement platform and placement review process only. 
+                          <strong> Payment does not guarantee placement.</strong> Placement decisions are made by providers based on availability, 
+                          compatibility, and other factors beyond our control.
+                        </p>
+                      </div>
                     </div>
                   )}
                   
