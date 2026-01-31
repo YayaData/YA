@@ -37,8 +37,11 @@ export default function PlaceClient() {
   const [referralSources, setReferralSources] = useState([]);
   const [placementTypes, setPlacementTypes] = useState([]);
   const [servicesList, setServicesList] = useState([]);
-  const [placementFee, setPlacementFee] = useState(null);
+  const [paymentOptions, setPaymentOptions] = useState(null);
   const [paymentSessionId, setPaymentSessionId] = useState(null);
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+  const [subscriptionExpiry, setSubscriptionExpiry] = useState(null);
+  const [selectedPaymentType, setSelectedPaymentType] = useState("placement");
   const [disclaimerAcknowledged, setDisclaimerAcknowledged] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -54,6 +57,20 @@ export default function PlaceClient() {
     accepts_medicaid_required: false
   });
 
+  // Check subscription status when email changes
+  const checkSubscription = async (email) => {
+    if (!email) return;
+    try {
+      const response = await axios.get(`${API}/payments/subscription/check?email=${encodeURIComponent(email)}`);
+      setHasActiveSubscription(response.data.has_active_subscription);
+      if (response.data.subscription?.expires_at) {
+        setSubscriptionExpiry(response.data.subscription.expires_at);
+      }
+    } catch (error) {
+      console.error("Error checking subscription:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,7 +83,7 @@ export default function PlaceClient() {
         setReferralSources(sourcesRes.data.sources);
         setPlacementTypes(typesRes.data.types);
         setServicesList(servicesRes.data.services);
-        setPlacementFee(feeRes.data);
+        setPaymentOptions(feeRes.data);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Failed to load form data");
