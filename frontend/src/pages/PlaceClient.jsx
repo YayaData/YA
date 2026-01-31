@@ -124,16 +124,52 @@ export default function PlaceClient() {
   };
 
   const handleSubmit = async () => {
+    // If no payment session, redirect to payment
+    if (!paymentSessionId) {
+      await initiatePayment();
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      await axios.post(`${API}/placement-requests`, formData);
+      await axios.post(`${API}/placement-requests?payment_session_id=${paymentSessionId}`, formData);
+      
+      // Clear the payment session
+      localStorage.removeItem("placement_payment_session");
+      
       toast.success("Placement request submitted successfully!");
       navigate("/");
     } catch (error) {
       console.error("Error submitting request:", error);
-      toast.error("Failed to submit request. Please try again.");
+      if (error.response?.status === 402) {
+        toast.error("Payment required. Please complete payment first.");
+        setPaymentSessionId(null);
+      } else {
+        toast.error("Failed to submit request. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const initiatePayment = async () => {
+    setIsProcessingPayment(true);
+    try {
+      const response = await axios.post(`${API}/payments/checkout/create`, {
+        origin_url: window.location.origin,
+        metadata: {
+          type: "placement_request",
+          contact_email: formData.contact_email,
+          placement_type: formData.placement_type_needed
+        }
+      });
+
+      // Redirect to Stripe Checkout
+      window.location.href = response.data.checkout_url;
+    } catch (error) {
+      console.error("Error creating payment session:", error);
+      toast.error("Failed to initialize payment. Please try again.");
+      setIsProcessingPayment(false);
     }
   };
 
