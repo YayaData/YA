@@ -409,6 +409,39 @@ export default function PlaceClient() {
                       onChange={(e) => updateFormData('additional_notes', e.target.value)}
                     />
                   </div>
+                  
+                  {/* Payment Info */}
+                  {!paymentSessionId && placementFee && (
+                    <div className="mt-4 p-4 bg-sky-50 border border-sky-200 rounded-xl" data-testid="payment-info">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-sky-100 rounded-lg flex items-center justify-center">
+                          <CreditCard className="h-5 w-5 text-sky-600" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-sky-900">Placement Request Fee</p>
+                          <p className="text-sm text-sky-700">
+                            ${placementFee.amount.toFixed(2)} USD • Secure payment via Stripe
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {paymentSessionId && (
+                    <div className="mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl" data-testid="payment-complete-info">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                          <Check className="h-5 w-5 text-emerald-600" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-emerald-900">Payment Complete</p>
+                          <p className="text-sm text-emerald-700">
+                            Your payment has been processed. Click submit to finalize your request.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
 
