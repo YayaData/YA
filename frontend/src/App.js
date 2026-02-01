@@ -5,6 +5,8 @@ import WelcomeScreen from "@/pages/WelcomeScreen";
 import PlacementChoice from "@/pages/PlacementChoice";
 import PlaceClient from "@/pages/PlaceClient";
 import PlaceClientSuccess from "@/pages/PlaceClientSuccess";
+import RequestSubmitted from "@/pages/RequestSubmitted";
+import Resources from "@/pages/Resources";
 import Placements from "@/pages/Placements";
 import HowItWorks from "@/pages/HowItWorks";
 import StartIdea from "@/pages/StartIdea";
@@ -34,6 +36,8 @@ function App() {
           <Route path="/request-board" element={<PlacementRequestBoard />} />
           <Route path="/submit-request" element={<SubmitPlacementRequest />} />
           <Route path="/request-placement" element={<PlacementChoice />} />
+          <Route path="/request-submitted" element={<RequestSubmitted />} />
+          <Route path="/resources" element={<Resources />} />
           <Route path="/place-client" element={<PlaceClient />} />
           <Route path="/place-client/success" element={<PlaceClientSuccess />} />
           <Route path="/placements" element={<Placements />} />
