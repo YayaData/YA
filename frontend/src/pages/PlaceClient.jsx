@@ -158,7 +158,7 @@ export default function PlaceClient() {
       try {
         await axios.post(`${API}/placement-requests?user_email=${encodeURIComponent(formData.contact_email)}`, formData);
         toast.success("Placement request submitted successfully!");
-        navigate("/");
+        navigate("/request-submitted");
       } catch (error) {
         console.error("Error submitting request:", error);
         toast.error("Failed to submit request. Please try again.");
@@ -178,7 +178,7 @@ export default function PlaceClient() {
         localStorage.removeItem("placement_payment_session");
         
         toast.success("Placement request submitted successfully!");
-        navigate("/");
+        navigate("/request-submitted");
       } catch (error) {
         console.error("Error submitting request:", error);
         if (error.response?.status === 402) {
