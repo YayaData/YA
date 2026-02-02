@@ -18,8 +18,8 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-slate-400 text-sm max-w-md mb-4">
-              Your step-by-step guide to launching a Medicaid-billable Peer Support Specialist 
-              agency in any of the 50 U.S. states.
+              A guidance and documentation framework for launching Peer Support agencies. 
+              Expand state-by-state with structure, templates, and tracking tools.
             </p>
             <div className="flex flex-col gap-2 text-sm text-slate-400">
               <div className="flex items-center gap-2">
