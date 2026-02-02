@@ -78,6 +78,9 @@ const HomePage = () => {
           <p className="mt-2 text-sm text-slate-500">
             Explore the platform, review national requirements, and see exactly what it takes to open a Peer Support Agency.
           </p>
+          <p className="mt-2 text-sm text-slate-500 font-medium">
+            Designed for Peer Support Agencies operating across all 50 U.S. states.
+          </p>
         </div>
       </section>
 
