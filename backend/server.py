@@ -726,14 +726,145 @@ def get_placeholder_state_data(code, name):
         "reimbursement_notes": "Contact state Medicaid for rates", "checklist": get_standard_checklist(), "last_verified": "Pending"
     }
 
-# ============== TEMPLATES ==============
+# ============== DOCUMENT CATEGORIES ==============
+DOCUMENT_CATEGORIES = {
+    "corporate_legal": {
+        "id": "corporate_legal",
+        "name": "Corporate & Legal",
+        "description": "Business formation and legal structure documents",
+        "icon": "building"
+    },
+    "medicaid_payer": {
+        "id": "medicaid_payer", 
+        "name": "Medicaid & Payer",
+        "description": "Enrollment and credentialing documentation",
+        "icon": "file-check"
+    },
+    "workforce_credentialing": {
+        "id": "workforce_credentialing",
+        "name": "Workforce & Credentialing", 
+        "description": "Staff hiring, certification, and supervision",
+        "icon": "users"
+    },
+    "clinical_operations": {
+        "id": "clinical_operations",
+        "name": "Clinical & Operations",
+        "description": "Policies, procedures, and compliance documents",
+        "icon": "clipboard-list"
+    },
+    "service_documentation": {
+        "id": "service_documentation",
+        "name": "Service Documentation",
+        "description": "Progress notes and clinical documentation",
+        "icon": "file-text"
+    },
+    "risk_insurance": {
+        "id": "risk_insurance",
+        "name": "Risk & Insurance",
+        "description": "Insurance and risk management documentation",
+        "icon": "shield"
+    }
+}
+
+# ============== TEMPLATES (FREE) ==============
 TEMPLATES = {
-    "policies-procedures": {"id": "policies-procedures", "title": "Policies & Procedures Template", "description": "Comprehensive policy manual framework", "category": "Compliance", "preview_text": "Complete P&P framework including HIPAA, documentation, supervision, and compliance policies."},
-    "job-posting": {"id": "job-posting", "title": "Peer Support Specialist Job Posting", "description": "Ready-to-use job description", "category": "Hiring", "preview_text": "Position: Certified Peer Support Specialist with qualifications and duties."},
-    "supervisor-contract": {"id": "supervisor-contract", "title": "Clinical Supervisor Contract", "description": "Supervision agreement template", "category": "Contracts", "preview_text": "Agreement establishing supervision terms, compensation, and responsibilities."},
-    "provider-agreement": {"id": "provider-agreement", "title": "Provider Services Agreement", "description": "Client services contract", "category": "Contracts", "preview_text": "Agreement defining scope of services, client rights, and payment terms."},
-    "medicaid-scripts": {"id": "medicaid-scripts", "title": "Medicaid Call Scripts", "description": "Phone scripts for enrollment inquiries", "category": "Communications", "preview_text": "Scripts for calling Medicaid and MCO credentialing departments."},
-    "startup-budget": {"id": "startup-budget", "title": "Startup Budget Checklist", "description": "Financial planning template", "category": "Finance", "preview_text": "Startup costs, monthly expenses, staffing costs, and revenue projections."}
+    # Corporate & Legal
+    "articles-incorporation": {
+        "id": "articles-incorporation", 
+        "title": "Articles of Incorporation Checklist", 
+        "description": "Requirements checklist for business formation",
+        "category": "corporate_legal", 
+        "preview_text": "Step-by-step checklist for filing articles of incorporation in your state."
+    },
+    "operating-agreement": {
+        "id": "operating-agreement", 
+        "title": "Operating Agreement Framework", 
+        "description": "LLC operating agreement template outline",
+        "category": "corporate_legal", 
+        "preview_text": "Framework for creating your LLC operating agreement or corporate bylaws."
+    },
+    # Medicaid & Payer
+    "medicaid-enrollment-checklist": {
+        "id": "medicaid-enrollment-checklist", 
+        "title": "Medicaid Enrollment Checklist", 
+        "description": "State Medicaid provider enrollment guide",
+        "category": "medicaid_payer", 
+        "preview_text": "Checklist of common requirements for Medicaid provider enrollment applications."
+    },
+    "medicaid-scripts": {
+        "id": "medicaid-scripts", 
+        "title": "Medicaid Call Scripts", 
+        "description": "Phone scripts for enrollment inquiries",
+        "category": "medicaid_payer", 
+        "preview_text": "Scripts for calling Medicaid and MCO credentialing departments."
+    },
+    # Workforce & Credentialing
+    "job-posting": {
+        "id": "job-posting", 
+        "title": "Peer Support Specialist Job Posting", 
+        "description": "Ready-to-use job description",
+        "category": "workforce_credentialing", 
+        "preview_text": "Position: Certified Peer Support Specialist with qualifications and duties."
+    },
+    "supervisor-contract": {
+        "id": "supervisor-contract", 
+        "title": "Clinical Supervisor Contract", 
+        "description": "Supervision agreement template",
+        "category": "workforce_credentialing", 
+        "preview_text": "Agreement establishing supervision terms, compensation, and responsibilities."
+    },
+    "background-check-policy": {
+        "id": "background-check-policy", 
+        "title": "Background Check Policy Template", 
+        "description": "Staff screening policy framework",
+        "category": "workforce_credentialing", 
+        "preview_text": "Policy template for employee background check requirements and procedures."
+    },
+    # Clinical & Operations
+    "policies-procedures": {
+        "id": "policies-procedures", 
+        "title": "Policies & Procedures Template", 
+        "description": "Comprehensive policy manual framework",
+        "category": "clinical_operations", 
+        "preview_text": "Complete P&P framework including HIPAA, documentation, supervision, and compliance policies."
+    },
+    "grievance-procedure": {
+        "id": "grievance-procedure", 
+        "title": "Grievance Procedure Template", 
+        "description": "Client complaint handling process",
+        "category": "clinical_operations", 
+        "preview_text": "Step-by-step grievance procedure for handling client complaints and appeals."
+    },
+    # Service Documentation  
+    "progress-note-template": {
+        "id": "progress-note-template", 
+        "title": "Progress Note Template", 
+        "description": "Service documentation template",
+        "category": "service_documentation", 
+        "preview_text": "SOAP/DAP note template for documenting peer support sessions."
+    },
+    "provider-agreement": {
+        "id": "provider-agreement", 
+        "title": "Provider Services Agreement", 
+        "description": "Client services contract",
+        "category": "service_documentation", 
+        "preview_text": "Agreement defining scope of services, client rights, and payment terms."
+    },
+    # Risk & Insurance
+    "startup-budget": {
+        "id": "startup-budget", 
+        "title": "Startup Budget Checklist", 
+        "description": "Financial planning template",
+        "category": "risk_insurance", 
+        "preview_text": "Startup costs, monthly expenses, staffing costs, and revenue projections."
+    },
+    "insurance-checklist": {
+        "id": "insurance-checklist", 
+        "title": "Insurance Requirements Checklist", 
+        "description": "Coverage requirements guide",
+        "category": "risk_insurance", 
+        "preview_text": "Checklist of insurance types typically required: liability, malpractice, workers comp."
+    }
 }
 
 DISCLAIMERS = {
