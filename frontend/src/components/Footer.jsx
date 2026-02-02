@@ -97,10 +97,9 @@ const Footer = () => {
         <div className="mt-8 pt-8 border-t border-slate-700">
           <div className="warning-box bg-slate-800 border-l-gold p-4 rounded-r-lg mb-6">
             <p className="text-sm text-slate-300">
-              <strong className="text-gold">Important Disclaimer:</strong> This platform provides 
-              educational guidance only and does not constitute legal, financial, or professional 
-              advice. Requirements vary by state and change frequently. Always verify current 
-              requirements with official state agencies before proceeding.
+              <strong className="text-gold">Important:</strong> This platform provides educational and organizational tools. 
+              Peer Support is regulated at the state level — requirements vary by jurisdiction. 
+              Approval and reimbursement are determined by state authorities and Medicaid agencies, not this platform.
             </p>
           </div>
           <p className="text-center text-sm text-slate-500">
