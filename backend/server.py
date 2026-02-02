@@ -1347,12 +1347,27 @@ async def get_products():
 # ============== DOCUMENT SHOP ==============
 @api_router.get("/document-shop")
 async def get_document_shop():
-    """Get all available Document Shop products."""
+    """Get all available Document Shop products grouped by category."""
+    products = list(DOCUMENT_SHOP_PRODUCTS.values())
+    
+    # Group by document category
+    by_category = {}
+    for cat_id, cat_info in DOCUMENT_CATEGORIES.items():
+        cat_products = [p for p in products if p.get("category") == cat_id]
+        if cat_products:
+            by_category[cat_id] = {
+                "category": cat_info,
+                "products": cat_products
+            }
+    
     return {
-        "products": list(DOCUMENT_SHOP_PRODUCTS.values()),
-        "categories": {
-            "core": [p for p in DOCUMENT_SHOP_PRODUCTS.values() if p["scope"] == "core"],
-            "addendum": [p for p in DOCUMENT_SHOP_PRODUCTS.values() if p["scope"] == "addendum"]
+        "products": products,
+        "document_categories": DOCUMENT_CATEGORIES,
+        "by_category": by_category,
+        # Legacy grouping by scope
+        "by_scope": {
+            "core": [p for p in products if p["scope"] == "core"],
+            "addendum": [p for p in products if p["scope"] == "addendum"]
         }
     }
 
