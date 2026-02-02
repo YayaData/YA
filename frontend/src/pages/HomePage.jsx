@@ -79,8 +79,17 @@ const HomePage = () => {
             Explore the platform, review national requirements, and see exactly what it takes to open a Peer Support Agency.
           </p>
           <p className="mt-2 text-sm text-slate-500 font-medium">
-            Designed for Peer Support Agencies operating across all 50 U.S. states.
+            Designed for Peer Support Agencies expanding state-by-state across the U.S.
           </p>
+          
+          {/* Compliance Disclaimer */}
+          <div className="mt-6 pt-4 border-t border-[hsl(40,15%,88%)]">
+            <p className="text-xs text-slate-400 max-w-2xl mx-auto">
+              This platform provides educational and organizational tools. 
+              Peer Support is regulated at the state level — requirements vary by jurisdiction. 
+              Approval and reimbursement are determined by state authorities and Medicaid agencies.
+            </p>
+          </div>
         </div>
       </section>
 
