@@ -81,6 +81,9 @@ const HomePage = () => {
           <p className="mt-2 text-sm text-slate-500 font-medium">
             Designed for Peer Support Agencies operating across all 50 U.S. states.
           </p>
+          <p className="mt-2 text-sm text-slate-500">
+            Built to support Medicaid-aligned Peer Support Agency startup requirements.
+          </p>
         </div>
       </section>
 
