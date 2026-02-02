@@ -82,14 +82,18 @@ const NationalOverviewPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
             <span className="inline-block px-4 py-2 bg-blue-light text-blue-700 rounded-full text-sm font-medium mb-6">
-              National Guide
+              Educational Guide
             </span>
             <h1 className="text-4xl sm:text-5xl font-serif font-bold text-navy tracking-tight mb-6">
-              Understanding Peer Support Services Nationwide
+              Understanding Peer Support Agency Requirements
             </h1>
-            <p className="text-lg text-slate-600 mb-8">
-              Before diving into state-specific requirements, understand the fundamentals 
-              of peer support services, Medicaid billing, and what every agency needs to succeed.
+            <p className="text-lg text-slate-600 mb-4">
+              Learn the fundamentals of peer support services and what agencies typically need 
+              to get started. Requirements vary by state — use this as a starting point for your research.
+            </p>
+            <p className="text-sm text-slate-500 mb-8">
+              Peer Support is regulated at the state level. This guide provides structure and educational resources — 
+              final approval rests with your state Medicaid agency.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/">
