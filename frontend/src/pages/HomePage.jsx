@@ -73,7 +73,7 @@ const HomePage = () => {
           </Link>
 
           <p className="mt-4 text-sm text-slate-500">
-            No payment required to explore the basics.
+            No credit card required. Upgrade anytime.
           </p>
         </div>
       </section>
