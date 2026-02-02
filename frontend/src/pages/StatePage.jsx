@@ -761,9 +761,9 @@ const StatePage = () => {
       <div className="bg-slate-100 border-t border-slate-200 py-6">
         <div className="max-w-7xl mx-auto px-4">
           <p className="text-xs text-slate-500 text-center">
-            <strong>Disclaimer:</strong> This information is for educational purposes only. Not legal, medical, or financial advice. 
-            Requirements change frequently. Always verify with official state agencies. Zoning requirements are local. 
-            No guarantee of Medicaid approval or reimbursement.
+            <strong>Disclaimer:</strong> Peer Support is regulated at the state level. This platform provides educational and organizational tools only. 
+            Requirements vary by jurisdiction and change frequently. Always verify with official state agencies. 
+            Approval and reimbursement are determined by state authorities — not guaranteed by this platform.
           </p>
         </div>
       </div>
