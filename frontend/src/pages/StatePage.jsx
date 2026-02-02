@@ -561,10 +561,10 @@ const StatePage = () => {
           <TabsContent value="credentialing" className="space-y-6" data-testid="tab-credentialing">
             <Card className="border-2 border-slate-200">
               <CardHeader className="bg-[hsl(40,15%,96%)] border-b py-4">
-                <CardTitle className="font-serif text-navy">Universal Credentialing Requirements</CardTitle>
+                <CardTitle className="font-serif text-navy">Common Credentialing Requirements</CardTitle>
               </CardHeader>
               <CardContent className="p-4">
-                <p className="text-sm text-slate-600 mb-4">These requirements apply in virtually every state.</p>
+                <p className="text-sm text-slate-600 mb-4">These items are commonly required across most states. Verify specific requirements with your state Medicaid agency.</p>
                 <div className="space-y-3">
                   {[
                     { item: "Legal Business Entity", desc: "Form LLC, Corporation, or approved entity type" },
