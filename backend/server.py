@@ -208,60 +208,18 @@ PRODUCTS = {
 
 # Document Shop - À-la-carte document purchases for experienced users
 DOCUMENT_SHOP_PRODUCTS = {
+    # Clinical & Operations
     "doc-pp-manual": {
         "id": "doc-pp-manual",
-        "name": "Policies & Procedures Manual (Peer Support)",
+        "name": "Policies & Procedures Manual",
         "price": 47.00,
         "description": "A complete operational manual covering service delivery, supervision, training, documentation, confidentiality, and site visit readiness.",
         "includes": ["Service delivery policies", "Supervision requirements", "Training protocols", "Documentation standards", "Confidentiality procedures", "Site visit preparation"],
         "format": "Word (.docx) - fully editable",
+        "category": "clinical_operations",
         "scope": "core",
         "scope_label": "Core – Works in All States",
-        "scope_note": "Universal policies designed to meet standard Medicaid and MCO requirements nationwide."
-    },
-    "doc-hiring-packet": {
-        "id": "doc-hiring-packet",
-        "name": "Hiring & Onboarding Packet",
-        "price": 37.00,
-        "description": "Job descriptions, onboarding checklist, confidentiality agreement, and staff acknowledgment forms.",
-        "includes": ["Job descriptions", "Onboarding checklist", "Confidentiality agreement", "Staff acknowledgment forms"],
-        "format": "Word (.docx) + Excel (.xlsx)",
-        "scope": "core",
-        "scope_label": "Core – Works in All States",
-        "scope_note": "Standard HR documents suitable for peer support agencies in any state."
-    },
-    "doc-employee-handbook": {
-        "id": "doc-employee-handbook",
-        "name": "Staff Rules & Employee Handbook",
-        "price": 37.00,
-        "description": "Standards of conduct, ethics, attendance, confidentiality, and professional expectations.",
-        "includes": ["Standards of conduct", "Ethics guidelines", "Attendance policy", "Confidentiality requirements", "Professional expectations"],
-        "format": "Word (.docx) - fully editable",
-        "scope": "core",
-        "scope_label": "Core – Works in All States",
-        "scope_note": "Professional workplace policies applicable to peer support agencies nationwide."
-    },
-    "doc-supervision-packet": {
-        "id": "doc-supervision-packet",
-        "name": "Supervision Packet",
-        "price": 29.00,
-        "description": "Supervisor role description, supervision requirements, supervision logs, and sample supervisor agreement.",
-        "includes": ["Supervisor role description", "Supervision requirements", "Supervision logs", "Sample supervisor agreement"],
-        "format": "Word (.docx) + Excel (.xlsx)",
-        "scope": "core",
-        "scope_label": "Core – Works in All States",
-        "scope_note": "Core supervision documentation that meets standard clinical oversight requirements."
-    },
-    "doc-documentation-pack": {
-        "id": "doc-documentation-pack",
-        "name": "Documentation Pack",
-        "price": 29.00,
-        "description": "Service note templates, required documentation elements checklist, and record-keeping guidance.",
-        "includes": ["Service note templates", "Required documentation elements checklist", "Record-keeping guidance"],
-        "format": "Word (.docx) + PDF examples",
-        "scope": "core",
-        "scope_label": "Core – Works in All States",
-        "scope_note": "Documentation templates designed to meet Medicaid billing and compliance requirements."
+        "scope_note": "Verify specific requirements with your state Medicaid agency."
     },
     "doc-site-visit-binder": {
         "id": "doc-site-visit-binder",
@@ -270,9 +228,60 @@ DOCUMENT_SHOP_PRODUCTS = {
         "description": "A checklist of what reviewers typically request, folder organization guidance, and readiness confirmation checklist.",
         "includes": ["Reviewer request checklist", "Folder organization guidance", "Readiness confirmation checklist"],
         "format": "Word (.docx) + PDF printables",
+        "category": "clinical_operations",
         "scope": "core",
         "scope_label": "Core – Works in All States",
-        "scope_note": "Universal organization system for Medicaid and MCO site visits."
+        "scope_note": "Organization system for Medicaid and MCO site visits."
+    },
+    # Workforce & Credentialing
+    "doc-hiring-packet": {
+        "id": "doc-hiring-packet",
+        "name": "Hiring & Onboarding Packet",
+        "price": 37.00,
+        "description": "Job descriptions, onboarding checklist, confidentiality agreement, and staff acknowledgment forms.",
+        "includes": ["Job descriptions", "Onboarding checklist", "Confidentiality agreement", "Staff acknowledgment forms"],
+        "format": "Word (.docx) + Excel (.xlsx)",
+        "category": "workforce_credentialing",
+        "scope": "core",
+        "scope_label": "Core – Works in All States",
+        "scope_note": "Standard HR documents. Verify state-specific credentialing requirements."
+    },
+    "doc-employee-handbook": {
+        "id": "doc-employee-handbook",
+        "name": "Staff Rules & Employee Handbook",
+        "price": 37.00,
+        "description": "Standards of conduct, ethics, attendance, confidentiality, and professional expectations.",
+        "includes": ["Standards of conduct", "Ethics guidelines", "Attendance policy", "Confidentiality requirements", "Professional expectations"],
+        "format": "Word (.docx) - fully editable",
+        "category": "workforce_credentialing",
+        "scope": "core",
+        "scope_label": "Core – Works in All States",
+        "scope_note": "Professional workplace policies. Customize for your state requirements."
+    },
+    "doc-supervision-packet": {
+        "id": "doc-supervision-packet",
+        "name": "Supervision Packet",
+        "price": 29.00,
+        "description": "Supervisor role description, supervision requirements, supervision logs, and sample supervisor agreement.",
+        "includes": ["Supervisor role description", "Supervision requirements", "Supervision logs", "Sample supervisor agreement"],
+        "format": "Word (.docx) + Excel (.xlsx)",
+        "category": "workforce_credentialing",
+        "scope": "core",
+        "scope_label": "Core – Works in All States",
+        "scope_note": "Verify supervision ratios and requirements with your state."
+    },
+    # Service Documentation
+    "doc-documentation-pack": {
+        "id": "doc-documentation-pack",
+        "name": "Documentation Pack",
+        "price": 29.00,
+        "description": "Service note templates, required documentation elements checklist, and record-keeping guidance.",
+        "includes": ["Service note templates", "Required documentation elements checklist", "Record-keeping guidance"],
+        "format": "Word (.docx) + PDF examples",
+        "category": "service_documentation",
+        "scope": "core",
+        "scope_label": "Core – Works in All States",
+        "scope_note": "Templates designed for Medicaid compliance. Verify with your MCO."
     }
 }
 
