@@ -10,20 +10,25 @@ import {
   CreditCard,
   Sparkles,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Building,
+  FileCheck,
+  Users,
+  ClipboardList,
+  Shield,
+  ChevronDown,
+  ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import ResourceCard from "@/components/ResourceCard";
@@ -32,21 +37,30 @@ import ConsultationModal from "@/components/ConsultationModal";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+// Category icons mapping
+const CATEGORY_ICONS = {
+  corporate_legal: Building,
+  medicaid_payer: FileCheck,
+  workforce_credentialing: Users,
+  clinical_operations: ClipboardList,
+  service_documentation: FileText,
+  risk_insurance: Shield
+};
+
 const TemplatesPage = () => {
   const { user, isAuthenticated } = useAuth();
   const [templates, setTemplates] = useState([]);
+  const [categories, setCategories] = useState({});
+  const [byCategory, setByCategory] = useState({});
   const [products, setProducts] = useState({});
   const [fullyPopulatedStates, setFullyPopulatedStates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
   const [emailModalOpen, setEmailModalOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [consultationOpen, setConsultationOpen] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(null);
-
-  // Check if user's state is fully populated
-  const userStatePopulated = !user?.selected_state || fullyPopulatedStates.includes(user.selected_state);
+  const [expandedCategories, setExpandedCategories] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -59,8 +73,17 @@ const TemplatesPage = () => {
         axios.get(`${API}/products`)
       ]);
       setTemplates(templatesRes.data.templates);
+      setCategories(templatesRes.data.categories || {});
+      setByCategory(templatesRes.data.by_category || {});
       setProducts(productsRes.data.products);
       setFullyPopulatedStates(productsRes.data.fully_populated_states || []);
+      
+      // Expand all categories by default
+      const expanded = {};
+      Object.keys(templatesRes.data.by_category || {}).forEach(key => {
+        expanded[key] = true;
+      });
+      setExpandedCategories(expanded);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -68,14 +91,31 @@ const TemplatesPage = () => {
     }
   };
 
-  const categories = ["all", ...new Set(templates.map(t => t.category))];
+  const toggleCategory = (categoryId) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [categoryId]: !prev[categoryId]
+    }));
+  };
 
-  const filteredTemplates = templates.filter(template => {
-    const matchesSearch = template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          template.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = categoryFilter === "all" || template.category === categoryFilter;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredByCategory = () => {
+    if (!searchQuery) return byCategory;
+    
+    const filtered = {};
+    Object.entries(byCategory).forEach(([catId, catData]) => {
+      const matchingTemplates = catData.templates.filter(t => 
+        t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      if (matchingTemplates.length > 0) {
+        filtered[catId] = {
+          ...catData,
+          templates: matchingTemplates
+        };
+      }
+    });
+    return filtered;
+  };
 
   const handleDownloadClick = (template) => {
     setSelectedTemplate(template);
@@ -84,7 +124,6 @@ const TemplatesPage = () => {
 
   const handleEmailSuccess = () => {
     if (selectedTemplate) {
-      // Trigger actual download
       window.open(`${API}/templates/download/${selectedTemplate.id}`, "_blank");
     }
   };
@@ -107,6 +146,11 @@ const TemplatesPage = () => {
     }
   };
 
+  const getCategoryIcon = (categoryId) => {
+    const IconComponent = CATEGORY_ICONS[categoryId] || FileText;
+    return <IconComponent className="w-5 h-5" />;
+  };
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16" data-testid="templates-page-loading">
@@ -121,6 +165,8 @@ const TemplatesPage = () => {
     );
   }
 
+  const filteredCategories = filteredByCategory();
+
   return (
     <div className="min-h-screen bg-slate-50" data-testid="templates-page">
       {/* Hero */}
@@ -133,15 +179,18 @@ const TemplatesPage = () => {
             <h1 className="text-4xl sm:text-5xl font-serif font-bold text-navy tracking-tight mb-6">
               Templates & Resources
             </h1>
-            <p className="text-lg text-slate-600">
+            <p className="text-lg text-slate-600 mb-4">
               Download ready-to-use templates for policies, contracts, job postings, 
-              and more. Free PDF downloads available with email signup.
+              and more. Organized by category to help you find what you need.
+            </p>
+            <p className="text-sm text-slate-500">
+              These templates provide frameworks for organizational use. Verify specific requirements with your state Medicaid agency.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Document Shop CTA - For experienced users */}
+      {/* Document Shop CTA */}
       <section className="bg-gradient-to-r from-violet-50 to-purple-50 border-b border-violet-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -150,13 +199,13 @@ const TemplatesPage = () => {
                 <FileText className="w-6 h-6 text-violet-600" />
               </div>
               <div>
-                <h3 className="font-medium text-navy text-lg">I only need documents</h3>
-                <p className="text-sm text-slate-600">Already familiar with the process? Buy only what you need.</p>
+                <h3 className="font-medium text-navy text-lg">Need editable documents?</h3>
+                <p className="text-sm text-slate-600">Purchase fully editable Word documents for your agency.</p>
               </div>
             </div>
             <Link to="/document-shop">
               <Button className="bg-violet-600 hover:bg-violet-700 text-white" data-testid="templates-document-shop-btn">
-                Documents & Templates Only
+                Document Shop
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
@@ -164,57 +213,74 @@ const TemplatesPage = () => {
         </div>
       </section>
 
-      {/* Filters */}
-      <section className="bg-white border-b border-slate-200 sticky top-16 z-40 glass-nav">
+      {/* Search */}
+      <section className="bg-white border-b border-slate-200 sticky top-16 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <Input
-                type="text"
-                placeholder="Search templates..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-                data-testid="template-search-input"
-              />
-            </div>
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full sm:w-48" data-testid="category-filter">
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map(cat => (
-                  <SelectItem key={cat} value={cat}>
-                    {cat === "all" ? "All Categories" : cat}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Input
+              type="text"
+              placeholder="Search templates..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+              data-testid="template-search-input"
+            />
           </div>
         </div>
       </section>
 
-      {/* Templates Grid */}
+      {/* Templates by Category */}
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {filteredTemplates.length > 0 ? (
+          {Object.keys(filteredCategories).length > 0 ? (
             <div className="space-y-6">
-              {filteredTemplates.map((template, index) => (
-                <div 
-                  key={template.id} 
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <ResourceCard
-                    title={template.title}
-                    description={template.description}
-                    category={template.category}
-                    previewText={template.preview_text}
-                    onDownload={() => handleDownloadClick(template)}
-                  />
-                </div>
+              {Object.entries(filteredCategories).map(([categoryId, categoryData]) => (
+                <Card key={categoryId} className="border-2 border-slate-200" data-testid={`category-${categoryId}`}>
+                  <Collapsible
+                    open={expandedCategories[categoryId]}
+                    onOpenChange={() => toggleCategory(categoryId)}
+                  >
+                    <CollapsibleTrigger asChild>
+                      <CardHeader className="bg-[hsl(40,15%,96%)] border-b cursor-pointer hover:bg-[hsl(40,15%,94%)] transition-colors">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gold-light rounded-lg flex items-center justify-center text-gold">
+                              {getCategoryIcon(categoryId)}
+                            </div>
+                            <div>
+                              <CardTitle className="font-serif text-navy text-lg">
+                                {categoryData.category?.name || categoryId}
+                              </CardTitle>
+                              <p className="text-sm text-slate-500 font-normal">
+                                {categoryData.category?.description} • {categoryData.templates.length} template{categoryData.templates.length !== 1 ? 's' : ''}
+                              </p>
+                            </div>
+                          </div>
+                          {expandedCategories[categoryId] ? (
+                            <ChevronDown className="w-5 h-5 text-slate-400" />
+                          ) : (
+                            <ChevronRight className="w-5 h-5 text-slate-400" />
+                          )}
+                        </div>
+                      </CardHeader>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <CardContent className="p-4 space-y-4">
+                        {categoryData.templates.map((template) => (
+                          <ResourceCard
+                            key={template.id}
+                            title={template.title}
+                            description={template.description}
+                            category={template.category_name}
+                            previewText={template.preview_text}
+                            onDownload={() => handleDownloadClick(template)}
+                          />
+                        ))}
+                      </CardContent>
+                    </CollapsibleContent>
+                  </Collapsible>
+                </Card>
               ))}
             </div>
           ) : (
@@ -224,17 +290,14 @@ const TemplatesPage = () => {
                 No Templates Found
               </h3>
               <p className="text-slate-600 mb-4">
-                Try adjusting your search or filter criteria.
+                Try adjusting your search criteria.
               </p>
               <Button
                 variant="outline"
-                onClick={() => {
-                  setSearchQuery("");
-                  setCategoryFilter("all");
-                }}
+                onClick={() => setSearchQuery("")}
                 data-testid="clear-filters-btn"
               >
-                Clear Filters
+                Clear Search
               </Button>
             </div>
           )}
@@ -250,10 +313,10 @@ const TemplatesPage = () => {
               Premium Upgrades
             </Badge>
             <h2 className="text-3xl font-serif font-bold text-navy mb-4">
-              Take Your Launch to the Next Level
+              Comprehensive Document Packages
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              Get editable templates, comprehensive guides, and expert support to fast-track your agency launch.
+              Get editable templates and expert support. Verify requirements with your state Medicaid agency.
             </p>
           </div>
 
@@ -300,8 +363,7 @@ const TemplatesPage = () => {
             Need Personalized Guidance?
           </h2>
           <p className="text-slate-300 mb-8">
-            Book a strategy consultation with our experts. Get answers to your specific questions 
-            and a customized roadmap for your state.
+            Book a strategy consultation with our experts. Get answers to your specific questions.
           </p>
           <Button 
             onClick={() => setConsultationOpen(true)}
