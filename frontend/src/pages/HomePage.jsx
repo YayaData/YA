@@ -75,6 +75,9 @@ const HomePage = () => {
           <p className="mt-4 text-sm text-slate-500">
             No credit card required. Upgrade anytime.
           </p>
+          <p className="mt-2 text-sm text-slate-500">
+            Explore the platform, review national requirements, and see exactly what it takes to open a Peer Support Agency.
+          </p>
         </div>
       </section>
 
