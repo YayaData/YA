@@ -1268,8 +1268,40 @@ async def get_pp_framework(): return PP_FRAMEWORK
 @api_router.get("/disclaimers")
 async def get_disclaimers(): return {"disclaimers": DISCLAIMERS}
 
+@api_router.get("/document-categories")
+async def get_document_categories():
+    """Get all document categories."""
+    return {"categories": list(DOCUMENT_CATEGORIES.values())}
+
 @api_router.get("/templates")
-async def get_templates(): return {"templates": [{"id": t["id"], "title": t["title"], "description": t["description"], "category": t["category"], "preview_text": t["preview_text"], "download_url": f"/api/templates/download/{t['id']}"} for t in TEMPLATES.values()]}
+async def get_templates(): 
+    """Get all free templates grouped by category."""
+    templates_list = [
+        {
+            "id": t["id"], 
+            "title": t["title"], 
+            "description": t["description"], 
+            "category": t["category"], 
+            "category_name": DOCUMENT_CATEGORIES.get(t["category"], {}).get("name", "Other"),
+            "preview_text": t["preview_text"], 
+            "download_url": f"/api/templates/download/{t['id']}"
+        } 
+        for t in TEMPLATES.values()
+    ]
+    
+    # Group by category
+    by_category = {}
+    for cat_id, cat_info in DOCUMENT_CATEGORIES.items():
+        by_category[cat_id] = {
+            "category": cat_info,
+            "templates": [t for t in templates_list if t["category"] == cat_id]
+        }
+    
+    return {
+        "templates": templates_list,
+        "categories": DOCUMENT_CATEGORIES,
+        "by_category": by_category
+    }
 
 @api_router.get("/templates/download/{template_id}")
 async def download_template(template_id: str):
