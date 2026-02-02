@@ -117,10 +117,10 @@ const StatePage = () => {
           </CardHeader>
           <CardContent className="p-6 space-y-4">
             <div className="space-y-3 text-sm text-slate-700">
-              <p><strong>Educational Only:</strong> This platform provides educational guidance only and does not constitute legal, financial, medical, or professional advice.</p>
-              <p><strong>No Guarantee:</strong> Medicaid approval and reimbursement are not guaranteed. Requirements vary by state and change frequently.</p>
-              <p><strong>Verify Information:</strong> Laws, regulations, and administrative rules change. Users must verify current requirements with official agencies.</p>
-              <p><strong>Local Compliance:</strong> Zoning and occupancy requirements are determined by local (city/county) governments.</p>
+              <p><strong>State-Level Regulation:</strong> Peer Support is regulated at the state level. Requirements vary by jurisdiction and agencies must comply with their specific state rules.</p>
+              <p><strong>Educational Only:</strong> This platform provides educational guidance and organizational tools only. It does not constitute legal, financial, medical, or professional advice.</p>
+              <p><strong>No Guarantee:</strong> Medicaid approval and reimbursement are not guaranteed. Final approval rests with state authorities and Medicaid agencies.</p>
+              <p><strong>Verify Information:</strong> Laws, regulations, and administrative rules change. Users must verify current requirements with official state agencies.</p>
               <p><strong>Professional Help:</strong> Users should consult qualified professionals (attorneys, compliance specialists) as needed.</p>
             </div>
             <Button onClick={acceptDisclaimer} className="w-full bg-gold hover:bg-gold/90 text-white" data-testid="accept-disclaimer-btn">
