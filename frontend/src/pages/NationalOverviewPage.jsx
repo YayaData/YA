@@ -206,12 +206,12 @@ const NationalOverviewPage = () => {
             <div className="inline-flex items-center gap-3 mb-4">
               <Globe className="w-8 h-8 text-gold" />
               <h2 className="text-3xl font-serif font-bold text-navy">
-                Universal Requirements
+                Common Requirements
               </h2>
             </div>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              These requirements apply in virtually every state. Start here regardless of 
-              where you plan to operate.
+              These items are commonly required across most states. 
+              Always verify specific requirements with your state Medicaid agency.
             </p>
             <div className="section-divider mx-auto mt-6"></div>
           </div>
