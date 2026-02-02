@@ -160,8 +160,9 @@ const DocumentShopPage = () => {
               <div>
                 <h3 className="font-medium text-amber-800 mb-2">Important Notice</h3>
                 <p className="text-sm text-amber-700">
-                  Some documents apply across all states, while others may require state-specific addendums. 
-                  Always confirm requirements with official Medicaid or MCO guidance for your state.
+                  These documents provide templates and frameworks for organizational use. 
+                  Peer Support is regulated at the state level — always verify requirements with your state Medicaid agency or MCO. 
+                  Documents do not guarantee approval or reimbursement.
                 </p>
               </div>
             </div>
