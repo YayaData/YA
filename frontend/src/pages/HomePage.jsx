@@ -133,10 +133,20 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* WHAT YOU CAN DO */}
-      <section className="bg-[hsl(40,20%,98%)] py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="bg-[hsl(40,15%,99%)] p-6 md:p-8 rounded-xl border border-[hsl(40,15%,90%)] shadow-sm">
+      {/* WHAT YOU CAN DO - with Background Image */}
+      <section 
+        className="relative py-16 overflow-hidden"
+        style={{
+          backgroundImage: `url('https://static.prod-images.emergentagent.com/jobs/7ebff0d0-11b1-49d7-8c58-986b19e814f9/images/4754abcc2563e774bcc1947a57dbacdea8e0fead31b92674a5e9becba7e27651.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'bottom center'
+        }}
+      >
+        {/* Light overlay for text readability */}
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm" />
+        
+        <div className="relative max-w-5xl mx-auto px-6">
+          <div className="bg-white/70 backdrop-blur-md p-6 md:p-8 rounded-xl border border-white/50 shadow-lg">
             <h2 className="text-xl sm:text-2xl font-serif font-semibold text-navy mb-6">
               What you can do here
             </h2>
