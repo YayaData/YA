@@ -3,7 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { 
   ArrowLeft, Award, Building2, FileCheck, Users, UserCheck, DollarSign,
   CheckCircle2, AlertTriangle, ExternalLink, Phone, Globe, Scale, 
-  FileText, MapPin, Shield, BookOpen, Clock, Flag, Calendar, Download
+  FileText, MapPin, Shield, BookOpen, Clock, Flag, Calendar, Download,
+  Info, Gauge
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,6 +22,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const StatePage = () => {
   const { stateCode } = useParams();
   const [stateData, setStateData] = useState(null);
+  const [complexity, setComplexity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [checklist, setChecklist] = useState([]);
@@ -35,6 +37,7 @@ const StatePage = () => {
 
   useEffect(() => {
     fetchStateData();
+    fetchComplexity();
     const accepted = localStorage.getItem('disclaimer_accepted');
     if (accepted) setDisclaimerAccepted(true);
   }, [stateCode]);
