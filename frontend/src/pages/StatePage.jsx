@@ -811,6 +811,14 @@ const StatePage = () => {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* State Entry Checklist - For Multi-State Expansion Tracking */}
+        <div className="mt-8">
+          <StateEntryChecklist 
+            stateCode={stateCode} 
+            stateName={stateData?.state_name || stateCode}
+          />
+        </div>
       </div>
 
       {/* Footer Disclaimer */}
