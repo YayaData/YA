@@ -55,6 +55,16 @@ const StatePage = () => {
     }
   };
 
+  const fetchComplexity = async () => {
+    try {
+      const response = await axios.get(`${API}/state-complexity/${stateCode}`);
+      setComplexity(response.data);
+    } catch (err) {
+      // Complexity data is optional, don't show error
+      console.log("Complexity data not available");
+    }
+  };
+
   const toggleStep = (stepIndex) => {
     setChecklist(prev => prev.map((item, idx) => idx === stepIndex ? { ...item, completed: !item.completed } : item));
   };
