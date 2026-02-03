@@ -50,34 +50,45 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-[hsl(40,20%,98%)] text-slate-900" data-testid="home-page">
-      {/* HERO */}
-      <section className="max-w-5xl mx-auto px-6 py-20 text-center">
-        <div className="bg-[hsl(40,15%,99%)] rounded-2xl p-8 md:p-12 shadow-sm border border-[hsl(40,15%,92%)]">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-navy mb-6 leading-tight">
-            Start a Peer Support Agency — With Clarity, Confidence, and the Right Documents
-          </h1>
-          <p className="text-lg text-slate-600 mb-8 max-w-3xl mx-auto">
-            A guided platform for Certified Peer Support Specialists and providers who want to start,
-            organize, or operate a Peer Support agency — with or without step-by-step guidance.
-          </p>
+      {/* HERO with Background Image */}
+      <section 
+        className="relative py-20 overflow-hidden"
+        style={{
+          backgroundImage: `url('https://static.prod-images.emergentagent.com/jobs/7ebff0d0-11b1-49d7-8c58-986b19e814f9/images/4754abcc2563e774bcc1947a57dbacdea8e0fead31b92674a5e9becba7e27651.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        {/* Light overlay for text readability */}
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm" />
+        
+        <div className="relative max-w-5xl mx-auto px-6 text-center">
+          <div className="bg-white/70 backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-lg border border-white/50">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-navy mb-6 leading-tight">
+              Start a Peer Support Agency — With Clarity, Confidence, and the Right Documents
+            </h1>
+            <p className="text-lg text-slate-600 mb-8 max-w-3xl mx-auto">
+              A guided platform for Certified Peer Support Specialists and providers who want to start,
+              organize, or operate a Peer Support agency — with or without step-by-step guidance.
+            </p>
 
-          <Link to="/start">
-            <Button 
-              size="lg" 
-              className="bg-gold hover:bg-gold/90 text-white px-8 py-6 text-lg shadow-md"
-              data-testid="hero-get-started-btn"
-            >
-              Get Started Free
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-          </Link>
+            <Link to="/start">
+              <Button 
+                size="lg" 
+                className="bg-gold hover:bg-gold/90 text-white px-8 py-6 text-lg shadow-md"
+                data-testid="hero-get-started-btn"
+              >
+                Get Started Free
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
 
-          <p className="mt-4 text-sm text-slate-500">
-            No credit card required. Upgrade anytime.
-          </p>
-          <p className="mt-2 text-sm text-slate-500">
-            Explore the platform, review national requirements, and see exactly what it takes to open a Peer Support Agency.
-          </p>
+            <p className="mt-4 text-sm text-slate-500">
+              No credit card required. Upgrade anytime.
+            </p>
+            <p className="mt-2 text-sm text-slate-500">
+              Explore the platform, review national requirements, and see exactly what it takes to open a Peer Support Agency.
+            </p>
           <p className="mt-2 text-sm text-slate-500 font-medium">
             Designed for Peer Support Agencies expanding state-by-state across the U.S.
           </p>
