@@ -1678,6 +1678,35 @@ async def get_all_state_complexity():
     
     return result
 
+@api_router.get("/state-entry-checklist/{state_code}")
+async def get_state_entry_checklist(state_code: str):
+    """Get state entry checklist for tracking purposes (informational only)."""
+    state_code = state_code.upper()
+    
+    # Check if state exists
+    state_info = next((s for s in ALL_STATES if s["code"] == state_code), None)
+    if not state_info:
+        raise HTTPException(status_code=404, detail="State not found")
+    
+    return {
+        "state_code": state_code,
+        "state_name": state_info["name"],
+        "disclaimer": STATE_CHECKLIST_DISCLAIMER,
+        "important_notice": "Completing this checklist does NOT equal approval. This is for personal tracking only.",
+        "checklist_items": STATE_ENTRY_CHECKLIST,
+        "instructions": "Use this checklist to track your research and preparation progress. Check off items as you complete your research and verification with official state agencies. Your progress is saved locally in your browser."
+    }
+
+@api_router.get("/state-entry-checklist")
+async def get_state_entry_checklist_template():
+    """Get the generic state entry checklist template."""
+    return {
+        "disclaimer": STATE_CHECKLIST_DISCLAIMER,
+        "important_notice": "Completing this checklist does NOT equal approval. This is for personal tracking only.",
+        "checklist_items": STATE_ENTRY_CHECKLIST,
+        "categories": list(set(item["category"] for item in STATE_ENTRY_CHECKLIST))
+    }
+
 @api_router.post("/checkout/create-session")
 async def create_checkout_session(request: CheckoutRequest, http_request: Request):
     if request.product_id not in PRODUCTS: raise HTTPException(status_code=400, detail="Invalid product")
