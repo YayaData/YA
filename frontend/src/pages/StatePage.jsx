@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import EstimatedCosts from "@/components/EstimatedCosts";
 import FAQAssistant from "@/components/FAQAssistant";
+import StateEntryChecklist from "@/components/StateEntryChecklist";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
