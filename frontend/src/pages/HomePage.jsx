@@ -49,22 +49,16 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(40,20%,98%)] text-slate-900" data-testid="home-page">
+    <div className="min-h-screen text-slate-900" data-testid="home-page">
       {/* HERO with Gradient Background */}
-      <section className="relative py-20 overflow-hidden">
-        {/* Soft purple-to-blue gradient background layer */}
-        <div 
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 25%, #ddd6fe 50%, #e9d5ff 75%, #fae8ff 100%)'
-          }}
-        />
-        
-        {/* Light overlay for text readability - 80% white */}
-        <div className="absolute inset-0 bg-white/80" />
-        
-        <div className="relative max-w-5xl mx-auto px-6 text-center">
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-lg border border-white/70">
+      <section 
+        className="relative py-20"
+        style={{
+          background: 'linear-gradient(135deg, #c7d2fe 0%, #ddd6fe 35%, #e9d5ff 65%, #fce7f3 100%)'
+        }}
+      >
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <div className="bg-white rounded-2xl p-8 md:p-12 shadow-xl border border-gray-100">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-navy mb-6 leading-tight">
               Start a Peer Support Agency — With Clarity, Confidence, and the Right Documents
             </h1>
