@@ -50,15 +50,22 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen text-slate-900" data-testid="home-page">
-      {/* HERO with Gradient Background */}
+      {/* HERO with Background Image */}
       <section 
         className="relative py-20"
         style={{
-          background: 'linear-gradient(135deg, #c7d2fe 0%, #ddd6fe 35%, #e9d5ff 65%, #fce7f3 100%)'
+          backgroundImage: `url('https://static.prod-images.emergentagent.com/jobs/7ebff0d0-11b1-49d7-8c58-986b19e814f9/images/4754abcc2563e774bcc1947a57dbacdea8e0fead31b92674a5e9becba7e27651.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
         }}
       >
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <div className="bg-white rounded-2xl p-8 md:p-12 shadow-xl border border-gray-100">
+        {/* Readable overlay */}
+        <div className="absolute inset-0 bg-white/70" />
+        
+        {/* Content on top */}
+        <div className="relative max-w-5xl mx-auto px-6 text-center">
+          <div className="bg-white/95 rounded-2xl p-8 md:p-12 shadow-xl border border-gray-100">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-navy mb-6 leading-tight">
               Start a Peer Support Agency — With Clarity, Confidence, and the Right Documents
             </h1>
