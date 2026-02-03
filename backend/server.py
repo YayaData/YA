@@ -1541,6 +1541,67 @@ async def get_location_status(state_code: str):
         **location_info
     }
 
+@api_router.get("/state-complexity/{state_code}")
+async def get_state_complexity(state_code: str):
+    """Get administrative complexity classification for a state (educational/informational only)."""
+    state_code = state_code.upper()
+    
+    # Check if state exists
+    state_info = next((s for s in ALL_STATES if s["code"] == state_code), None)
+    if not state_info:
+        raise HTTPException(status_code=404, detail="State not found")
+    
+    # Get state-specific or default complexity
+    complexity_info = STATE_COMPLEXITY.get(state_code, DEFAULT_COMPLEXITY)
+    
+    return {
+        "state_code": state_code,
+        "state_name": state_info["name"],
+        "disclaimer": "This classification is for educational guidance only. It reflects typical administrative complexity, not likelihood of approval. Requirements change frequently. Always verify with your state Medicaid agency.",
+        **complexity_info
+    }
+
+@api_router.get("/state-complexity")
+async def get_all_state_complexity():
+    """Get complexity classification for all states (educational/informational only)."""
+    result = {
+        "disclaimer": "These classifications are for educational guidance only. They reflect typical administrative complexity, not likelihood of approval. Requirements change frequently. Always verify with your state Medicaid agency.",
+        "classifications": {
+            "high": {
+                "label": "Higher Complexity",
+                "description": "More administrative layers, county variations, or strict oversight. Plan for additional time and documentation.",
+                "states": []
+            },
+            "moderate": {
+                "label": "Moderate Complexity",
+                "description": "Standard state-level processes with some additional coordination requirements.",
+                "states": []
+            },
+            "lower": {
+                "label": "Lower Complexity",
+                "description": "More streamlined administrative processes. Still requires full compliance with state requirements.",
+                "states": []
+            },
+            "unclassified": {
+                "label": "Not Yet Classified",
+                "description": "Research state-specific requirements directly with state agencies.",
+                "states": []
+            }
+        }
+    }
+    
+    # Categorize all states
+    for state in ALL_STATES:
+        complexity = STATE_COMPLEXITY.get(state["code"], DEFAULT_COMPLEXITY)
+        level = complexity.get("level", "unclassified")
+        result["classifications"][level]["states"].append({
+            "code": state["code"],
+            "name": state["name"],
+            "reason": complexity.get("reason", "Contact state for details")
+        })
+    
+    return result
+
 @api_router.post("/checkout/create-session")
 async def create_checkout_session(request: CheckoutRequest, http_request: Request):
     if request.product_id not in PRODUCTS: raise HTTPException(status_code=400, detail="Invalid product")
