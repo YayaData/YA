@@ -1,5 +1,15 @@
 # Launch Your Peer Support Agency™ - PRD
 
+## UI FREEZE STATUS: CONFIRMED ✅
+**Date:** February 2025
+**Final Design Standard:** Anchor Placement Hero Pattern
+- Soft purple-to-pink gradient background (`linear-gradient(135deg, #c7d2fe 0%, #ddd6fe 35%, #e9d5ff 65%, #fce7f3 100%)`)
+- White content card on top
+- No further UI, layout, background, gradient, animation, or design changes authorized
+- Future background usage must follow this pattern exactly
+
+---
+
 ## Original Problem Statement
 Build a web-based app called "Launch Your Peer Support Agency™ — Step-By-Step in Your State (50-State Edition)" - a guided, state-selectable platform that shows users everything needed to open a Medicaid-billable Peer Support Specialist agency in their U.S. state.
 
