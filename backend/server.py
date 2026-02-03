@@ -310,6 +310,119 @@ DEFAULT_LOCATION_STATUS = {
     "note": "Contact your state Medicaid agency to confirm approved service locations before establishing your business address."
 }
 
+# ============== STATE DIFFICULTY CLASSIFICATION (EDUCATIONAL/INFORMATIONAL) ==============
+# This classification is for GUIDANCE ONLY. It does not guarantee or predict approval outcomes.
+# Complexity refers to administrative processes, not likelihood of success.
+STATE_COMPLEXITY = {
+    # High Complexity - More administrative layers, county variations, or strict oversight
+    "CA": {
+        "level": "high",
+        "label": "Higher Complexity",
+        "reason": "County-based Mental Health Plans with varying requirements",
+        "considerations": ["Each county has different enrollment processes", "Contact your specific county MHP", "Requirements may differ significantly by region"]
+    },
+    "TX": {
+        "level": "high",
+        "label": "Higher Complexity",
+        "reason": "Managed care heavy with multiple MCO contracts required",
+        "considerations": ["Must credential with multiple MCOs", "Each MCO has separate requirements", "HHSC oversight adds documentation layers"]
+    },
+    "FL": {
+        "level": "high",
+        "label": "Higher Complexity",
+        "reason": "Strict EVV requirements and audit processes",
+        "considerations": ["Electronic Visit Verification mandatory", "Frequent compliance audits", "Detailed documentation requirements"]
+    },
+    # Moderate Complexity - Standard state-level processes with some additional requirements
+    "NY": {
+        "level": "moderate",
+        "label": "Moderate Complexity",
+        "reason": "OMH oversight with regional office coordination",
+        "considerations": ["Regional office approval required", "Specific site requirements", "Structured supervision mandates"]
+    },
+    "IL": {
+        "level": "moderate",
+        "label": "Moderate Complexity",
+        "reason": "HFS coordination with MCO credentialing",
+        "considerations": ["State and MCO enrollment required", "Specific training requirements", "Documentation standards"]
+    },
+    "PA": {
+        "level": "moderate",
+        "label": "Moderate Complexity",
+        "reason": "County-based with managed care coordination",
+        "considerations": ["County behavioral health oversight", "MCO credentialing required", "Specific certification pathways"]
+    },
+    "OH": {
+        "level": "moderate",
+        "label": "Moderate Complexity",
+        "reason": "MHAS oversight with regional coordination",
+        "considerations": ["State certification requirements", "Regional board coordination", "MCO contracting processes"]
+    },
+    "NJ": {
+        "level": "moderate",
+        "label": "Moderate Complexity",
+        "reason": "DMHS requirements with MCO coordination",
+        "considerations": ["Division approval processes", "Specific site requirements", "Managed care credentialing"]
+    },
+    "GA": {
+        "level": "moderate",
+        "label": "Moderate Complexity",
+        "reason": "DBHDD oversight with CMO coordination",
+        "considerations": ["State certification required", "Care Management Organization contracts", "Regional coordination"]
+    },
+    # Lower Administrative Friction - More streamlined processes
+    "NC": {
+        "level": "lower",
+        "label": "Lower Complexity",
+        "reason": "Streamlined LME-MCO process",
+        "considerations": ["Clear enrollment pathways", "Established peer support infrastructure", "Supportive regulatory environment"]
+    },
+    "VA": {
+        "level": "lower",
+        "label": "Lower Complexity",
+        "reason": "DBHDS with clear certification pathways",
+        "considerations": ["Defined certification process", "Supportive state infrastructure", "Clear supervision requirements"]
+    },
+    "AZ": {
+        "level": "lower",
+        "label": "Lower Complexity",
+        "reason": "AHCCCS with integrated behavioral health",
+        "considerations": ["Integrated health system", "Clear enrollment process", "Established peer support programs"]
+    },
+    "MO": {
+        "level": "lower",
+        "label": "Lower Complexity",
+        "reason": "DMH with clear provider pathways",
+        "considerations": ["Defined certification requirements", "Clear Medicaid enrollment", "Supportive infrastructure"]
+    },
+    "CO": {
+        "level": "lower",
+        "label": "Lower Complexity",
+        "reason": "BHA with regional coordination",
+        "considerations": ["Clear certification pathways", "Regional administrative entities", "Established programs"]
+    },
+    "MI": {
+        "level": "lower",
+        "label": "Lower Complexity",
+        "reason": "MDHHS with PIHP coordination",
+        "considerations": ["Prepaid Inpatient Health Plan structure", "Clear enrollment processes", "Supportive environment"]
+    },
+    "WA": {
+        "level": "lower",
+        "label": "Lower Complexity",
+        "reason": "HCA with integrated managed care",
+        "considerations": ["Integrated care model", "Clear certification process", "Supportive regulatory framework"]
+    }
+}
+
+# Default complexity for states without specific classification
+DEFAULT_COMPLEXITY = {
+    "level": "unclassified",
+    "label": "Not Yet Classified",
+    "reason": "Contact your state Medicaid agency for current requirements",
+    "considerations": ["Research state-specific requirements", "Contact state behavioral health authority", "Verify current enrollment processes"]
+}
+
 # Free vs Premium access rules
 FREE_STEPS = [1, 2, 3]  # Steps 1-3 are free
 PREMIUM_STEPS = [4, 5, 6, 7, 8, 9, 10, 11]  # Steps 4-11 require premium
