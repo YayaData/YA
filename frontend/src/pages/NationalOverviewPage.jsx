@@ -77,10 +77,20 @@ const NationalOverviewPage = () => {
 
   return (
     <div className="min-h-screen" data-testid="national-overview-page">
-      {/* Hero */}
-      <section className="bg-slate-50 py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl">
+      {/* Hero with Background Image */}
+      <section 
+        className="relative py-16 md:py-24 overflow-hidden"
+        style={{
+          backgroundImage: `url('https://static.prod-images.emergentagent.com/jobs/7ebff0d0-11b1-49d7-8c58-986b19e814f9/images/4754abcc2563e774bcc1947a57dbacdea8e0fead31b92674a5e9becba7e27651.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        {/* Light overlay for text readability */}
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm" />
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl bg-white/70 backdrop-blur-md rounded-2xl p-8 md:p-12 shadow-lg border border-white/50">
             <span className="inline-block px-4 py-2 bg-blue-light text-blue-700 rounded-full text-sm font-medium mb-6">
               Educational Guide
             </span>
