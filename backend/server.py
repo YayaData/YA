@@ -423,6 +423,82 @@ DEFAULT_COMPLEXITY = {
     "considerations": ["Research state-specific requirements", "Contact state behavioral health authority", "Verify current enrollment processes"]
 }
 
+# ============== STATE ENTRY CHECKLIST (INFORMATIONAL/TRACKING ONLY) ==============
+# This checklist is for USER TRACKING ONLY. Completion does NOT equal approval.
+# No blocking logic - purely informational progress tracking.
+STATE_ENTRY_CHECKLIST = [
+    {
+        "id": "foreign_qualification",
+        "category": "Corporate & Legal",
+        "title": "Foreign Qualification Status",
+        "description": "Register your business entity to operate in this state if formed elsewhere",
+        "guidance": "If your LLC/Corp was formed in another state, you typically need to register as a 'foreign entity' in this state. Check with the Secretary of State.",
+        "verify_with": "Secretary of State or equivalent state agency"
+    },
+    {
+        "id": "registered_agent",
+        "category": "Corporate & Legal", 
+        "title": "Registered Agent Confirmed",
+        "description": "Designate a registered agent with a physical address in this state",
+        "guidance": "Most states require a registered agent with a physical street address (not P.O. Box) in the state to receive legal documents.",
+        "verify_with": "Secretary of State or business registration office"
+    },
+    {
+        "id": "peer_certification_rules",
+        "category": "Workforce & Credentialing",
+        "title": "State Peer Certification Rules Reviewed",
+        "description": "Research this state's peer specialist certification requirements",
+        "guidance": "Each state has different certification requirements for Peer Support Specialists. Some accept reciprocity, others require state-specific training.",
+        "verify_with": "State behavioral health authority or certification board"
+    },
+    {
+        "id": "supervision_requirements",
+        "category": "Workforce & Credentialing",
+        "title": "Supervision Requirements Understood",
+        "description": "Review state-specific supervision ratios and qualifications",
+        "guidance": "States vary on supervision requirements - ratios, supervisor qualifications, and documentation. Some require clinical supervisors, others allow peer supervisors.",
+        "verify_with": "State Medicaid agency or behavioral health authority"
+    },
+    {
+        "id": "medicaid_enrollment",
+        "category": "Medicaid & Payer",
+        "title": "Medicaid Enrollment Status",
+        "description": "Complete state Medicaid provider enrollment application",
+        "guidance": "Enroll as a Medicaid provider through the state's designated portal or process. This is separate from MCO credentialing.",
+        "verify_with": "State Medicaid agency"
+    },
+    {
+        "id": "mco_contracting",
+        "category": "Medicaid & Payer",
+        "title": "MCO Contracting Status",
+        "description": "Identify and credential with Managed Care Organizations in service area",
+        "guidance": "Most states use MCOs for Medicaid. You'll need to credential with each MCO where you want to provide services. Requirements vary by MCO.",
+        "verify_with": "Individual MCOs operating in your service area"
+    },
+    {
+        "id": "evv_requirements",
+        "category": "Clinical & Operations",
+        "title": "EVV Requirements Reviewed",
+        "description": "Understand Electronic Visit Verification requirements if applicable",
+        "guidance": "Some states require EVV for community-based services. Check if peer support services are subject to EVV in this state.",
+        "verify_with": "State Medicaid agency or MCO requirements"
+    },
+    {
+        "id": "policy_addendum",
+        "category": "Clinical & Operations",
+        "title": "State-Specific Policy Addendum",
+        "description": "Review and adapt policies for state-specific requirements",
+        "guidance": "Your core P&P manual may need state-specific addendums covering local regulations, reporting requirements, or documentation standards.",
+        "verify_with": "State Medicaid agency, MCOs, or compliance consultant"
+    }
+]
+
+# Disclaimer for state entry checklist
+STATE_CHECKLIST_DISCLAIMER = """This checklist is for informational and personal tracking purposes only. 
+Completing these items does NOT constitute approval, authorization, or guarantee of Medicaid enrollment or reimbursement. 
+Requirements vary by state and change frequently. Always verify current requirements with official state agencies. 
+This platform does not approve, certify, or authorize any entity to provide services or bill Medicaid."""
+
 # Free vs Premium access rules
 FREE_STEPS = [1, 2, 3]  # Steps 1-3 are free
 PREMIUM_STEPS = [4, 5, 6, 7, 8, 9, 10, 11]  # Steps 4-11 require premium
