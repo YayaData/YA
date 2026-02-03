@@ -54,14 +54,14 @@ const HomePage = () => {
       <section 
         className="relative py-20"
         style={{
-          backgroundImage: `url('https://static.prod-images.emergentagent.com/jobs/7ebff0d0-11b1-49d7-8c58-986b19e814f9/images/4754abcc2563e774bcc1947a57dbacdea8e0fead31b92674a5e9becba7e27651.png')`,
+          backgroundImage: `url('https://images.pexels.com/photos/8092510/pexels-photo-8092510.jpeg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
       >
-        {/* Readable overlay */}
-        <div className="absolute inset-0 bg-white/70" />
+        {/* Light overlay for readability */}
+        <div className="absolute inset-0 bg-white/75" />
         
         {/* Content on top */}
         <div className="relative max-w-5xl mx-auto px-6 text-center">
