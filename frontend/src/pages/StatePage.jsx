@@ -190,6 +190,48 @@ const StatePage = () => {
                   )}
                 </div>
               )}
+
+              {/* State Complexity Indicator - Informational Only */}
+              {complexity && (
+                <div className="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-xl max-w-xl" data-testid="state-complexity-info">
+                  <div className="flex items-start gap-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                      complexity.level === 'high' ? 'bg-orange-100' :
+                      complexity.level === 'moderate' ? 'bg-yellow-100' :
+                      complexity.level === 'lower' ? 'bg-green-100' : 'bg-slate-100'
+                    }`}>
+                      <Gauge className={`w-5 h-5 ${
+                        complexity.level === 'high' ? 'text-orange-600' :
+                        complexity.level === 'moderate' ? 'text-yellow-600' :
+                        complexity.level === 'lower' ? 'text-green-600' : 'text-slate-500'
+                      }`} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium text-navy text-sm">{complexity.label}</span>
+                        <Badge variant="outline" className="text-xs">
+                          <Info className="w-3 h-3 mr-1" />
+                          Guidance Only
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-slate-600 mb-2">{complexity.reason}</p>
+                      {complexity.considerations && complexity.considerations.length > 0 && (
+                        <ul className="text-xs text-slate-500 space-y-1">
+                          {complexity.considerations.map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-1">
+                              <span className="text-slate-400 mt-0.5">•</span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                      <p className="text-xs text-slate-400 mt-2 italic">
+                        This reflects administrative complexity, not approval likelihood. Always verify with your state.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
               
               {stateData.last_updated && (
                 <div className="flex flex-wrap items-center gap-4 mt-2">
