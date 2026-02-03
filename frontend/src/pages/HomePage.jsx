@@ -239,38 +239,56 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* TWO PATHS */}
-      <section className="bg-[hsl(40,15%,95%)] py-16">
-        <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-6">
-          <div className="bg-[hsl(40,15%,99%)] p-6 rounded-xl border border-[hsl(40,15%,90%)] shadow-sm">
-            <h3 className="text-lg sm:text-xl font-serif font-semibold text-navy mb-3">
-              Option 1: Guided Setup
-            </h3>
-            <p className="text-slate-600 mb-4">
-              Step-by-step checklist, state-specific guidance, readiness tools,
-              and optional upgrades for those who want support.
-            </p>
-            <Link to="/start">
-              <Button className="bg-gold hover:bg-gold/90 text-white shadow-sm">
-                Start Guided Setup
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </Link>
+      {/* TWO PATHS - with Background Image */}
+      <section 
+        className="relative py-16 overflow-hidden"
+        style={{
+          backgroundImage: `url('https://static.prod-images.emergentagent.com/jobs/7ebff0d0-11b1-49d7-8c58-986b19e814f9/images/4754abcc2563e774bcc1947a57dbacdea8e0fead31b92674a5e9becba7e27651.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        {/* Light overlay for text readability */}
+        <div className="absolute inset-0 bg-white/85 backdrop-blur-sm" />
+        
+        <div className="relative max-w-5xl mx-auto px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-xl sm:text-2xl font-serif font-semibold text-navy mb-3">
+              Choose Your Path
+            </h2>
+            <p className="text-slate-600">Two ways to use this platform based on your experience level</p>
           </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white/70 backdrop-blur-md p-6 rounded-xl border border-white/50 shadow-lg">
+              <h3 className="text-lg sm:text-xl font-serif font-semibold text-navy mb-3">
+                Option 1: Guided Setup
+              </h3>
+              <p className="text-slate-600 mb-4">
+                Step-by-step checklist, state-specific guidance, readiness tools,
+                and optional upgrades for those who want support.
+              </p>
+              <Link to="/start">
+                <Button className="bg-gold hover:bg-gold/90 text-white shadow-sm">
+                  Start Guided Setup
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
 
-          <div className="bg-[hsl(40,15%,99%)] p-6 rounded-xl border border-[hsl(40,15%,90%)] shadow-sm">
-            <h3 className="text-lg sm:text-xl font-serif font-semibold text-navy mb-3">
-              Option 2: Documents Only
-            </h3>
-            <p className="text-slate-600 mb-4">
-              Purchase Policies & Procedures, hiring packets, supervision documents,
-              and site-visit materials without guided setup.
-            </p>
-            <Link to="/document-shop">
-              <Button variant="outline" className="border-[hsl(40,15%,85%)] text-slate-700 hover:bg-[hsl(40,15%,95%)]">
-                Browse Documents
-              </Button>
-            </Link>
+            <div className="bg-white/70 backdrop-blur-md p-6 rounded-xl border border-white/50 shadow-lg">
+              <h3 className="text-lg sm:text-xl font-serif font-semibold text-navy mb-3">
+                Option 2: Documents Only
+              </h3>
+              <p className="text-slate-600 mb-4">
+                Purchase Policies & Procedures, hiring packets, supervision documents,
+                and site-visit materials without guided setup.
+              </p>
+              <Link to="/document-shop">
+                <Button variant="outline" className="border-slate-300 text-slate-700 hover:bg-white/50">
+                  Browse Documents
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
